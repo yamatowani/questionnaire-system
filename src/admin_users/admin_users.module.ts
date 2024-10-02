@@ -3,6 +3,6 @@ import { AdminUsersResolver } from './admin_users.resolver';
 import { AdminUsersService } from './admin_users.service';
 
 @Module({
-  providers: [AdminUsersResolver, AdminUsersService]
+  providers: [AdminUsersResolver, AdminUsersService],
 })
 export class AdminUsersModule {}
