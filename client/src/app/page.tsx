@@ -19,7 +19,7 @@ export default async function Home() {
 
   return (
     <div>
-      <h1>Admin Users</h1>
+      <h2>Admin Users</h2>
       <ul>
         {data.admin_users.map((user: any) => (
           <li key={user.session_id}>
