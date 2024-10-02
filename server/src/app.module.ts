@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-import { AdminUsersModule } from './admin_users/admin_users.module';
+import { AdminUsersModule } from './modules/admin_users.module';
 import { AdminUser } from './entities/admin_user.entity';
 
 @Module({
