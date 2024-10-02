@@ -6,6 +6,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { AdminUsersModule } from './admin_users/admin_users.module';
+import { AdminUser } from './entities/admin_user.entity';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AdminUsersModule } from './admin_users/admin_users.module';
       username: 'sample',
       password: 'sample',
       database: 'sample',
+      entities: [AdminUser],
       synchronize: false,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({

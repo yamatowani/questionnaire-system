@@ -31,8 +31,8 @@ export class Question {
   @UpdateDateColumn()
   readonly updated_at?: Date;
 
-  @ManyToOne(() => AdminUser, (admin_user) => admin_user.questions)
-  admin_user: AdminUser;
+  // @ManyToOne(() => AdminUser, (admin_user) => admin_user.questions)
+  // admin_user: AdminUser;
 
   @OneToMany(() => Option, (option) => option.question)
   options: Option[];

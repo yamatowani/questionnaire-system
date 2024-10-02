@@ -1,12 +1,14 @@
+// src/admin_users/admin_users.resolver.ts
 import { Query, Resolver } from '@nestjs/graphql';
 import { AdminUsersService } from './admin_users.service';
+import { AdminUser } from 'src/entities/admin_user.entity';
 
-@Resolver()
+@Resolver(() => AdminUser)
 export class AdminUsersResolver {
-  constructor(private adminUsersService: AdminUsersService) {}
+  constructor(private readonly adminUsersService: AdminUsersService) {}
 
-  @Query(() => String)
-  public async admin_users() {
-    return 'All Admin Users';
+  @Query(() => [AdminUser])
+  public async admin_users(): Promise<AdminUser[]> {
+    return this.adminUsersService.getAllAdminUsers();
   }
 }
