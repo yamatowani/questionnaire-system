@@ -22,6 +22,10 @@ export class AdminUser {
 
   @Column('varchar', { nullable: true })
   @Field()
+  email: string;
+
+  @Column('varchar', { nullable: true })
+  @Field()
   password_digest: string;
 
   @Column('varchar', { nullable: false })

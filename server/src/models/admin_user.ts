@@ -8,6 +8,9 @@ export class AdminUser {
   name: string;
 
   @Field()
+  email: string;
+
+  @Field()
   password_digest: string;
 
   @Field()

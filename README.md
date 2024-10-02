@@ -26,6 +26,7 @@ erDiagram
     AdminUsers {
         bigint id PK "管理ユーザーID"
         varchar name "管理ユーザー名"
+        varchar email "管理ユーザーemail"
         varchar password_digest "パスワードダイジェスト"
         timestamp session_id "セッションID"
         timestamp created_at "作成日時"
