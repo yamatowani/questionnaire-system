@@ -18,6 +18,8 @@ import { AdminUsersModule } from './admin_users/admin_users.module';
       synchronize: false,
     }),
     GraphQLModule.forRoot({
+      playground: true,
+      debug: true,
       autoSchemaFile: join(process.cwd(), 'src/shema.gql'),
     }),
     AdminUsersModule,
