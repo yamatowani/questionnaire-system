@@ -1,4 +1,3 @@
-// src/admin_users/admin_users.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminUsersResolver } from './admin_users.resolver';

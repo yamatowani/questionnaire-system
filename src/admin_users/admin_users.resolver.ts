@@ -1,4 +1,3 @@
-// src/admin_users/admin_users.resolver.ts
 import { Query, Resolver } from '@nestjs/graphql';
 import { AdminUsersService } from './admin_users.service';
 import { AdminUser } from 'src/entities/admin_user.entity';

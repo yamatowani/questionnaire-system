@@ -1,4 +1,3 @@
-// src/entities/admin_user.entity.ts
 import {
   Entity,
   Column,
