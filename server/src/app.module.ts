@@ -24,7 +24,7 @@ import { AdminUser } from './entities/admin_user.entity';
       driver: ApolloDriver,
       playground: true,
       debug: true,
-      autoSchemaFile: join(process.cwd(), 'src/shema.gql'),
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     AdminUsersModule,
   ],

@@ -1,0 +1,18 @@
+overwrite: true
+schema: "./server/src/schema.gql"
+documents:
+  - ./graphql/queries/*.graphql
+  - ./graphql/mutations/*.graphql
+generates:
+  graphql/generated.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+    config:
+      skipTypename: true
+      scalars:
+        Date: number
+    hooks:
+      afterOneFileWrite:
+        - yarn lint --fix
