@@ -19,3 +19,13 @@ scalar DateTime
 type Query {
   admin_users: [AdminUser!]!
 }
+
+type Mutation {
+  addNewAdminUser(newAdminUserData: NewAdminUserInput!): AdminUser!
+}
+
+input NewAdminUserInput {
+  name: String!
+  password_digest: String!
+  session_id: String!
+}
