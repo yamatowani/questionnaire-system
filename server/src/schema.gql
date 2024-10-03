@@ -51,5 +51,4 @@ input NewAdminUserInput {
   name: String!
   email: String!
   password_digest: String!
-  session_id: String!
 }
