@@ -10,17 +10,28 @@ type Answer {
 }
 
 type Option {
+  id: Float!
   option_text: String!
   question: Question!
   answers: [Answer!]!
+  created_at: DateTime!
+  updated_at: DateTime!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Question {
+  id: Float!
   title: String!
   url: String!
   admin_user: AdminUser!
   options: [Option!]!
   answers: [Answer!]!
+  created_at: DateTime!
+  updated_at: DateTime!
 }
 
 type AdminUser {
@@ -34,21 +45,27 @@ type AdminUser {
   questions: [Question!]!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type Query {
   admin_users: [AdminUser!]!
 }
 
 type Mutation {
   addNewAdminUser(newAdminUserData: NewAdminUserInput!): AdminUser!
+  createQuestion(createQuestionInput: NewQuestionInput!): Question!
 }
 
 input NewAdminUserInput {
   name: String!
   email: String!
   password_digest: String!
+}
+
+input NewQuestionInput {
+  title: String!
+  url: String!
+  options: [NewOptionInput!]!
+}
+
+input NewOptionInput {
+  option_text: String!
 }

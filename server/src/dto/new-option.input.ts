@@ -4,8 +4,5 @@ import { InputType, Field } from '@nestjs/graphql';
 export class NewOptionInput {
   @Field()
   option_text: string;
-
-  @Field()
-  question_id: number;
 }
 

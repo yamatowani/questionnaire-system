@@ -10,6 +10,7 @@ import { AdminUser } from './entities/admin_user.entity';
 import { Question } from './entities/question.entity';
 import { Option } from './entities/option.entity';
 import { Answer } from './entities/answer.entity';
+import { QuestionModule } from './modules/questions.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { Answer } from './entities/answer.entity';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     AdminUsersModule,
+    QuestionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

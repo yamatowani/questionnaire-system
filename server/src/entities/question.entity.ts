@@ -17,6 +17,7 @@ import { ObjectType, Field } from '@nestjs/graphql';
 @ObjectType()
 export class Question {
   @PrimaryGeneratedColumn()
+  @Field()
   readonly id: number;
 
   @Column('varchar', { nullable: true })
@@ -47,8 +48,10 @@ export class Question {
   answers: Answer[];
 
   @CreateDateColumn()
+  @Field()
   readonly created_at?: Date;
 
   @UpdateDateColumn()
+  @Field()
   readonly updated_at?: Date;
 }
