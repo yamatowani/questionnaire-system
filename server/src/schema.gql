@@ -5,6 +5,7 @@
 type AdminUser {
   admin_user_id: Float!
   name: String!
+  email: String!
   password_digest: String!
   session_id: String!
   created_at: DateTime!
