@@ -9,7 +9,6 @@ const GET_ADMIN_USERS = gql`
       name
       email
       password_digest
-      session_id
     }
   }
 `;
@@ -42,7 +41,7 @@ export default function AdminUser() {
       <ul>
         {data.admin_users.map((user) => (
           <li key={user.id}>
-            Name: {user.name}, Password Digest: {user.password_digest}, Session ID: {user.session_id}
+            Name: {user.name}, Password Digest: {user.password_digest}
           </li>
         ))}
       </ul>
