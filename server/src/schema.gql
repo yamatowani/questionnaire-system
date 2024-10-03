@@ -24,7 +24,7 @@ type Question {
 }
 
 type AdminUser {
-  admin_user_id: Float!
+  id: Float!
   name: String!
   email: String!
   password_digest: String!

@@ -15,7 +15,7 @@ import { ObjectType, Field } from '@nestjs/graphql';
 @ObjectType()
 export class Answer {
   @PrimaryGeneratedColumn()
-  readonly answer_id: number;
+  readonly id: number;
 
   @Column('bigint', { nullable: false })
   @Field()

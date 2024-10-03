@@ -14,7 +14,7 @@ import { ObjectType, Field } from '@nestjs/graphql';
 export class AdminUser {
   @PrimaryGeneratedColumn()
   @Field()
-  readonly admin_user_id: number;
+  readonly id: number;
 
   @Column('varchar', { length: 20, nullable: true })
   @Field()

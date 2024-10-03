@@ -16,7 +16,7 @@ import { ObjectType, Field } from '@nestjs/graphql';
 @ObjectType()
 export class Option {
   @PrimaryGeneratedColumn()
-  readonly option_id: number;
+  readonly id: number;
 
   @Column('varchar', { nullable: true })
   @Field()
