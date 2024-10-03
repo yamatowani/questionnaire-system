@@ -9,7 +9,7 @@ const source = new DataSource({
   database: 'sample',
   entities: ['src/entities/*.ts'],
   migrations: ['src/migration/*.ts'],
-  synchronize: false,
+  synchronize: true, // dev 環境のみtrueを許可
 });  
 
 export default source;
