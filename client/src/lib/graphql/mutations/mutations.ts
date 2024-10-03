@@ -13,7 +13,7 @@ export const ADD_NEW_ADMIN_USER = gql`
   }
 `;
 
-export const CREATE_QUESTIONNAIRE = gql`
+export const CREATE_QUESTION = gql`
   mutation createQuestion($newQuestionInput: NewQuestionInput!) {
     createQuestion(newQuestionInput: $newQuestionInput) {
       id
