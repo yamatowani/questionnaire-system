@@ -7,9 +7,9 @@ const source = new DataSource({
   username: 'sample',
   password: 'sample',
   database: 'sample',
-  entities: ['src/entities/*.ts'],
-  migrations: ['src/migration/*.ts'],
+  entities: [__dirname + '/entities/*.ts'],  
+  migrations: [__dirname + '/migration/*.ts'], 
   synchronize: false,
-});  
+});
 
 export default source;
