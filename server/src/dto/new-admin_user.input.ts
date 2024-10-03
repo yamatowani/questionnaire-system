@@ -10,7 +10,4 @@ export class NewAdminUserInput {
 
   @Field()
   password_digest: string;
-
-  @Field()
-  session_id: string;
 }
