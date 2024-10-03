@@ -1,6 +1,6 @@
-// app/page.tsx
+"use client";
 import { gql } from '@apollo/client';
-import client from '../../lib/apollo';
+import { useQuery } from '@apollo/client';
 
 const GET_ADMIN_USERS = gql`
   query {
@@ -12,10 +12,15 @@ const GET_ADMIN_USERS = gql`
   }
 `;
 
-export default async function Home() {
-  const { data } = await client.query({
-    query: GET_ADMIN_USERS,
+export default function Home() {
+  const { data, loading, error } = useQuery(GET_ADMIN_USERS, {
+    fetchPolicy: 'network-only'
   });
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+
 
   return (
     <div>
