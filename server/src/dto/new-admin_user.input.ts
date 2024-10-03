@@ -6,6 +6,9 @@ export class NewAdminUserInput {
   name: string;
 
   @Field()
+  email: string;
+
+  @Field()
   password_digest: string;
 
   @Field()
