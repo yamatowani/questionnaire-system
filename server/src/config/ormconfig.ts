@@ -8,8 +8,8 @@ const source = new DataSource({
   password: 'sample',
   database: 'sample',
   entities: ['src/entities/*.ts'],
-  migrations: ['src/migration/**/*.ts'],
+  migrations: ['src/migration/*.ts'],
   synchronize: false,
-});
+});  
 
 export default source;
