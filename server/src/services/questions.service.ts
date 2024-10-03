@@ -16,7 +16,7 @@ export class QuestionService {
   ) {}
 
   public async getAllQuestions(): Promise<Question[]> {
-    return this.questionRepository.find({})
+    return this.questionRepository.find({ relations: ['options'] })
   }
 
   async create(newQuestionInput: NewQuestionInput): Promise<Question> {
