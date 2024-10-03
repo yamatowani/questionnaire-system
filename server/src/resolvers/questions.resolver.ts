@@ -11,6 +11,6 @@ export class QuestionResolver {
   async createQuestion(
     @Args('createQuestionInput') newQuestionInput: NewQuestionInput
   ): Promise<Question> {
-    return this.questionService.create(newQuestionInput)
+    return this.questionService.create(newQuestionInput);
   }
 }

@@ -14,8 +14,8 @@ export const ADD_NEW_ADMIN_USER = gql`
 `;
 
 export const CREATE_QUESTION = gql`
-  mutation createQuestion($newQuestionInput: NewQuestionInput!) {
-    createQuestion(newQuestionInput: $newQuestionInput) {
+  mutation createQuestion($createQuestionInput: NewQuestionInput!) {
+    createQuestion(createQuestionInput: $createQuestionInput) {
       id
       title
       url
@@ -26,3 +26,4 @@ export const CREATE_QUESTION = gql`
     }
   }
 `;
+

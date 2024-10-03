@@ -1,10 +1,10 @@
-import AddAdminUserForm from "../components/admin_user/add_admin_user_form";
+import NewQuestionForm from "../components/question/new_question";
 
 export default function AdminUserPage() {
   return (
     <div>
        <h1>Create New Admin User</h1>
-       <AddAdminUserForm />
+       <NewQuestionForm />
     </div>
   )
 }
