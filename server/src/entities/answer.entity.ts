@@ -5,12 +5,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  JoinColumn
 } from 'typeorm';
 import { Question } from './question.entity';
 import { Option } from './option.entity';
 import { ObjectType, Field } from '@nestjs/graphql';
 
-@Entity()
+@Entity({ name: 'answers' })
 @ObjectType()
 export class Answer {
   @PrimaryGeneratedColumn()
@@ -30,11 +31,17 @@ export class Answer {
   @UpdateDateColumn()
   readonly updated_at?: Date;
 
-  @ManyToOne(() => Question, (question) => question.answers)
+  @ManyToOne(() => Question, (question) => question.answers, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'question_id' })
   @Field(() => Question)
   question: Question;
-
-  @ManyToOne(() => Option, (option) => option.answers)
+  
+  @ManyToOne(() => Option, (option) => option.answers, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'option_id' })
   @Field(() => Option)
-  option: Option;
+  option: Option;  
 }

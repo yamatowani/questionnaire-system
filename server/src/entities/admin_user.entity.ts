@@ -40,7 +40,9 @@ export class AdminUser {
   @Field()
   readonly updated_at?: Date;
 
-  @OneToMany(() => Question, (question) => question.admin_user)
+  @OneToMany(() => Question, (question) => question.admin_user, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => [Question])
   questions: Question[];
 }

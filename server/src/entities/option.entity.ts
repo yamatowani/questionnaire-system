@@ -11,7 +11,7 @@ import { Question } from './question.entity';
 import { Answer } from './answer.entity';
 import { ObjectType, Field } from '@nestjs/graphql';
 
-@Entity()
+@Entity({ name: 'options' })
 @ObjectType()
 export class Option {
   @PrimaryGeneratedColumn()
@@ -21,17 +21,15 @@ export class Option {
   @Field()
   option_text: string;
 
-  @Column('bigint', { nullable: false })
-  @Field()
-  question_id: number;
-
   @CreateDateColumn()
   readonly created_at?: Date;
 
   @UpdateDateColumn()
   readonly updated_at?: Date;
 
-  @ManyToOne(() => Question, (question) => question.options)
+  @ManyToOne(() => Question, (question) => question.options, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => Question)
   question: Question;
 
