@@ -2,7 +2,6 @@
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client';
 
-// GraphQLクエリを定義
 const GET_ADMIN_USERS = gql`
   query {
     admin_users {
@@ -32,12 +31,17 @@ export default function AdminUser() {
 
   if (error) return <p>Error: {error.message}</p>;
 
+  if (!data || !data.admin_users) {
+    return <p>No admin users found.</p>; 
+  }
+
+
   return (
     <div>
       <h2>Admin Users</h2>
       <ul>
         {data.admin_users.map((user) => (
-          <li key={user.id}> {/* 例: emailをキーとして使用 */}
+          <li key={user.id}>
             Name: {user.name}, Password Digest: {user.password_digest}, Session ID: {user.session_id}
           </li>
         ))}
