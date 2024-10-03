@@ -12,3 +12,17 @@ export const ADD_NEW_ADMIN_USER = gql`
     }
   }
 `;
+
+export const CREATE_QUESTIONNAIRE = gql`
+  mutation createQuestion($newQuestionInput: NewQuestionInput!) {
+    createQuestion(newQuestionInput: $newQuestionInput) {
+      id
+      title
+      url
+      options {
+        id
+        option_text
+      }
+    }
+  }
+`;
