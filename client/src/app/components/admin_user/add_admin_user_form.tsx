@@ -38,7 +38,7 @@ export default function AddAdminUserForm() {
       <button type="submit" disabled={loading}>Create Admin User</button>
       {error && <p>Error: {error.message}</p>}
       </form>
-      <Link href='/'>Back Top</Link>
+      <Link href='/'>Back to Home</Link>
     </div>
   )
 }

@@ -47,6 +47,8 @@ export default function AdminUser() {
         ))}
       </ul>
       <Link href='/admin_user'>Create New Admin User</Link>
+      <br />
+      <Link href='/question'>Create New Question</Link>
     </div>
   );
 }
