@@ -47,6 +47,7 @@ type AdminUser {
 
 type Query {
   admin_users: [AdminUser!]!
+  questions: [Question!]!
 }
 
 type Mutation {
