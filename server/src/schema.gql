@@ -2,6 +2,27 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Answer {
+  option_id: Float!
+  question_id: Float!
+  question: Question!
+  option: Option!
+}
+
+type Option {
+  option_text: String!
+  question: Question!
+  answers: [Answer!]!
+}
+
+type Question {
+  title: String!
+  url: String!
+  admin_user: AdminUser!
+  options: [Option!]!
+  answers: [Answer!]!
+}
+
 type AdminUser {
   admin_user_id: Float!
   name: String!
@@ -10,6 +31,7 @@ type AdminUser {
   session_id: String!
   created_at: DateTime!
   updated_at: DateTime!
+  questions: [Question!]!
 }
 
 """
@@ -27,6 +49,7 @@ type Mutation {
 
 input NewAdminUserInput {
   name: String!
+  email: String!
   password_digest: String!
   session_id: String!
 }

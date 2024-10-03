@@ -20,7 +20,7 @@ export class AdminUser {
   @Field()
   name: string;
 
-  @Column('varchar', { nullable: true })
+  @Column('varchar', { nullable: false })
   @Field()
   email: string;
 
@@ -28,7 +28,7 @@ export class AdminUser {
   @Field()
   password_digest: string;
 
-  @Column('varchar', { nullable: false })
+  @Column('varchar', { nullable: true })
   @Field()
   session_id: string;
 

@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { AdminUser } from './admin_user.entity';
 import { Option } from './option.entity';
@@ -26,15 +27,10 @@ export class Question {
   @Field()
   url: string;
 
-  @CreateDateColumn()
-  readonly created_at?: Date;
-
-  @UpdateDateColumn()
-  readonly updated_at?: Date;
-
   @ManyToOne(() => AdminUser, (admin_user) => admin_user.questions, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'admin_user_id' })
   @Field(() => AdminUser)
   admin_user: AdminUser;
 
@@ -49,4 +45,10 @@ export class Question {
   })
   @Field(() => [Answer])
   answers: Answer[];
+
+  @CreateDateColumn()
+  readonly created_at?: Date;
+
+  @UpdateDateColumn()
+  readonly updated_at?: Date;
 }
