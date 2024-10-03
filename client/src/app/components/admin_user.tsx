@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client';
 
@@ -45,6 +46,7 @@ export default function AdminUser() {
           </li>
         ))}
       </ul>
+      <Link href='/admin_user'>Create New Admin User</Link>
     </div>
   );
 }
