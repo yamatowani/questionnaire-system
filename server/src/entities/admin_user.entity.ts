@@ -40,6 +40,7 @@ export class AdminUser {
   @Field()
   readonly updated_at?: Date;
 
-  // @OneToMany(() => Question, (question) => question.admin_user)
-  // questions: Question[];
+  @OneToMany(() => Question, (question) => question.admin_user)
+  @Field(() => [Question])
+  questions: Question[];
 }
