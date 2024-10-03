@@ -15,6 +15,10 @@ export class QuestionService {
     private readonly optionRepository: Repository<Option>,
   ) {}
 
+  public async getAllQuestions(): Promise<Question[]> {
+    return this.questionRepository.find({})
+  }
+
   async create(newQuestionInput: NewQuestionInput): Promise<Question> {
     const { title, url, options } = newQuestionInput;
 
