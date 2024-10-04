@@ -27,7 +27,7 @@ export class QuestionService {
   }  
 
   async create(newQuestionInput: NewQuestionInput): Promise<Question> {
-    const { title, url, options } = newQuestionInput;
+    const { title, options } = newQuestionInput;
 
     const question      = this.questionRepository.create({
       title,
