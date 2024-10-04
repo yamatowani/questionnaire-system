@@ -1,7 +1,7 @@
 'use client';
 import { useMutation } from "@apollo/client";
 import { CREATE_QUESTION } from "@/lib/graphql/mutations/mutations";
-import { NewQuestionInput, NewOptionInput } from "@/types/types";
+import { NewQuestionInput } from "@/types/types";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -18,7 +18,7 @@ export default function NewQuestionForm() {
     onCompleted: (data) => {
       const generatedUrl = data.createQuestion.url;
       const fullUrl = `${window.location.origin}/question/${generatedUrl}`;
-      setQuestionUrl(generatedUrl)
+      setQuestionUrl(generatedUrl);
       alert(`アンケートを作成しました! \n URLは"${fullUrl}"です`);
       setFormData({ title: '', options: [{ option_text: '' }] });
     },
@@ -44,6 +44,15 @@ export default function NewQuestionForm() {
       ...formData,
       options: [...formData.options, { option_text: '' }],
     });
+  };
+
+  const copyToClipboard = () => {
+    if (questionUrl) {
+      const fullUrl = `${window.location.origin}/question/${questionUrl}`;
+      navigator.clipboard.writeText(fullUrl).then(() => {
+        alert(`URL "${fullUrl}" がコピーされました!`);
+      });
+    }
   };
 
   return (
@@ -73,6 +82,13 @@ export default function NewQuestionForm() {
         <button type="submit" disabled={loading}>Create Question</button>
         {error && <p>Error: {error.message}</p>}
       </form>
+
+      {questionUrl && (
+        <div>
+          <button onClick={copyToClipboard}>URLをコピー</button>
+        </div>
+      )}
+
       <Link href='/'>Back to Home</Link>
     </div>
   );
