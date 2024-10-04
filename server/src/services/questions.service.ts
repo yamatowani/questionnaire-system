@@ -18,6 +18,13 @@ export class QuestionService {
     return this.questionRepository.find({ relations: ['options'] })
   }
 
+  public async getQuestionById(id: number): Promise<Question> {
+    return this.questionRepository.findOne({
+      where: { id },
+      relations: ['options']
+    })
+  } 
+
   async create(newQuestionInput: NewQuestionInput): Promise<Question> {
     const { title, url, options } = newQuestionInput;
 

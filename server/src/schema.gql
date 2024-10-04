@@ -47,6 +47,7 @@ type AdminUser {
 
 type Query {
   admin_users: [AdminUser!]!
+  getQuestionById(id: Float!): Question!
   questions: [Question!]!
   getAnswerByQuestion(question_id: Float!): [Answer!]!
 }
