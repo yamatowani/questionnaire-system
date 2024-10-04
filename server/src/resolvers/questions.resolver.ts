@@ -7,6 +7,13 @@ import { Question } from "src/entities/question.entity";
 export class QuestionResolver {
   constructor(private readonly questionService: QuestionService) {}
 
+  @Query(() => Question)
+  public async getQuestionById(
+    @Args('id') id: number
+  ): Promise<Question> {
+    return this.questionService.getQuestionById(id);
+  }
+
   @Query(() => [Question])
   public async questions(): Promise<Question[]> {
     return this.questionService.getAllQuestions();

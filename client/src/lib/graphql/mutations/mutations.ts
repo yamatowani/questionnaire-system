@@ -27,3 +27,17 @@ export const CREATE_QUESTION = gql`
   }
 `;
 
+export const CREATE_ANSWER = gql`
+  mutation createAnswer($newAnswerInput: NewAnswerInput!) {
+    createAnswer(newAnswerInput: $newAnswerInput) {
+      question {
+        id
+        title
+      }
+      option {
+        id
+        option_text
+      }
+    }
+  }
+`;
