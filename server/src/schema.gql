@@ -48,11 +48,13 @@ type AdminUser {
 type Query {
   admin_users: [AdminUser!]!
   questions: [Question!]!
+  getAnswerByQuestion(question_id: Float!): [Answer!]!
 }
 
 type Mutation {
   addNewAdminUser(newAdminUserData: NewAdminUserInput!): AdminUser!
   createQuestion(createQuestionInput: NewQuestionInput!): Question!
+  createAnswer(newAnswerInput: NewAnswerInput!): Answer!
 }
 
 input NewAdminUserInput {
@@ -69,4 +71,9 @@ input NewQuestionInput {
 
 input NewOptionInput {
   option_text: String!
+}
+
+input NewAnswerInput {
+  option_id: Float!
+  question_id: Float!
 }
