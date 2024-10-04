@@ -1,9 +1,22 @@
 import { gql } from "@apollo/client";
 
 export const GET_ANSWER_BY_QUESTION_ID = gql`
-  query getAnswerByQuestion($question_id: Int!) {  // 引数を定義
-    getAnswerByQuestion(question_id: $question_id) {  // 引数を使用
+  query getAnswerByQuestion($question_id: Int!) {
+    getAnswerByQuestion(question_id: $question_id) {
       option {
+        id
+        option_text
+      }
+    }
+  }
+`;
+
+export const GET_QUESTION_BY_ID = gql`
+  query getQuestionById($id: Int!) {
+    question(id: $id) {
+      id
+      title
+      options {
         id
         option_text
       }
