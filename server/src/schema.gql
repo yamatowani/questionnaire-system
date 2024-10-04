@@ -48,6 +48,7 @@ type AdminUser {
 type Query {
   admin_users: [AdminUser!]!
   questions: [Question!]!
+  getAnswerByQuestion(question_id: Float!): [Answer!]!
 }
 
 type Mutation {
