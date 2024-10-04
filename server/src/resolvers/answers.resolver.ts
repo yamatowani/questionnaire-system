@@ -13,4 +13,11 @@ export class AnswerResolver {
   ): Promise<Answer[]> {
     return this.answerService.getAnswerByQuestion(question_id);
   }
+
+  @Mutation(() => Answer)
+  async createAnswer(
+    @Args('newAnswerInput') newAnswerInput: NewAnswerInput
+  ): Promise<Answer> {
+    return this.answerService.create(newAnswerInput);
+  }
 }
