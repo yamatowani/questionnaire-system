@@ -8,7 +8,6 @@ import Link from "next/link";
 export default function NewQuestionForm() {
   const [formData, setFormData] = useState<NewQuestionInput>({
     title: '',
-    url: '',
     options: [{ option_text: '' }],
   });
 
@@ -16,7 +15,7 @@ export default function NewQuestionForm() {
     variables: { createQuestionInput: formData },
     onCompleted: () => {
       alert('Question created successfully!');
-      setFormData({ title: '', url: '', options: [{ option_text: '' }] });
+      setFormData({ title: '', options: [{ option_text: '' }] });
     },
     onError: (error) => {
       console.error("Error creating question:", error);
@@ -48,17 +47,9 @@ export default function NewQuestionForm() {
         <input 
           type="text"
           name="title"
-          placeholder="Question Title"
+          placeholder="質問項目を入力"
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           value={formData.title}
-          required
-        />
-        <input
-          type="text"
-          name="url"
-          placeholder="Question URL"
-          onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-          value={formData.url}
           required
         />
 
@@ -66,14 +57,14 @@ export default function NewQuestionForm() {
           <input
             key={index}
             type="text"
-            placeholder="Option Text"
+            placeholder="選択肢を入力"
             onChange={(e) => handleChange(e, index)}
             value={option.option_text}
             required
           />
         ))}
 
-        <button type="button" onClick={addOption}>Add Option</button>
+        <button type="button" onClick={addOption}>選択肢を追加</button>
         <button type="submit" disabled={loading}>Create Question</button>
         {error && <p>Error: {error.message}</p>}
       </form>

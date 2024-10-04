@@ -6,7 +6,6 @@ export type NewAdminUserInput = {
 
 export type NewQuestionInput = {
   title: string;
-  url: string;
   options: NewOptionInput[];
 }
 
