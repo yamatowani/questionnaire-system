@@ -8,10 +8,10 @@ export class QuestionResolver {
   constructor(private readonly questionService: QuestionService) {}
 
   @Query(() => Question)
-  public async getQuestionById(
-    @Args('id') id: number
+  public async getQuestionByUrl(
+    @Args('url') url: string
   ): Promise<Question> {
-    return this.questionService.getQuestionById(id);
+    return this.questionService.getQuestionByUrl(url);
   }
 
   @Query(() => [Question])
