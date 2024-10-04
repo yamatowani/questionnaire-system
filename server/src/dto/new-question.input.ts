@@ -1,7 +1,6 @@
 import { InputType, Field } from '@nestjs/graphql';
 import { NewOptionInput } from './new-option.input';
 
-
 @InputType()
 export class NewQuestionInput {
   @Field()
