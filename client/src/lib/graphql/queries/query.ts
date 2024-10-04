@@ -12,8 +12,8 @@ export const GET_ANSWER_BY_QUESTION_ID = gql`
 `;
 
 export const GET_QUESTION_BY_ID = gql`
-  query getQuestionById($id: Int!) {
-    question(id: $id) {
+  query getQuestionById($id: Float!) {
+    getQuestionById(id: $id) {
       id
       title
       options {
