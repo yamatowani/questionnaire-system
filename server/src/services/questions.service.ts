@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Question } from 'src/entities/question.entity';
 import { Option } from 'src/entities/option.entity';
 import { NewQuestionInput } from 'src/dto/new-question.input';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class QuestionService {
@@ -18,17 +19,20 @@ export class QuestionService {
     return this.questionRepository.find({ relations: ['options'] })
   }
 
-  public async getQuestionById(id: number): Promise<Question> {
+  public async getQuestionByUrl(url: string): Promise<Question> {
     return this.questionRepository.findOne({
-      where: { id },
-      relations: ['options']
-    })
-  } 
+      where: { url },
+      relations: ['options'],
+    });
+  }  
 
   async create(newQuestionInput: NewQuestionInput): Promise<Question> {
-    const { title, url, options } = newQuestionInput;
+    const { title, options } = newQuestionInput;
 
-    const question      = this.questionRepository.create({ title, url })
+    const question      = this.questionRepository.create({
+      title,
+      url: uuidv4()
+    })
     const savedQuestion = await this.questionRepository.save(question)
 
     const savedOptions = await Promise.all(

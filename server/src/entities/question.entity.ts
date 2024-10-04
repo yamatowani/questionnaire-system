@@ -24,7 +24,7 @@ export class Question {
   @Field()
   title: string;
 
-  @Column('varchar', { nullable: false })
+  @Column('varchar', { unique: true, nullable: false })
   @Field()
   url: string;
 

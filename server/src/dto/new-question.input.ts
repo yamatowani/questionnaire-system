@@ -6,9 +6,6 @@ export class NewQuestionInput {
   @Field()
   title: string;
 
-  @Field()
-  url: string;
-
   @Field(() => [NewOptionInput])
   options: NewOptionInput[];
 }

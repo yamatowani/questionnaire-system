@@ -11,9 +11,9 @@ export const GET_ANSWER_BY_QUESTION_ID = gql`
   }
 `;
 
-export const GET_QUESTION_BY_ID = gql`
-  query getQuestionById($id: Float!) {
-    getQuestionById(id: $id) {
+export const GET_QUESTION_BY_URL = gql`
+  query getQuestionByUrl($url: String!) {
+    getQuestionByUrl(url: $url) {
       id
       title
       options {

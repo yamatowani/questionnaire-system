@@ -1,6 +1,6 @@
 'use client';
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_QUESTION_BY_ID } from "@/lib/graphql/queries/query";
+import { GET_QUESTION_BY_URL } from "@/lib/graphql/queries/query";
 import { CREATE_ANSWER } from "@/lib/graphql/mutations/mutations";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -12,10 +12,10 @@ interface Option {
 }
 
 export default function QuestionPage() {
-  const params = useParams<{ id: string }>();
-  const id = Number(params.id);
-  const { loading, error, data } = useQuery(GET_QUESTION_BY_ID, {
-    variables: { id: id },
+  const params = useParams<{ url: string }>();
+  const url = params.url;
+  const { loading, error, data } = useQuery(GET_QUESTION_BY_URL, {
+    variables: { url },
   });
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -37,7 +37,7 @@ export default function QuestionPage() {
 
   if (loading) return <p>Loading...</p>;
 
-  const question = data.getQuestionById;
+  const question = data.getQuestionByUrl;
 
   const handleSubmit = async () => {
     if (selectedOption) {

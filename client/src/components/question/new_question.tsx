@@ -1,22 +1,26 @@
 'use client';
 import { useMutation } from "@apollo/client";
 import { CREATE_QUESTION } from "@/lib/graphql/mutations/mutations";
-import { NewQuestionInput, NewOptionInput } from "@/types/types";
+import { NewQuestionInput } from "@/types/types";
 import { useState } from "react";
 import Link from "next/link";
 
 export default function NewQuestionForm() {
   const [formData, setFormData] = useState<NewQuestionInput>({
     title: '',
-    url: '',
     options: [{ option_text: '' }],
   });
 
+  const [questionUrl, setQuestionUrl] = useState<string | null>(null);
+
   const [addNewQuestion, { loading, error }] = useMutation(CREATE_QUESTION, {
     variables: { createQuestionInput: formData },
-    onCompleted: () => {
-      alert('Question created successfully!');
-      setFormData({ title: '', url: '', options: [{ option_text: '' }] });
+    onCompleted: (data) => {
+      const generatedUrl = data.createQuestion.url;
+      const fullUrl = `${window.location.origin}/question/${generatedUrl}`;
+      setQuestionUrl(generatedUrl);
+      alert(`アンケートを作成しました! \n URLは"${fullUrl}"です`);
+      setFormData({ title: '', options: [{ option_text: '' }] });
     },
     onError: (error) => {
       console.error("Error creating question:", error);
@@ -42,23 +46,24 @@ export default function NewQuestionForm() {
     });
   };
 
+  const copyToClipboard = () => {
+    if (questionUrl) {
+      const fullUrl = `${window.location.origin}/question/${questionUrl}`;
+      navigator.clipboard.writeText(fullUrl).then(() => {
+        alert(`URL "${fullUrl}" がコピーされました!`);
+      });
+    }
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <input 
           type="text"
           name="title"
-          placeholder="Question Title"
+          placeholder="質問項目を入力"
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           value={formData.title}
-          required
-        />
-        <input
-          type="text"
-          name="url"
-          placeholder="Question URL"
-          onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-          value={formData.url}
           required
         />
 
@@ -66,17 +71,24 @@ export default function NewQuestionForm() {
           <input
             key={index}
             type="text"
-            placeholder="Option Text"
+            placeholder="選択肢を入力"
             onChange={(e) => handleChange(e, index)}
             value={option.option_text}
             required
           />
         ))}
 
-        <button type="button" onClick={addOption}>Add Option</button>
+        <button type="button" onClick={addOption}>選択肢を追加</button>
         <button type="submit" disabled={loading}>Create Question</button>
         {error && <p>Error: {error.message}</p>}
       </form>
+
+      {questionUrl && (
+        <div>
+          <button onClick={copyToClipboard}>URLをコピー</button>
+        </div>
+      )}
+
       <Link href='/'>Back to Home</Link>
     </div>
   );
