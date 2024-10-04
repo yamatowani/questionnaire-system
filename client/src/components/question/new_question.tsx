@@ -11,10 +11,15 @@ export default function NewQuestionForm() {
     options: [{ option_text: '' }],
   });
 
+  const [questionUrl, setQuestionUrl] = useState<string | null>(null);
+
   const [addNewQuestion, { loading, error }] = useMutation(CREATE_QUESTION, {
     variables: { createQuestionInput: formData },
-    onCompleted: () => {
-      alert('Question created successfully!');
+    onCompleted: (data) => {
+      const generatedUrl = data.createQuestion.url;
+      const fullUrl = `${window.location.origin}/question/${generatedUrl}`;
+      setQuestionUrl(generatedUrl)
+      alert(`アンケートを作成しました! \n URLは"${fullUrl}"です`);
       setFormData({ title: '', options: [{ option_text: '' }] });
     },
     onError: (error) => {
