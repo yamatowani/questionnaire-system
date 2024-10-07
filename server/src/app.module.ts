@@ -10,7 +10,7 @@ import { AdminUser } from './entities/admin_user.entity';
 import { Question } from './entities/question.entity';
 import { Option } from './entities/option.entity';
 import { Answer } from './entities/answer.entity';
-import { QuestionModule } from './modules/questions.module';
+import { QuestionsModule } from './modules/questions.module';
 import { AnswerModule } from './modules/answers.module';
 import { AuthModule } from './auth/auth.module';
 
@@ -33,7 +33,7 @@ import { AuthModule } from './auth/auth.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     AdminUsersModule,
-    QuestionModule,
+    QuestionsModule,
     AnswerModule,
     AuthModule,
   ],

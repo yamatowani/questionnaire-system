@@ -20,9 +20,10 @@ export class QuestionResolver {
   }
 
   @Mutation(() => Question)
-  async createQuestion(
-    @Args('createQuestionInput') newQuestionInput: NewQuestionInput
+  public async createQuestion(
+    @Args('newQuestionInput') newQuestionInput: NewQuestionInput,
+    @Args('adminUserId') adminUserId: number,
   ): Promise<Question> {
-    return this.questionService.create(newQuestionInput);
+    return this.questionService.create(newQuestionInput, adminUserId);
   }
 }

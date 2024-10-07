@@ -57,7 +57,7 @@ type Query {
 
 type Mutation {
   addNewAdminUser(newAdminUserData: NewAdminUserInput!): AdminUser!
-  createQuestion(createQuestionInput: NewQuestionInput!): Question!
+  createQuestion(newQuestionInput: NewQuestionInput!, adminUserId: Float!): Question!
   createAnswer(newAnswerInput: NewAnswerInput!): Answer!
   login(authInput: AuthInput!): AuthResponse!
 }

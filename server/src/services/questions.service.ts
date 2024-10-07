@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Question } from 'src/entities/question.entity';
 import { Option } from 'src/entities/option.entity';
 import { NewQuestionInput } from 'src/dto/new-question.input';
+import { AdminUser } from 'src/entities/admin_user.entity';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -13,6 +14,8 @@ export class QuestionService {
     private readonly questionRepository: Repository<Question>,
     @InjectRepository(Option)
     private readonly optionRepository: Repository<Option>,
+    @InjectRepository(AdminUser)
+    private readonly adminUserRepository: Repository<AdminUser>,
   ) {}
 
   public async getAllQuestions(): Promise<Question[]> {
@@ -26,12 +29,23 @@ export class QuestionService {
     });
   }
 
-  async create(newQuestionInput: NewQuestionInput): Promise<Question> {
+  async create(
+    newQuestionInput: NewQuestionInput,
+    adminUserId: number,
+  ): Promise<Question> {
     const { title, options } = newQuestionInput;
+
+    const adminUser = await this.adminUserRepository.findOne({
+      where: { id: adminUserId },
+    });
+    if (!adminUser) {
+      throw new NotFoundException('Admin user not found');
+    }
 
     const question = this.questionRepository.create({
       title,
       url: uuidv4(),
+      admin_user: adminUser,
     });
     const savedQuestion = await this.questionRepository.save(question);
 
@@ -44,6 +58,7 @@ export class QuestionService {
         return this.optionRepository.save(newOption);
       }),
     );
+
     savedQuestion.options = savedOptions;
 
     return savedQuestion;
