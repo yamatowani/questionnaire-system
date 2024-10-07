@@ -28,7 +28,6 @@ erDiagram
         varchar name "管理ユーザー名"
         varchar email "管理ユーザーemail"
         varchar password_digest "パスワードダイジェスト"
-        timestamp session_id "セッションID"
         timestamp created_at "作成日時"
         timestamp updated_at "更新日時"
     }
@@ -70,9 +69,8 @@ erDiagram
 |-----------------|--------------|------|-----|----------------------|--------------------------------------------------|
 | admin_user_id   | int          | NO   | PRI | NULL                 | auto_increment                                   |
 | name            | varchar(20)  | YES  |     | NULL                 |                                                  |
-| email           | varchar(255) | NO  |     | NULL                 |                                                  |
+| email           | varchar(255) | NO   |     | NULL                 |                                                  |
 | password_digest | varchar(255) | YES  |     | NULL                 |                                                  |
-| session_id      | varchar(255) | YES  |     | NULL                 |                                                  |
 | created_at      | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED                                |
 | updated_at      | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6) |
 

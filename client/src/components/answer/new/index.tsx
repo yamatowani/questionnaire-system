@@ -11,7 +11,7 @@ interface Option {
   option_text: string
 }
 
-export default function QuestionPage() {
+export default function NewAnswerForm() {
   const params = useParams<{ url: string }>();
   const url = params.url;
   const { loading, error, data } = useQuery(GET_QUESTION_BY_URL, {

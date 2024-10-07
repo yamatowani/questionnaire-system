@@ -39,10 +39,13 @@ type AdminUser {
   name: String!
   email: String!
   password_digest: String!
-  session_id: String!
   created_at: DateTime!
   updated_at: DateTime!
   questions: [Question!]!
+}
+
+type AuthResponse {
+  access_token: String!
 }
 
 type Query {
@@ -56,12 +59,13 @@ type Mutation {
   addNewAdminUser(newAdminUserData: NewAdminUserInput!): AdminUser!
   createQuestion(createQuestionInput: NewQuestionInput!): Question!
   createAnswer(newAnswerInput: NewAnswerInput!): Answer!
+  login(authInput: AuthInput!): AuthResponse!
 }
 
 input NewAdminUserInput {
   name: String!
   email: String!
-  password_digest: String!
+  password: String!
 }
 
 input NewQuestionInput {
@@ -76,4 +80,9 @@ input NewOptionInput {
 input NewAnswerInput {
   option_id: Float!
   question_id: Float!
+}
+
+input AuthInput {
+  email: String!
+  password: String!
 }

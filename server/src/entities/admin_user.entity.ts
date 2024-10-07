@@ -20,17 +20,13 @@ export class AdminUser {
   @Field()
   name: string;
 
-  @Column('varchar', { nullable: false })
+  @Column('varchar', { unique: true, nullable: false })
   @Field()
   email: string;
 
   @Column('varchar', { nullable: true })
   @Field()
   password_digest: string;
-
-  @Column('varchar', { nullable: true })
-  @Field()
-  session_id: string;
 
   @CreateDateColumn()
   @Field()

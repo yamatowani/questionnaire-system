@@ -9,15 +9,24 @@ export default function AddAdminUserForm() {
   const [formData, setFormData] = useState<NewAdminUserInput>({
     name: '',
     email: '',
-    password_digest: '',
+    password: '',
   });
 
-  const [addNewAdminUser, { loading, error }] = useMutation(ADD_NEW_ADMIN_USER, {
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const [addNewAdminUser, { loading }] = useMutation(ADD_NEW_ADMIN_USER, {
     variables: { newAdminUserData: formData },
     onCompleted: () => {
       alert('Admin User added Successfully!');
-      setFormData({ name: '', email: '', password_digest: '' });
+      setFormData({ name: '', email: '', password: '' });
     },
+    onError: (err) => {
+      if (err.message.includes("Duplicate entry")) {
+        setErrorMessage("このメールアドレスはすでに使用されています。別のメールアドレスをお試しください。");
+      } else {
+        setErrorMessage(err.message);
+      }
+    }
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,14 +40,14 @@ export default function AddAdminUserForm() {
 
   return (
     <div>
-     <form onSubmit={handleSubmit}>
-      <input type="text" name="name" placeholder="Name" onChange={handleChange} value={formData.name} required />
-      <input type="email" name="email" placeholder="Email" onChange={handleChange} value={formData.email} required />
-      <input type="password" name="password_digest" placeholder="Password" onChange={handleChange} value={formData.password_digest} required />
-      <button type="submit" disabled={loading}>Create Admin User</button>
-      {error && <p>Error: {error.message}</p>}
+      <form onSubmit={handleSubmit}>
+        <input type="text" name="name" placeholder="Name" onChange={handleChange} value={formData.name} required />
+        <input type="email" name="email" placeholder="Email" onChange={handleChange} value={formData.email} required />
+        <input type="password" name="password" placeholder="Password" onChange={handleChange} value={formData.password} required />
+        <button type="submit" disabled={loading}>Create Admin User</button>
+        {errorMessage && <p>Error: {errorMessage}</p>}
       </form>
       <Link href='/'>Back to Home</Link>
     </div>
-  )
+  );
 }
