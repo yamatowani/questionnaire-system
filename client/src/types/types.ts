@@ -4,7 +4,7 @@ export type AdminUser = {
   id: number,
   name: string;
   email: string;
-  password_digest: string;
+  password: string;
   session_id: string;
 }
 
@@ -24,7 +24,7 @@ export type Option = {
 export type NewAdminUserInput = {
   name: string;
   email: string;
-  password_digest: string;
+  password: string;
 }
 
 export type NewQuestionInput = {

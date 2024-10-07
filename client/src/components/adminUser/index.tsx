@@ -25,7 +25,7 @@ export default function AdminUsers() {
       <ul>
         {data.admin_users.map((user) => (
           <li key={user.id}>
-            Name: {user.name}, Password Digest: {user.password_digest}
+            Name: {user.name}, Password Digest: {user.password}
           </li>
         ))}
       </ul>
