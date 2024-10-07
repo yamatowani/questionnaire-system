@@ -40,6 +40,7 @@ export const GET_ALL_QUESTIONS_BY_ADMIN_USER_ID = gql`
     getAllQuestionsByAdminUserId(adminUserId: $adminUserId) {
       id
       title
+      url
       options {
         id
         option_text
