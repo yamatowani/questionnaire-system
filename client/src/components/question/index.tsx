@@ -1,6 +1,6 @@
 'use client';
 import Link from "next/link";
-import { gql } from "@apollo/client";
+
 import { useQuery } from "@apollo/client";
 import { GET_ALL_QUESTIONS } from "@/lib/graphql/queries/query";
 import { Question } from "@/types/types";
