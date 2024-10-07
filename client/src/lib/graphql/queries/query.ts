@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const GET_ANSWER_BY_ADMIN_USER = gql`
   query getAnswerByAdminUser($adminUserId: Float!) {
-    getAnswerByQuestion(adminUserId: $adminUserId) {
+    getAnswerByAdminUser(adminUserId: $adminUserId) {
       id
       question {
         id
