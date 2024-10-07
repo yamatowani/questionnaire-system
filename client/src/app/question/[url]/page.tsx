@@ -1,5 +1,5 @@
-import NewAnswer from "@/components/answer/new_answer"
+import NewAnswerForm from "@/components/answer/new";
 
 export default function Page() {
-  return <NewAnswer />;
+  return <NewAnswerForm />;
 }
