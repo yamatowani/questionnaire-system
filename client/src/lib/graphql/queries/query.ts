@@ -23,3 +23,15 @@ export const GET_QUESTION_BY_URL = gql`
     }
   }
 `;
+
+
+export const GET_ADMIN_USERS = gql`
+query {
+  admin_users {
+    id
+    name
+    email
+    password_digest
+  }
+}
+`;

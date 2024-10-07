@@ -1,9 +1,9 @@
-import AdminUser from "@/components/adminUser"
+import AdminUsers from "@/components/adminUser"
 
 export default function Home() {
   return (
     <main>
-      <AdminUser />
+      <AdminUsers />
     </main>
   )
 }
