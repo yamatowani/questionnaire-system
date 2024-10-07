@@ -15,6 +15,10 @@ export class AdminUsersService {
     return this.adminUserRepository.find({});
   }
 
+  async findOneByEmail(email: string): Promise<AdminUser | undefined> {
+    return this.adminUserRepository.findOneBy({ email: email })
+  }
+
   public async createNewAdminUser(newAdminUserInput: NewAdminUserInput): Promise<AdminUser> {
 
     const hasedPassword = await bcrypt.hash(newAdminUserInput.password, 10);
