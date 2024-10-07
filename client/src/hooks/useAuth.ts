@@ -14,10 +14,7 @@ const useAuth = () => {
     } else {
       try {
         const decodedToken = jwt.decode(token) as JwtPayload;
-
-        if (decodedToken && typeof decodedToken.sub === 'string') {
-          setAdminUserId(Number(decodedToken.sub));
-        }
+        setAdminUserId(Number(decodedToken.sub));
       } catch (error) {
         console.error('Token decoding error:', error);
         router.push('/login');
