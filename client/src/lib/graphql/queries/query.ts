@@ -24,14 +24,23 @@ export const GET_QUESTION_BY_URL = gql`
   }
 `;
 
-
 export const GET_ADMIN_USERS = gql`
-query {
-  admin_users {
-    id
-    name
-    email
-    password_digest
+  query {
+    admin_users {
+      id
+      name
+      email
+      password_digest
+    }
   }
-}
+`;
+
+export const GET_ALL_QUESTIONS = gql`
+  query {
+    questions {
+      id
+      title
+      url
+    }
+  }
 `;
