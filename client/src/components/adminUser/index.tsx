@@ -2,27 +2,10 @@
 import Link from "next/link";
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client';
+import { GET_ADMIN_USERS } from "@/lib/graphql/queries/query";
+import { AdminUser } from "@/types/types";
 
-const GET_ADMIN_USERS = gql`
-  query {
-    admin_users {
-      id
-      name
-      email
-      password_digest
-    }
-  }
-`;
-
-interface AdminUser {
-  id: string,
-  name: string;
-  email: string;
-  password_digest: string;
-  session_id: string;
-}
-
-export default function AdminUser() {
+export default function AdminUsers() {
   const { data, loading, error } = useQuery<{ admin_users: AdminUser[] }>(GET_ADMIN_USERS, {
     fetchPolicy: 'network-only'
   });

@@ -1,9 +1,9 @@
-import AdminUser from "@/components/admin_user/admin_user"
+import Questions from "@/components/question"
 
 export default function Home() {
   return (
     <main>
-      <AdminUser />
+      <Questions />
     </main>
   )
 }

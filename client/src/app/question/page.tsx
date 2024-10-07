@@ -1,4 +1,4 @@
-import NewQuestionForm from "@/components/question/new_question"
+import NewQuestionForm from "@/components/question/new"
 
 export default function AdminUserPage() {
   return (
