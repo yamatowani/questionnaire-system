@@ -18,8 +18,14 @@ export class QuestionService {
     private readonly adminUserRepository: Repository<AdminUser>,
   ) {}
 
-  public async getAllQuestions(): Promise<Question[]> {
-    return this.questionRepository.find({ relations: ['options'] });
+  public async getAllQuestionsByAdminUserId(
+    adminUserId: number,
+  ): Promise<Question[]> {
+    const questions = await this.questionRepository.find({
+      where: { admin_user: { id: adminUserId } },
+      relations: ['options'],
+    });
+    return questions;
   }
 
   public async getQuestionByUrl(url: string): Promise<Question> {

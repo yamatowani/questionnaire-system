@@ -51,7 +51,7 @@ type AuthResponse {
 type Query {
   admin_users: [AdminUser!]!
   getQuestionByUrl(url: String!): Question!
-  questions: [Question!]!
+  getAllQuestionsByAdminUserId(adminUserId: Float!): [Question!]!
   getAnswerByQuestion(question_id: Float!): [Answer!]!
 }
 
