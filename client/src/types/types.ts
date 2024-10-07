@@ -1,5 +1,3 @@
-import exp from "constants";
-
 export type AdminUser = {
   id: number,
   name: string;
@@ -33,4 +31,10 @@ export type NewQuestionInput = {
 
 export type NewOptionInput = {
   option_text: string;
+}
+
+export type LoginResponse = {
+  login: {
+    access_token: string;
+  };
 }

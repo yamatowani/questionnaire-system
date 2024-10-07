@@ -40,6 +40,7 @@ export default function AddAdminUserForm() {
 
   return (
     <div>
+      <h1>アカウントを作成する</h1>
       <form onSubmit={handleSubmit}>
         <input type="text" name="name" placeholder="Name" onChange={handleChange} value={formData.name} required />
         <input type="email" name="email" placeholder="Email" onChange={handleChange} value={formData.email} required />

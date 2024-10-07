@@ -40,3 +40,11 @@ export const CREATE_ANSWER = gql`
     }
   }
 `;
+
+export const LOGIN = gql`
+  mutation login($authInput: AuthInput!) {
+    login(authInput: $authInput) {
+      access_token
+    }
+  }
+`;
