@@ -61,7 +61,7 @@ type Mutation {
 input NewAdminUserInput {
   name: String!
   email: String!
-  password_digest: String!
+  password: String!
 }
 
 input NewQuestionInput {
