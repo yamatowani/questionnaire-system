@@ -1,8 +1,13 @@
 import { gql } from "@apollo/client";
 
-export const GET_ANSWER_BY_QUESTION_ID = gql`
-  query getAnswerByQuestion($question_id: Int!) {
-    getAnswerByQuestion(question_id: $question_id) {
+export const GET_ANSWER_BY_ADMIN_USER = gql`
+  query getAnswerByAdminUser($adminUserId: Float!) {
+    getAnswerByQuestion(adminUserId: $adminUserId) {
+      id
+      question {
+        id
+        title
+      }
       option {
         id
         option_text
