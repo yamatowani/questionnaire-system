@@ -28,10 +28,6 @@ export class AdminUser {
   @Field()
   password_digest: string;
 
-  @Column('varchar', { nullable: true })
-  @Field()
-  session_id: string;
-
   @CreateDateColumn()
   @Field()
   readonly created_at?: Date;

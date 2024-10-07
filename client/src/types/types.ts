@@ -5,7 +5,6 @@ export type AdminUser = {
   name: string;
   email: string;
   password: string;
-  session_id: string;
 }
 
 export type Question = {
