@@ -16,7 +16,7 @@ export class QuestionService {
   ) {}
 
   public async getAllQuestions(): Promise<Question[]> {
-    return this.questionRepository.find({ relations: ['options'] })
+    return this.questionRepository.find({ relations: ['options'] });
   }
 
   public async getQuestionByUrl(url: string): Promise<Question> {
@@ -24,28 +24,28 @@ export class QuestionService {
       where: { url },
       relations: ['options'],
     });
-  }  
+  }
 
   async create(newQuestionInput: NewQuestionInput): Promise<Question> {
     const { title, options } = newQuestionInput;
 
-    const question      = this.questionRepository.create({
+    const question = this.questionRepository.create({
       title,
-      url: uuidv4()
-    })
-    const savedQuestion = await this.questionRepository.save(question)
+      url: uuidv4(),
+    });
+    const savedQuestion = await this.questionRepository.save(question);
 
     const savedOptions = await Promise.all(
-      options.map(option => {
+      options.map((option) => {
         const newOption = this.optionRepository.create({
           option_text: option.option_text,
           question: savedQuestion,
-        })
-        return this.optionRepository.save(newOption)
-      })
-    )
+        });
+        return this.optionRepository.save(newOption);
+      }),
+    );
     savedQuestion.options = savedOptions;
 
-    return savedQuestion
+    return savedQuestion;
   }
 }
