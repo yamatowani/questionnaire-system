@@ -20,7 +20,7 @@ export class AdminUser {
   @Field()
   name: string;
 
-  @Column('varchar', { nullable: false })
+  @Column('varchar', { unique: true, nullable: false })
   @Field()
   email: string;
 
