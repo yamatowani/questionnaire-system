@@ -34,7 +34,7 @@ export default function AddAdminUserForm() {
      <form onSubmit={handleSubmit}>
       <input type="text" name="name" placeholder="Name" onChange={handleChange} value={formData.name} required />
       <input type="email" name="email" placeholder="Email" onChange={handleChange} value={formData.email} required />
-      <input type="password" name="password_digest" placeholder="Password" onChange={handleChange} value={formData.password} required />
+      <input type="password" name="password" placeholder="Password" onChange={handleChange} value={formData.password} required />
       <button type="submit" disabled={loading}>Create Admin User</button>
       {error && <p>Error: {error.message}</p>}
       </form>
