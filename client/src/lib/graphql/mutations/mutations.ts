@@ -13,8 +13,8 @@ export const ADD_NEW_ADMIN_USER = gql`
 `;
 
 export const CREATE_QUESTION = gql`
-  mutation createQuestion($createQuestionInput: NewQuestionInput!) {
-    createQuestion(createQuestionInput: $createQuestionInput) {
+  mutation createQuestion($newQuestionInput: NewQuestionInput!, $adminUserId: Float!) {
+    createQuestion(newQuestionInput: $newQuestionInput, adminUserId: $adminUserId) {
       id
       title
       url
@@ -22,9 +22,14 @@ export const CREATE_QUESTION = gql`
         id
         option_text
       }
+      admin_user {
+        id
+        name
+      }
     }
   }
 `;
+
 
 export const CREATE_ANSWER = gql`
   mutation createAnswer($newAnswerInput: NewAnswerInput!) {

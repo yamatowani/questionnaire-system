@@ -6,16 +6,16 @@ import { AdminUsersModule } from 'src/modules/admin_users.module';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthResolver } from './auth.resolever';
 
-   @Module({
-     imports: [
-       AdminUsersModule,
-       PassportModule,
-       JwtModule.register({
-         secret: 'secretKey',
-         signOptions: { expiresIn: '60m' },
-       }),
-     ],
-     providers: [AuthResolver, AuthService, JwtStrategy],
-     exports: [AuthService],
-   })
-   export class AuthModule {}
+@Module({
+  imports: [
+    AdminUsersModule,
+    PassportModule,
+    JwtModule.register({
+      secret: 'secretKey',
+      signOptions: { expiresIn: '60m' },
+    }),
+  ],
+  providers: [AuthResolver, AuthService, JwtStrategy],
+  exports: [AuthService],
+})
+export class AuthModule {}

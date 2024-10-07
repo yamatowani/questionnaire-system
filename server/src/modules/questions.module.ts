@@ -1,15 +1,14 @@
-import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { QuestionResolver } from "src/resolvers/questions.resolver";
-import { QuestionService } from "src/services/questions.service";
-import { Question } from "src/entities/question.entity";
-import { Option } from "src/entities/option.entity";
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Question } from 'src/entities/question.entity';
+import { Option } from 'src/entities/option.entity';
+import { AdminUser } from 'src/entities/admin_user.entity';
+import { QuestionService } from 'src/services/questions.service';
+import { QuestionResolver } from 'src/resolvers/questions.resolver';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Question, Option])
-  ],
-  providers: [QuestionResolver, QuestionService],
+  imports: [TypeOrmModule.forFeature([Question, Option, AdminUser])],
+  providers: [QuestionService, QuestionResolver],
   exports: [QuestionService],
 })
-export class QuestionModule {}
+export class QuestionsModule {}

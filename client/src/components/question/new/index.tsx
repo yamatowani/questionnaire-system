@@ -4,17 +4,18 @@ import { CREATE_QUESTION } from "@/lib/graphql/mutations/mutations";
 import { NewQuestionInput } from "@/types/types";
 import { useState } from "react";
 import Link from "next/link";
+import useAuth from "@/hooks/useAuth";
 
 export default function NewQuestionForm() {
+  const { logout,adminUserId  } = useAuth();
   const [formData, setFormData] = useState<NewQuestionInput>({
     title: '',
     options: [{ option_text: '' }],
   });
-
   const [questionUrl, setQuestionUrl] = useState<string | null>(null);
 
   const [addNewQuestion, { loading, error }] = useMutation(CREATE_QUESTION, {
-    variables: { createQuestionInput: formData },
+    variables: { newQuestionInput: formData, adminUserId: adminUserId },
     onCompleted: (data) => {
       const generatedUrl = data.createQuestion.url;
       const fullUrl = `${window.location.origin}/question/${generatedUrl}`;
@@ -88,8 +89,9 @@ export default function NewQuestionForm() {
           <button onClick={copyToClipboard}>URLをコピー</button>
         </div>
       )}
-
-      <Link href='/'>Back to Home</Link>
+      <button onClick={logout}>ログアウト</button>
+      <br />
+      <Link href='/'>ホームに戻る</Link>
     </div>
   );
 }
