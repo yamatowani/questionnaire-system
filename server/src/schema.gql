@@ -45,6 +45,10 @@ type AdminUser {
   questions: [Question!]!
 }
 
+type AuthResponse {
+  access_token: String!
+}
+
 type Query {
   admin_users: [AdminUser!]!
   getQuestionByUrl(url: String!): Question!
@@ -56,6 +60,7 @@ type Mutation {
   addNewAdminUser(newAdminUserData: NewAdminUserInput!): AdminUser!
   createQuestion(createQuestionInput: NewQuestionInput!): Question!
   createAnswer(newAnswerInput: NewAnswerInput!): Answer!
+  login(authInput: AuthInput!): AuthResponse!
 }
 
 input NewAdminUserInput {
@@ -76,4 +81,9 @@ input NewOptionInput {
 input NewAnswerInput {
   option_id: Float!
   question_id: Float!
+}
+
+input AuthInput {
+  email: String!
+  password: String!
 }
