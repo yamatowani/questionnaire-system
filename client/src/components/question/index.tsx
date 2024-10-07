@@ -1,33 +1,32 @@
 'use client';
 import Link from "next/link";
-
 import { useQuery } from "@apollo/client";
-import { GET_ALL_QUESTIONS } from "@/lib/graphql/queries/query";
+import { GET_ALL_QUESTIONS_BY_ADMIN_USER_ID } from "@/lib/graphql/queries/query";
 import { Question } from "@/types/types";
 import useAuth from "@/hooks/useAuth";
 
 export default function Questions() {
+  const { logout, adminUserId } = useAuth();
 
-  const { logout } = useAuth();
-  const { data, loading, error } = useQuery<{ questions: Question[] }>(GET_ALL_QUESTIONS, {
-    fetchPolicy: "network-only"
+  const { data, loading, error } = useQuery(GET_ALL_QUESTIONS_BY_ADMIN_USER_ID, {
+    variables: { adminUserId },
   });
+
   if (loading) return <p>Loading...</p>;
 
   if (error) return <p>Error: {error.message}</p>;
 
-  if (!data || !data.questions) {
-    return <p>作成したアンケートはありません</p>; 
+  if (!data || !data.getAllQuestionsByAdminUserId || data.getAllQuestionsByAdminUserId.length === 0) {
+    return <p>作成したアンケートはありません</p>;
   }
-
 
   return (
     <div>
       <h2>作成したアンケート一覧</h2>
       <ul>
-        {data.questions.map((question) => (
+        {data.getAllQuestionsByAdminUserId.map((question: Question) => (
           <li key={question.id}>
-            <Link href={'/question/' + question.url }>タイトル: {question.title}</Link>
+            <Link href={`/question/${question.url}`}>タイトル: {question.title}</Link>
           </li>
         ))}
       </ul>

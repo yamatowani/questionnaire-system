@@ -35,12 +35,15 @@ export const GET_ADMIN_USERS = gql`
   }
 `;
 
-export const GET_ALL_QUESTIONS = gql`
-  query {
-    questions {
+export const GET_ALL_QUESTIONS_BY_ADMIN_USER_ID = gql`
+  query getAllQuestionsByAdminUserId($adminUserId: Float!) {
+    getAllQuestionsByAdminUserId(adminUserId: $adminUserId) {
       id
       title
-      url
+      options {
+        id
+        option_text
+      }
     }
   }
 `;
