@@ -6,7 +6,6 @@ export const ADD_NEW_ADMIN_USER = gql`
       id
       name
       email
-      password
       created_at
       updated_at
     }
