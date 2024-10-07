@@ -4,8 +4,11 @@ import { CREATE_QUESTION } from "@/lib/graphql/mutations/mutations";
 import { NewQuestionInput } from "@/types/types";
 import { useState } from "react";
 import Link from "next/link";
+import useAuth from "@/hooks/useAuth";
 
 export default function NewQuestionForm() {
+  const { logout } = useAuth();
+
   const [formData, setFormData] = useState<NewQuestionInput>({
     title: '',
     options: [{ option_text: '' }],
@@ -88,7 +91,8 @@ export default function NewQuestionForm() {
           <button onClick={copyToClipboard}>URLをコピー</button>
         </div>
       )}
-
+      <button onClick={logout}>ログアウト</button>
+      <br />
       <Link href='/'>Back to Home</Link>
     </div>
   );
