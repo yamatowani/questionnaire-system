@@ -4,8 +4,11 @@ import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_QUESTIONS } from "@/lib/graphql/queries/query";
 import { Question } from "@/types/types";
+import useAuth from "@/hooks/useAuth";
 
 export default function Questions() {
+
+  const { logout } = useAuth();
   const { data, loading, error } = useQuery<{ questions: Question[] }>(GET_ALL_QUESTIONS, {
     fetchPolicy: "network-only"
   });
@@ -28,6 +31,7 @@ export default function Questions() {
           </li>
         ))}
       </ul>
+      <button onClick={logout}>ログアウト</button>
       <br />
       <Link href='/question'>新しいアンケートを作成する</Link>
     </div>
