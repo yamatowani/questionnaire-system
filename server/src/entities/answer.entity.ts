@@ -15,6 +15,7 @@ import { ObjectType, Field } from '@nestjs/graphql';
 @ObjectType()
 export class Answer {
   @PrimaryGeneratedColumn()
+  @Field()
   readonly id: number;
 
   @Column('bigint', { nullable: false })
@@ -37,11 +38,11 @@ export class Answer {
   @JoinColumn({ name: 'question_id' })
   @Field(() => Question)
   question: Question;
-  
+
   @ManyToOne(() => Option, (option) => option.answers, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'option_id' })
   @Field(() => Option)
-  option: Option;  
+  option: Option;
 }

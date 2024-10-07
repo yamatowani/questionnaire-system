@@ -3,6 +3,7 @@
 # ------------------------------------------------------
 
 type Answer {
+  id: Float!
   option_id: Float!
   question_id: Float!
   question: Question!
@@ -52,7 +53,7 @@ type Query {
   admin_users: [AdminUser!]!
   getQuestionByUrl(url: String!): Question!
   getAllQuestionsByAdminUserId(adminUserId: Float!): [Question!]!
-  getAnswerByQuestion(question_id: Float!): [Answer!]!
+  getAnswerByAdminUser(adminUserId: Float!): [Answer!]!
 }
 
 type Mutation {

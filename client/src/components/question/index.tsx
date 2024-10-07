@@ -30,6 +30,8 @@ export default function Questions() {
           </li>
         ))}
       </ul>
+      <Link href='/answer'>アンケートの結果を見る</Link>
+      <br />
       <button onClick={logout}>ログアウト</button>
       <br />
       <Link href='/question'>新しいアンケートを作成する</Link>

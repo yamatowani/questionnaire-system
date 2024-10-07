@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Question } from 'src/entities/question.entity';
 import { Option } from 'src/entities/option.entity';
 import { Answer } from 'src/entities/answer.entity';
@@ -17,20 +17,29 @@ export class AnswerService {
     private readonly optionRepository: Repository<Option>,
   ) {}
 
-  public async getAnswerByQuestion(question_id: number): Promise<Answer[]> {
+  public async getAnswerByAdminUser(adminUserId: number): Promise<Answer[]> {
+    const questions = await this.questionRepository.find({
+      where: { admin_user: { id: adminUserId } },
+      relations: ['options'],
+    });
+
+    const questionIds = questions.map(q => q.id);
+
     return this.answerRepository.find({
       relations: ['question', 'option'],
-       where: { question: {id: question_id } } 
-      })
+      where: { question: { id: In(questionIds) } },
+    });
   }
 
   async create(newAnswerInput: NewAnswerInput): Promise<Answer> {
-    const { option_id, question_id } = newAnswerInput
+    const { option_id, question_id } = newAnswerInput;
 
-    const question = await this.questionRepository.findOneBy({ id: question_id })
-    const option   = await this.optionRepository.findOneBy({ id: option_id })
+    const question = await this.questionRepository.findOneBy({
+      id: question_id,
+    });
+    const option = await this.optionRepository.findOneBy({ id: option_id });
 
-    const answer = this.answerRepository.create({ option, question })
-    return this.answerRepository.save(answer)
+    const answer = this.answerRepository.create({ option, question });
+    return this.answerRepository.save(answer);
   }
- }
+}
