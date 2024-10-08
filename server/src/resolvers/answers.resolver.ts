@@ -7,13 +7,6 @@ import { Answer } from 'src/entities/answer.entity';
 export class AnswerResolver {
   constructor(private readonly answerService: AnswerService) {}
 
-  @Query(() => [Answer])
-  public async getAnswerByAdminUser(
-    @Args('adminUserId', { type: () => Int }) adminUserId: number,
-  ): Promise<Answer[]> {
-    return this.answerService.getAnswerByAdminUser(adminUserId);
-  }
-
   @Mutation(() => Answer)
   async createAnswer(
     @Args('newAnswerInput') newAnswerInput: NewAnswerInput,

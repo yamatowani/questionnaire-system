@@ -62,7 +62,6 @@ type Query {
   questionByUrl(url: String!): Question!
   questions(adminUserId: Int!): [Question!]!
   getQuestionWithAnswerCounts(adminUserId: Int!): [QuestionWithAnswerCounts!]!
-  getAnswerByAdminUser(adminUserId: Int!): [Answer!]!
 }
 
 type Mutation {
