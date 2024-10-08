@@ -8,23 +8,24 @@ import * as bcrypt from 'bcryptjs';
 @Injectable()
 export class AdminUsersService {
   constructor(
-    @InjectRepository(AdminUser) private adminUserRepository: Repository<AdminUser>,
+    @InjectRepository(AdminUser)
+    private adminUserRepository: Repository<AdminUser>,
   ) {}
 
-  public async getAllAdminUsers(): Promise<AdminUser[]> {
-    return this.adminUserRepository.find({});
-  }
-
   async findOneByEmail(email: string): Promise<AdminUser | undefined> {
-    return this.adminUserRepository.findOneBy({ email: email })
+    return this.adminUserRepository.findOneBy({ email: email });
   }
 
-  public async createNewAdminUser(newAdminUserInput: NewAdminUserInput): Promise<AdminUser> {
-
+  public async createNewAdminUser(
+    newAdminUserInput: NewAdminUserInput,
+  ): Promise<AdminUser> {
     const hasedPassword = await bcrypt.hash(newAdminUserInput.password, 10);
 
-    const newAdminUser = this.adminUserRepository.create({ ...newAdminUserInput, password_digest: hasedPassword});
-    await this.adminUserRepository.save(newAdminUser)
-    return newAdminUser
-  };
+    const newAdminUser = this.adminUserRepository.create({
+      ...newAdminUserInput,
+      password_digest: hasedPassword,
+    });
+    await this.adminUserRepository.save(newAdminUser);
+    return newAdminUser;
+  }
 }

@@ -13,11 +13,6 @@ export class AdminUsersResolver {
     private readonly questionService: QuestionService,
   ) {}
 
-  @Query(() => [AdminUser])
-  public async admin_users(): Promise<AdminUser[]> {
-    return this.adminUsersService.getAllAdminUsers();
-  }
-
   @Mutation(() => AdminUser)
   public async addNewAdminUser(
     @Args('newAdminUserData') newAdminUserData: NewAdminUserInput,
