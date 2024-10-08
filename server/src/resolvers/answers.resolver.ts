@@ -16,7 +16,7 @@ export class AnswerResolver {
 
   @Mutation(() => Answer)
   async createAnswer(
-    @Args('newAnswerInput') newAnswerInput: NewAnswerInput
+    @Args('newAnswerInput') newAnswerInput: NewAnswerInput,
   ): Promise<Answer> {
     return this.answerService.create(newAnswerInput);
   }
