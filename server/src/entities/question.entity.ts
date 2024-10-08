@@ -44,7 +44,7 @@ export class Question {
   @OneToMany(() => Answer, (answer) => answer.question, {
     onDelete: 'CASCADE',
   })
-  @Field(() => [Answer])
+  @Field(() => [Answer], { nullable: true })
   answers: Answer[];
 
   @CreateDateColumn()

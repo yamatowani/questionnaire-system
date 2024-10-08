@@ -8,7 +8,7 @@ import { AdminUser } from 'src/entities/admin_user.entity';
 export class AuthService {
   constructor(
     private adminUsersService: AdminUsersService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -17,7 +17,7 @@ export class AuthService {
       const { password_digest, ...result } = user;
       return result;
     }
-    return null; 
+    return null;
   }
 
   async login(user: AdminUser) {
