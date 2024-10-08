@@ -10,13 +10,13 @@ import {
 } from 'typeorm';
 import { Question } from './question.entity';
 import { Answer } from './answer.entity';
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 
 @Entity({ name: 'options' })
 @ObjectType()
 export class Option {
   @PrimaryGeneratedColumn()
-  @Field()
+  @Field(() => ID)
   readonly id: number;
 
   @Column('varchar', { nullable: true })
