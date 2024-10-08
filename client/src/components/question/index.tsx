@@ -16,7 +16,7 @@ export default function Questions() {
 
   if (error) return <p>Error: {error.message}</p>;
 
-  if (!data || !data.getAllQuestionsByAdminUserId || data.getAllQuestionsByAdminUserId.length === 0) {
+  if (!data || !data.questions || data.questions.length === 0) {
     return <p>作成したアンケートはありません</p>;
   }
 
@@ -24,7 +24,7 @@ export default function Questions() {
     <div>
       <h2>作成したアンケート一覧</h2>
       <ul>
-        {data.getAllQuestionsByAdminUserId.map((question: Question) => (
+        {data.questions.map((question: Question) => (
           <li key={question.id}>
             <Link href={`/question/${question.url}`}>タイトル: {question.title}</Link>
           </li>

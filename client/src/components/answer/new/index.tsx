@@ -37,7 +37,7 @@ export default function NewAnswerForm() {
 
   if (loading) return <p>Loading...</p>;
 
-  const question = data.getQuestionByUrl;
+  const question = data.questionByUrl;
 
   const handleSubmit = async () => {
     if (selectedOption) {

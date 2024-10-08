@@ -16,13 +16,13 @@ export default function Answers() {
 
   if (error) return <p>Error: {error.message}</p>;
 
-  if (!data || !data.getQuestionWithAnswerCounts || data.getQuestionWithAnswerCounts.length === 0) {
+  if (!data || !data.questionResults || data.questionResults.length === 0) {
     return <p>作成したアンケートはありません</p>;
   }
 
   return (
     <div>
-      <AnswersChart data={data.getQuestionWithAnswerCounts} />
+      <AnswersChart data={data.questionResults} />
       <button onClick={logout}>ログアウト</button>
       <br />
       <Link href='/question'>新しいアンケートを作成する</Link>

@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const QUESTION_RESULTS = gql`
-  query GetQuestionsWithAnswerCounts($adminUserId: Int!) {
-  getQuestionWithAnswerCounts(adminUserId: $adminUserId) {
+  query questionResults($adminUserId: Int!) {
+  questionResults(adminUserId: $adminUserId) {
     questionId
     title
     options {
