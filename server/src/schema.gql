@@ -61,7 +61,7 @@ type AuthResponse {
 type Query {
   questionByUrl(url: String!): Question!
   questions(adminUserId: Int!): [Question!]!
-  getQuestionWithAnswerCounts(adminUserId: Int!): [QuestionWithAnswerCounts!]!
+  questionResults(adminUserId: Int!): [QuestionWithAnswerCounts!]!
 }
 
 type Mutation {

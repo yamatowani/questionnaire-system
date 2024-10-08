@@ -21,7 +21,7 @@ export class QuestionResolver {
   }
 
   @Query(() => [QuestionWithAnswerCounts])
-  async getQuestionWithAnswerCounts(
+  async questionResults(
     @Args('adminUserId', { type: () => Int }) adminUserId: number,
   ): Promise<any[]> {
     return this.questionService.getQuestionWithAnswerCounts(adminUserId);

@@ -1,14 +1,14 @@
 'use client';
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
-import { GET_ANSWER_BY_ADMIN_USER } from "@/lib/graphql/queries/query";
+import { QUESTION_RESULTS } from "@/lib/graphql/queries/query";
 import useAuth from "@/hooks/useAuth";
 import AnswersChart from "./chart";
 
 export default function Answers() {
   const { logout, adminUserId } = useAuth();
 
-  const { data, loading, error } = useQuery(GET_ANSWER_BY_ADMIN_USER, {
+  const { data, loading, error } = useQuery(QUESTION_RESULTS, {
     variables: { adminUserId },
   });
 
