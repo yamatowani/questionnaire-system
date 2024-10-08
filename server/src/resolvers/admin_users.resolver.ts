@@ -1,4 +1,4 @@
-import { Query, Mutation, Resolver, Args } from '@nestjs/graphql';
+import { Mutation, Resolver, Args } from '@nestjs/graphql';
 import { AdminUsersService } from '../services/admin_users.service';
 import { AdminUser } from 'src/entities/admin_user.entity';
 import { NewAdminUserInput } from 'src/dto/new-admin_user.input';
@@ -12,11 +12,6 @@ export class AdminUsersResolver {
     private readonly adminUsersService: AdminUsersService,
     private readonly questionService: QuestionService,
   ) {}
-
-  @Query(() => [AdminUser])
-  public async admin_users(): Promise<AdminUser[]> {
-    return this.adminUsersService.getAllAdminUsers();
-  }
 
   @Mutation(() => AdminUser)
   public async addNewAdminUser(

@@ -7,13 +7,13 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Question } from './question.entity';
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 
 @Entity({ name: 'admin_users' })
 @ObjectType()
 export class AdminUser {
   @PrimaryGeneratedColumn()
-  @Field()
+  @Field(() => ID)
   readonly id: number;
 
   @Column('varchar', { length: 20, nullable: true })
@@ -25,7 +25,6 @@ export class AdminUser {
   email: string;
 
   @Column('varchar', { nullable: true })
-  @Field()
   password_digest: string;
 
   @CreateDateColumn()

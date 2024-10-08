@@ -3,15 +3,13 @@
 # ------------------------------------------------------
 
 type Answer {
-  id: Float!
-  option_id: Float!
-  question_id: Float!
+  id: Int!
   question: Question!
   option: Option!
 }
 
 type Option {
-  id: Float!
+  id: ID!
   option_text: String!
   question: Question!
   answers: [Answer!]!
@@ -25,7 +23,7 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Question {
-  id: Float!
+  id: ID!
   title: String!
   url: String!
   admin_user: AdminUser!
@@ -36,10 +34,9 @@ type Question {
 }
 
 type AdminUser {
-  id: Float!
+  id: ID!
   name: String!
   email: String!
-  password_digest: String!
   created_at: DateTime!
   updated_at: DateTime!
   questions: [Question!]!
@@ -50,15 +47,14 @@ type AuthResponse {
 }
 
 type Query {
-  admin_users: [AdminUser!]!
   getQuestionByUrl(url: String!): Question!
-  getAllQuestionsByAdminUserId(adminUserId: Float!): [Question!]!
-  getAnswerByAdminUser(adminUserId: Float!): [Answer!]!
+  getAllQuestionsByAdminUserId(adminUserId: Int!): [Question!]!
+  getAnswerByAdminUser(adminUserId: Int!): [Answer!]!
 }
 
 type Mutation {
   addNewAdminUser(newAdminUserData: NewAdminUserInput!): AdminUser!
-  createQuestion(newQuestionInput: NewQuestionInput!, adminUserId: Float!): Question!
+  createQuestion(newQuestionInput: NewQuestionInput!, adminUserId: Int!): Question!
   createAnswer(newAnswerInput: NewAnswerInput!): Answer!
   login(authInput: AuthInput!): AuthResponse!
 }
@@ -79,8 +75,8 @@ input NewOptionInput {
 }
 
 input NewAnswerInput {
-  option_id: Float!
-  question_id: Float!
+  option_id: Int!
+  question_id: Int!
 }
 
 input AuthInput {

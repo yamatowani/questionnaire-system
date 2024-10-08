@@ -11,13 +11,13 @@ import {
 import { AdminUser } from './admin_user.entity';
 import { Option } from './option.entity';
 import { Answer } from './answer.entity';
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 
 @Entity({ name: 'questions' })
 @ObjectType()
 export class Question {
   @PrimaryGeneratedColumn()
-  @Field()
+  @Field(() => ID)
   readonly id: number;
 
   @Column('varchar', { nullable: true })

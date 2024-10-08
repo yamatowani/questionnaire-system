@@ -1,4 +1,4 @@
-import { Query, Resolver, Mutation, Args } from '@nestjs/graphql';
+import { Query, Resolver, Mutation, Args, Int } from '@nestjs/graphql';
 import { QuestionService } from 'src/services/questions.service';
 import { NewQuestionInput } from 'src/dto/new-question.input';
 import { Question } from 'src/entities/question.entity';
@@ -14,7 +14,7 @@ export class QuestionResolver {
 
   @Query(() => [Question])
   public async getAllQuestionsByAdminUserId(
-    @Args('adminUserId') adminUserId: number,
+    @Args('adminUserId', { type: () => Int }) adminUserId: number,
   ): Promise<Question[]> {
     return this.questionService.getAllQuestionsByAdminUserId(adminUserId);
   }
@@ -22,7 +22,7 @@ export class QuestionResolver {
   @Mutation(() => Question)
   public async createQuestion(
     @Args('newQuestionInput') newQuestionInput: NewQuestionInput,
-    @Args('adminUserId') adminUserId: number,
+    @Args('adminUserId', { type: () => Int }) adminUserId: number,
   ): Promise<Question> {
     return this.questionService.create(newQuestionInput, adminUserId);
   }

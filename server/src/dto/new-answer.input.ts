@@ -1,11 +1,10 @@
-import { InputType, Field } from "@nestjs/graphql";
-
+import { InputType, Field, Int } from '@nestjs/graphql';
 
 @InputType()
 export class NewAnswerInput {
-  @Field()
+  @Field(() => Int)
   option_id: number;
 
-  @Field()
+  @Field(() => Int)
   question_id: number;
 }
