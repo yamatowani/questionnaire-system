@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GET_ANSWER_BY_ADMIN_USER = gql`
-  query getAnswerByAdminUser($adminUserId: Float!) {
+  query getAnswerByAdminUser($adminUserId: Int!) {
     getAnswerByAdminUser(adminUserId: $adminUserId) {
       id
       question {
@@ -41,7 +41,7 @@ export const GET_ADMIN_USERS = gql`
 `;
 
 export const GET_ALL_QUESTIONS_BY_ADMIN_USER_ID = gql`
-  query getAllQuestionsByAdminUserId($adminUserId: Float!) {
+  query getAllQuestionsByAdminUserId($adminUserId: Int!) {
     getAllQuestionsByAdminUserId(adminUserId: $adminUserId) {
       id
       title

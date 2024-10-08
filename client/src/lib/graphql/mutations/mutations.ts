@@ -13,7 +13,7 @@ export const ADD_NEW_ADMIN_USER = gql`
 `;
 
 export const CREATE_QUESTION = gql`
-  mutation createQuestion($newQuestionInput: NewQuestionInput!, $adminUserId: Float!) {
+  mutation createQuestion($newQuestionInput: NewQuestionInput!, $adminUserId: Int!) {
     createQuestion(newQuestionInput: $newQuestionInput, adminUserId: $adminUserId) {
       id
       title
