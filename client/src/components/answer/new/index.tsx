@@ -44,7 +44,7 @@ export default function NewAnswerForm() {
       await createAnswer({
         variables: {
           newAnswerInput: {
-            question_id: question.id,
+            question_id: Number(question.id),
             option_id: selectedOption,
           },
         },
@@ -62,7 +62,7 @@ export default function NewAnswerForm() {
               <input
                 type="radio"
                 value={option.id}
-                onChange={() => setSelectedOption(option.id)}
+                onChange={() => setSelectedOption(Number(option.id))}
                 name="option"
               />
               {option.option_text}
