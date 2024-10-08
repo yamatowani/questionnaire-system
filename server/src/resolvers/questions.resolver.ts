@@ -9,12 +9,12 @@ export class QuestionResolver {
   constructor(private readonly questionService: QuestionService) {}
 
   @Query(() => Question)
-  public async getQuestionByUrl(@Args('url') url: string): Promise<Question> {
+  public async questionByUrl(@Args('url') url: string): Promise<Question> {
     return this.questionService.getQuestionByUrl(url);
   }
 
   @Query(() => [Question])
-  public async getAllQuestionsByAdminUserId(
+  public async questions(
     @Args('adminUserId', { type: () => Int }) adminUserId: number,
   ): Promise<Question[]> {
     return this.questionService.getAllQuestionsByAdminUserId(adminUserId);

@@ -15,8 +15,8 @@ export const GET_ANSWER_BY_ADMIN_USER = gql`
 `;
 
 export const GET_QUESTION_BY_URL = gql`
-  query getQuestionByUrl($url: String!) {
-    getQuestionByUrl(url: $url) {
+  query questionByUrl($url: String!) {
+    questionByUrl(url: $url) {
       id
       title
       options {
@@ -39,8 +39,8 @@ export const GET_ADMIN_USERS = gql`
 `;
 
 export const GET_ALL_QUESTIONS_BY_ADMIN_USER_ID = gql`
-  query getAllQuestionsByAdminUserId($adminUserId: Int!) {
-    getAllQuestionsByAdminUserId(adminUserId: $adminUserId) {
+  query questions($adminUserId: Int!) {
+    questions(adminUserId: $adminUserId) {
       id
       title
       url
