@@ -25,7 +25,6 @@ export class AdminUser {
   email: string;
 
   @Column('varchar', { nullable: true })
-  @Field()
   password_digest: string;
 
   @CreateDateColumn()

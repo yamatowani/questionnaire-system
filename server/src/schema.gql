@@ -4,8 +4,6 @@
 
 type Answer {
   id: Float!
-  option_id: Float!
-  question_id: Float!
   question: Question!
   option: Option!
 }
@@ -39,7 +37,6 @@ type AdminUser {
   id: Float!
   name: String!
   email: String!
-  password_digest: String!
   created_at: DateTime!
   updated_at: DateTime!
   questions: [Question!]!

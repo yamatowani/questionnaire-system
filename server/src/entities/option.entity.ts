@@ -26,7 +26,7 @@ export class Option {
   @ManyToOne(() => Question, (question) => question.options, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'question_id'})
+  @JoinColumn({ name: 'question_id' })
   @Field(() => Question)
   question: Question;
 

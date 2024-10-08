@@ -1,11 +1,10 @@
 import {
   Entity,
-  Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn
+  JoinColumn,
 } from 'typeorm';
 import { Question } from './question.entity';
 import { Option } from './option.entity';
@@ -17,14 +16,6 @@ export class Answer {
   @PrimaryGeneratedColumn()
   @Field()
   readonly id: number;
-
-  @Column('bigint', { nullable: false })
-  @Field()
-  option_id: number;
-
-  @Column('bigint', { nullable: false })
-  @Field()
-  question_id: number;
 
   @CreateDateColumn()
   readonly created_at?: Date;
