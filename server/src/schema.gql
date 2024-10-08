@@ -3,7 +3,7 @@
 # ------------------------------------------------------
 
 type Answer {
-  id: Float!
+  id: Int!
   question: Question!
   option: Option!
 }
@@ -48,13 +48,13 @@ type AuthResponse {
 
 type Query {
   getQuestionByUrl(url: String!): Question!
-  getAllQuestionsByAdminUserId(adminUserId: Float!): [Question!]!
-  getAnswerByAdminUser(adminUserId: Float!): [Answer!]!
+  getAllQuestionsByAdminUserId(adminUserId: Int!): [Question!]!
+  getAnswerByAdminUser(adminUserId: Int!): [Answer!]!
 }
 
 type Mutation {
   addNewAdminUser(newAdminUserData: NewAdminUserInput!): AdminUser!
-  createQuestion(newQuestionInput: NewQuestionInput!, adminUserId: Float!): Question!
+  createQuestion(newQuestionInput: NewQuestionInput!, adminUserId: Int!): Question!
   createAnswer(newAnswerInput: NewAnswerInput!): Answer!
   login(authInput: AuthInput!): AuthResponse!
 }

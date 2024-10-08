@@ -8,13 +8,13 @@ import {
 } from 'typeorm';
 import { Question } from './question.entity';
 import { Option } from './option.entity';
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, Int } from '@nestjs/graphql';
 
 @Entity({ name: 'answers' })
 @ObjectType()
 export class Answer {
   @PrimaryGeneratedColumn()
-  @Field()
+  @Field(() => Int)
   readonly id: number;
 
   @CreateDateColumn()
