@@ -15,7 +15,7 @@ export default function Answers() {
 
   if (error) return <p>Error: {error.message}</p>;
 
-  if (!data || !data.getAnswerByAdminUser || data.getAnswerByAdminUser.length === 0) {
+  if (!data || !data.getQuestionWithAnswerCounts || data.getQuestionWithAnswerCounts.length === 0) {
     return <p>作成したアンケートはありません</p>;
   }
   console.log(data)
@@ -23,10 +23,16 @@ export default function Answers() {
   return (
     <div>
       <ul>
-        {data.getAnswerByAdminUser.map((answer) => (
-          <li key={answer.id}>
-            <p>アンケートタイトル: {answer.question.title}</p>
-            <p>回答: {answer.option.option_text}</p>
+        {data.getQuestionWithAnswerCounts.map((question) => (
+          <li key={question.questionId}>
+            <p>アンケートタイトル: {question.title}</p>
+            <ul>
+              {question.options.map((option) => (
+                <li key={option.option_id}>
+                  <p>{option.option_text}, 回答数: {option.count}</p>
+                </li>
+              ))}
+            </ul>
           </li>
         ))}
       </ul>
@@ -36,5 +42,5 @@ export default function Answers() {
       <br />
       <Link href='/'>ホームに戻る</Link>
     </div>
-  );
+  );  
 }

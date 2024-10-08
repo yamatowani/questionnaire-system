@@ -1,19 +1,17 @@
 import { gql } from "@apollo/client";
 
 export const GET_ANSWER_BY_ADMIN_USER = gql`
-  query getAnswerByAdminUser($adminUserId: Int!) {
-    getAnswerByAdminUser(adminUserId: $adminUserId) {
-      id
-      question {
-        id
-        title
-      }
-      option {
-        id
-        option_text
-      }
+  query GetQuestionsWithAnswerCounts($adminUserId: Int!) {
+  getQuestionWithAnswerCounts(adminUserId: $adminUserId) {
+    questionId
+    title
+    options {
+      option_id
+      option_text
+      count
     }
   }
+}
 `;
 
 export const GET_QUESTION_BY_URL = gql`
