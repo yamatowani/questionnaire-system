@@ -35,8 +35,8 @@ export default function AnswersChart({ data }) {
             {
               label: `アンケートID: ${question.questionId} - ${question.title}`,
               data: question.options.map((option) => option.count),
-              backgroundColor: "rgba(75, 192, 192, 0.5)",
-              borderColor: "rgba(75, 192, 192, 1)",
+              backgroundColor: "#3f88d1",
+              borderColor: "#3f88d1",
               borderWidth: 1,
             },
           ],
