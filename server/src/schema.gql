@@ -28,7 +28,7 @@ type Question {
   url: String!
   admin_user: AdminUser!
   options: [Option!]!
-  answers: [Answer!]!
+  answers: [Answer!]
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -42,6 +42,18 @@ type AdminUser {
   questions: [Question!]!
 }
 
+type AnswerCount {
+  option_id: Int!
+  option_text: String!
+  count: Int!
+}
+
+type QuestionWithAnswerCounts {
+  questionId: Int!
+  title: String!
+  options: [AnswerCount!]!
+}
+
 type AuthResponse {
   access_token: String!
 }
@@ -49,6 +61,7 @@ type AuthResponse {
 type Query {
   getQuestionByUrl(url: String!): Question!
   getAllQuestionsByAdminUserId(adminUserId: Int!): [Question!]!
+  getQuestionWithAnswerCounts(adminUserId: Int!): [QuestionWithAnswerCounts!]!
   getAnswerByAdminUser(adminUserId: Int!): [Answer!]!
 }
 
