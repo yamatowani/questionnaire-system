@@ -23,7 +23,7 @@ export class AnswerService {
       relations: ['options'],
     });
 
-    const questionIds = questions.map(q => q.id);
+    const questionIds = questions.map((q) => q.id);
 
     return this.answerRepository.find({
       relations: ['question', 'option'],

@@ -6,6 +6,7 @@ import { Option } from 'src/entities/option.entity';
 import { NewQuestionInput } from 'src/dto/new-question.input';
 import { AdminUser } from 'src/entities/admin_user.entity';
 import { v4 as uuidv4 } from 'uuid';
+import { Answer } from 'src/entities/answer.entity';
 
 @Injectable()
 export class QuestionService {
@@ -16,6 +17,8 @@ export class QuestionService {
     private readonly optionRepository: Repository<Option>,
     @InjectRepository(AdminUser)
     private readonly adminUserRepository: Repository<AdminUser>,
+    @InjectRepository(Answer)
+    private readonly answerRepository: Repository<Answer>,
   ) {}
 
   public async getAllQuestionsByAdminUserId(
@@ -23,9 +26,45 @@ export class QuestionService {
   ): Promise<Question[]> {
     const questions = await this.questionRepository.find({
       where: { admin_user: { id: adminUserId } },
-      relations: ['options'],
+      relations: ['options', 'answers'],
     });
     return questions;
+  }
+
+  public async getQuestionWithAnswerCounts(
+    adminUserId: number,
+  ): Promise<any[]> {
+    const questions = await this.questionRepository.find({
+      where: { admin_user: { id: adminUserId } },
+      relations: ['options'],
+    });
+
+    const result: any[] = await Promise.all(
+      questions.map(async (question) => {
+        const optionsWithCounts: any[] = await Promise.all(
+          question.options.map(async (option) => {
+            const count = await this.answerRepository.count({
+              where: { option: { id: option.id } },
+              relations: ['option', 'question'],
+            });
+
+            return {
+              option_id: option.id,
+              option_text: option.option_text,
+              count: count,
+            };
+          }),
+        );
+
+        return {
+          questionId: question.id,
+          title: question.title,
+          options: optionsWithCounts,
+        };
+      }),
+    );
+
+    return result;
   }
 
   public async getQuestionByUrl(url: string): Promise<Question> {
