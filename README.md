@@ -241,40 +241,40 @@ erDiagram
 
 | Field           | Type         | Null | Key | Default              | Extra                                            |
 |-----------------|--------------|------|-----|----------------------|--------------------------------------------------|
-| admin_user_id   | int          | NO   | PRI | NULL                 | auto_increment                                   |
-| name            | varchar(20)  | YES  |     | NULL                 |                                                  |
+| id   | int          | NO   | PRI | NULL                 | auto_increment                                   |
+| name            | varchar(20)  | NO  |     | NULL                 |                                                  |
 | email           | varchar(255) | NO   |     | NULL                 |                                                  |
-| password_digest | varchar(255) | YES  |     | NULL                 |                                                  |
+| password_digest | varchar(255) | NO  |     | NULL                 |                                                  |
 | created_at      | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED                                |
 | updated_at      | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6) |
-
-### `answers` テーブル
-
-| Field       | Type        | Null | Key | Default              | Extra                                            |
-|-------------|-------------|------|-----|----------------------|--------------------------------------------------|
-| answer_id   | int         | NO   | PRI | NULL                 | auto_increment                                   |
-| option_id   | int         | NO   | MUL | NULL                 |                                                  |
-| question_id | int         | NO   | MUL | NULL                 |                                                  |
-| created_at  | datetime(6) | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED                                |
-| updated_at  | datetime(6) | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6) |
-
-### `options` テーブル
-
-| Field         | Type         | Null | Key | Default              | Extra                                            |
-|---------------|--------------|------|-----|----------------------|--------------------------------------------------|
-| option_id     | int          | NO   | PRI | NULL                 | auto_increment                                   |
-| option_text   | varchar(255) | YES  |     | NULL                 |                                                  |
-| created_at    | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED                                |
-| updated_at    | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6) |
-| question_id   | int          | YES  | MUL | NULL                 |                                                  |
 
 ### `questions` テーブル
 
 | Field         | Type         | Null | Key | Default              | Extra                                            |
 |---------------|--------------|------|-----|----------------------|--------------------------------------------------|
-| question_id   | int          | NO   | PRI | NULL                 | auto_increment                                   |
-| title         | varchar(255) | YES  |     | NULL                 |                                                  |
+| id   | int          | NO   | PRI | NULL                 | auto_increment                                   |
+| title         | varchar(255) | NO  |     | NULL                 |                                                  |
 | url           | varchar(255) | NO   |     | NULL                 |                                                  |
 | created_at    | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED                                |
 | updated_at    | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6) |
 | admin_user_id | int          | YES  | MUL | NULL                 |                                                  |
+
+### `options` テーブル
+
+| Field         | Type         | Null | Key | Default              | Extra                                            |
+|---------------|--------------|------|-----|----------------------|--------------------------------------------------|
+| id     | int          | NO   | PRI | NULL                 | auto_increment                                   |
+| option_text   | varchar(255) | NO  |     | NULL                 |                                                  |
+| created_at    | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED                                |
+| updated_at    | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6) |
+| question_id   | int          | YES  | MUL | NULL                 |                                                  |
+
+### `answers` テーブル
+
+| Field       | Type        | Null | Key | Default              | Extra                                            |
+|-------------|-------------|------|-----|----------------------|--------------------------------------------------|
+| id   | int         | NO   | PRI | NULL                 | auto_increment                                   |
+| option_id   | int         | NO   | MUL | NULL                 |                                                  |
+| question_id | int         | NO   | MUL | NULL                 |                                                  |
+| created_at  | datetime(6) | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED                                |
+| updated_at  | datetime(6) | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6) |
