@@ -3,8 +3,7 @@
 
 ## 使用技術
 - サーバーサイド: NestJS, TypeScript, TypeORM, MySQL, GraphQL
-- クライアントサイド: Next.js, React, TypeScript, react-chartjs-2
-
+- クライアントサイド: Next.js, React, TypeScript, Material UI, react-chartjs-2
 
 ## 基本機能
 - **ログインによるアクセス制御**: 管理画面にログインすることでアクセスを制限します。
@@ -28,7 +27,6 @@
 | `/answer`            | アンケートの結果一覧。ログインしているユーザーが作成したアンケートの結果をグラフ形式で表示。 |
 
 ## 認証ロジック
-
 ### ユーザー作成
 #### ユーザー情報の入力
 - ユーザーから以下の情報を受け取ります：
@@ -66,7 +64,6 @@
     - 検証に失敗した場合、「無効なメールアドレスまたはパスワード」というエラーメッセージを表示
 
 ##  GraphQL API仕様
-
 ### Queries
 
 | Query                | Description                                            | Input Type        | Output Type       |
@@ -186,7 +183,6 @@
 - **Output**:
   - `AuthResponse!`:
     - `access_token` (String!): 認証トークン
-
 
 ## DB設計, ER図
 
