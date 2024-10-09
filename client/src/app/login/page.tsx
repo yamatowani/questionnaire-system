@@ -90,7 +90,11 @@ const LoginPage = () => {
             {loading ? 'ログイン中...' : 'ログイン'}
           </Button>
         </form>
-          <Link href='/admin_user'>アカウントを作成する</Link>
+        <Link href='/admin_user' passHref>
+          <Button variant="outlined" color="primary" sx={{ mt: 2 }}>
+            アカウントを作成する
+          </Button>
+      </Link>
       </Box>
     </Container>
   );

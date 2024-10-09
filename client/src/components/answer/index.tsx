@@ -38,6 +38,7 @@ export default function Answers() {
 
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto', mt: 4 }}>
+      <Typography variant="h4">アンケート結果一覧</Typography>
       <AnswersChart data={data.questionResults} />
       <Box sx={{ textAlign: 'center', mt: 4 }}>
         <br />
