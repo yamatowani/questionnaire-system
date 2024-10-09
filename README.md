@@ -1,13 +1,12 @@
-# 1問だけの選択式アンケートを作成し、URLを配布して回答を収集するシステム
+# 概要
+1問だけの選択式アンケートを作成し、URLを配布して回答を収集するシステム
 
 ## 使用技術
-- バックエンド: NestJS, TypeScript, TypeORM, MySQL, GraphQL
-- フロントエンド: Next.js
+- サーバーサイド: NestJS, TypeScript, TypeORM, MySQL, GraphQL
+- クライアントサイド: Next.js, React, TypeScript, react-chartjs-2
 
 
-## 基本仕様
-
-### 基本機能
+## 基本機能
 - **ログインによるアクセス制御**: 管理画面にログインすることでアクセスを制限します。
 - **アンケート作成**: 管理画面から単一選択式の質問を持つアンケートを作成可能です。
   - **質問構成**:
@@ -20,7 +19,7 @@
 - **集計結果の表示**:
   - 回答状況を選択肢ごとの回答者数および%で棒グラフに表示します。
 
-### URL, ドメイン設計
+## URL, ドメイン設計
 | URL                  | 説明                                                             |
 |----------------------|------------------------------------------------------------------|
 | `/`                  | アンケート一覧画面。ログインしているユーザーに紐づくアンケートを表示。 |
@@ -28,16 +27,16 @@
 | `/question/:url`     | アンケート回答画面。URL(パスパラメータ)に紐づくアンケート表示。任意の回答者(ログイン不要)がアンケートに答えることができる。 |
 | `/answer`            | アンケートの結果一覧。ログインしているユーザーが作成したアンケートの結果をグラフ形式で表示。 |
 
-### 認証ロジック
+## 認証ロジック
 
-#### ユーザー作成
-##### ユーザー情報の入力
+### ユーザー作成
+#### ユーザー情報の入力
 - ユーザーから以下の情報を受け取ります：
   - `name`: ユーザー名
   - `email`: ユーザーのメールアドレス
   - `password`: ユーザーのパスワード
 
-##### サーバーでの処理
+#### サーバーでの処理
 1. 受け取ったユーザー情報を`UserService`に渡しす
 2. パスワードを以下の手順で処理：
    - bcryptを使用してパスワードをハッシュ化
@@ -47,16 +46,16 @@
 
 ---
 
-#### ログイン
-##### リダイレクト処理
+### ログイン
+#### リダイレクト処理
 - 未ログイン状態の場合`/`,`/question`,`/answer`にアクセスした場合、`/login`にリダイレクトされる
 
-##### ログイン情報の入力
+#### ログイン情報の入力
 - 管理者ユーザーに以下の情報を入力させる：
   - `email`: ユーザーのメールアドレス
   - `password`: ユーザーのパスワード
 
-##### 認証処理
+#### 認証処理
 - `AuthService`で以下の処理を行う：
   1. 入力されたメールアドレスを使用してユーザーを検索。
   2. ユーザーが見つかった場合、bcryptを使ってパスワードを比較
@@ -66,7 +65,7 @@
   5. 検証に成功した場合、ユーザーを`/`にリダイレクトし、作成したアンケートの一覧を表示
     - 検証に失敗した場合、「無効なメールアドレスまたはパスワード」というエラーメッセージを表示
 
-## Query, Mutation仕様
+##  GraphQL API仕様
 
 ### Queries
 
@@ -125,7 +124,7 @@
 | `submitAnswer`               | 回答を提出する。                             | `submitAnswerInput: SubmitAnswerInput!`            | `SubmitAnswerOutput!`          |
 | `authenticateAdminUser`      | 管理者ユーザーの認証                 | `authenticateAdminUserInput: AuthenticateAdminUserInput!` | `AuthResponse!`                |
 
-#### Input/Output Specifications
+#### Input/Output仕様
 
 ##### `registerAdminUser`
 - **Input**:
@@ -198,44 +197,45 @@
 erDiagram
 
     AdminUsers {
-        bigint id PK "管理ユーザーID"
+        int id PK "管理者ユーザーID"
         varchar name "管理ユーザー名"
-        varchar email "管理ユーザーemail"
-        varchar password_digest "パスワードダイジェスト"
+        varchar email "管理者ユーザーのメールアドレス"
+        varchar password_digest "ハッシュ化した管理者ユーザーのパスワード"
         timestamp created_at "作成日時"
         timestamp updated_at "更新日時"
     }
 
     Questions {
-        bigint id PK "アンケートID"
+        int id PK "アンケートID"
         varchar title "アンケート質問文"
         varchar url "アンケートURL"
-        bigint admin_user_id "アンケートを作成した管理ユーザーID"
+        bigint admin_user_id FK "アンケートを作成した管理ユーザーID"
         timestamp created_at "作成日時"
         timestamp updated_at "更新日時"
     }
 
     Options {
-        bigint id PK "選択肢ID"
-        varchar option_text "選択肢説明文"
+        int id PK "選択肢ID"
+        varchar option_text "選択肢文"
         bigint question_id FK "属する質問ID"
         timestamp created_at "作成日時"
         timestamp updated_at "更新日時"
     }
 
     Answers {
-        bigint id PK "回答ID"
-        bigint option_id FK "選択した選択肢ID"
-        bigint question_id FK "回答が属する質問ID"
+        int id PK "回答ID"
+        int option_id FK "選択した選択肢ID"
+        int question_id FK "回答が属する質問ID"
         timestamp created_at "作成日時"
         timestamp updated_at "更新日時"
     }
 
     %% リレーションシップ
-    AdminUsers ||--o{ Questions : "creates"
-    Questions ||--|{ Options : "has many"
-    Questions ||--o{ Answers : "has many"
-    Options ||--o{ Answers : "belongs to"
+    AdminUsers ||--o{ Questions : "作成する"
+    Questions ||--|{ Options : "複数の選択肢を持つ"
+    Questions ||--o{ Answers : "複数の回答を持つ"
+    Options ||--o{ Answers : "回答は選択肢に属する"
+
 ```
 ### `admin_users` テーブル
 
