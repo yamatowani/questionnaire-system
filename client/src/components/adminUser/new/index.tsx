@@ -2,7 +2,7 @@
 import { useMutation } from "@apollo/client";
 import { REGISTER_ADMIN_USER } from "@/lib/graphql/mutations/mutations";
 import { RegisterAdminUserInput } from "@/types/types";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 

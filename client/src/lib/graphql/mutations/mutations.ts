@@ -3,11 +3,16 @@ import { gql } from '@apollo/client';
 export const REGISTER_ADMIN_USER = gql`
   mutation registerAdminUser($registerAdminUserInput: RegisterAdminUserInput!) {
     registerAdminUser(registerAdminUserInput: $registerAdminUserInput) {
-      id
-      name
-      email
-      created_at
-      updated_at
+      success
+      statusCode
+      errorMessage
+      user {
+        id
+        name
+        email
+        created_at
+        updated_at
+      }
     }
   }
 `;
