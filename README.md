@@ -135,7 +135,6 @@
 - **Output**:
   - `RegisterAdminUserOutput!`:
     - `success` (Boolean!): 成功したかをBooleanで返す
-    - `statusCode` (Float!): HTTPステータスコード
     - `errorMessage` (String, nullable): エラーメッセージ
     - `user` (AdminUser, nullable):
       - `id` (ID!): 管理者ユーザーID。
@@ -155,7 +154,6 @@
 - **Output**:
   - `SubmitQuestionOutput!`:
     - `success` (Boolean!): 成功したかをBooleanで返す
-    - `statusCode` (Float!): HTTPステータスコード(ハンドリングしやすいよう明示的に作りました)
     - `errorMessage` (String, nullable): エラーメッセージ
     - `question` (Question, nullable):
       - `id` (ID!): アンケートID
@@ -174,7 +172,6 @@
 - **Output**:
   - `SubmitAnswerOutput!`:
     - `success` (Boolean!): 成功したかをBooleanで返す
-    - `statusCode` (Float!): HTTPステータスコード(ハンドリングしやすいよう明示的に作りました)
     - `errorMessage` (String, nullable): エラーメッセージ
     - `answer` (Answer): 回答
       - `id` (ID!): 回答ID

@@ -4,7 +4,6 @@ export const REGISTER_ADMIN_USER = gql`
   mutation registerAdminUser($registerAdminUserInput: RegisterAdminUserInput!) {
     registerAdminUser(registerAdminUserInput: $registerAdminUserInput) {
       success
-      statusCode
       errorMessage
       user {
         id
@@ -21,7 +20,6 @@ export const SUBMIT_QUESTION = gql`
   mutation submitQuestion($submitQuestionInput: SubmitQuestionInput!, $adminUserId: Int!) {
     submitQuestion(submitQuestionInput: $submitQuestionInput, adminUserId: $adminUserId) {
       success
-      statusCode
       errorMessage
       question {
         id
@@ -44,7 +42,6 @@ export const SUBMIT_ANSWER = gql`
   mutation submitAnswer($submitAnswerInput: SubmitAnswerInput!) {
     submitAnswer(submitAnswerInput: $submitAnswerInput) {
       success
-      statusCode
       errorMessage
       answer {
         id

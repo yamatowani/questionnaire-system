@@ -19,13 +19,11 @@ export class AnswerResolver {
 
       return {
         success: true,
-        statusCode: 201,
         answer: answer,
       };
     } catch (error) {
       return {
         success: false,
-        statusCode: error.statusCode || 500,
         errorMessage: error.message || 'Internal Server error',
       };
     }

@@ -44,7 +44,6 @@ type AdminUser {
 
 type RegisterAdminUserOutput {
   success: Boolean!
-  statusCode: Float!
   errorMessage: String
   user: AdminUser
 }
@@ -63,14 +62,12 @@ type QuestionWithAnswerCounts {
 
 type SubmitQuestionOutput {
   success: Boolean!
-  statusCode: Float!
   errorMessage: String
   question: Question
 }
 
 type SubmitAnswerOutput {
   success: Boolean!
-  statusCode: Float!
   errorMessage: String
   answer: Answer
 }

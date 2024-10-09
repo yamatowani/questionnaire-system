@@ -19,13 +19,11 @@ export class AdminUsersResolver {
 
       return {
         success: true,
-        statusCode: 201,
         user: user,
       };
     } catch (error) {
       return {
         success: false,
-        statusCode: error.statusCode || 500,
         errorMessage: error.message || 'Internal Server Error',
       };
     }

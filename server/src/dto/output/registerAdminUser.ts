@@ -6,9 +6,6 @@ export class RegisterAdminUserOutput {
   @Field()
   success: boolean;
 
-  @Field()
-  statusCode: number;
-
   @Field({ nullable: true })
   errorMessage?: string;
 
