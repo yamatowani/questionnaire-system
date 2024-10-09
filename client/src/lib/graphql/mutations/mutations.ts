@@ -43,13 +43,19 @@ export const SUBMIT_QUESTION = gql`
 export const SUBMIT_ANSWER = gql`
   mutation submitAnswer($submitAnswerInput: SubmitAnswerInput!) {
     submitAnswer(submitAnswerInput: $submitAnswerInput) {
-      question {
+      success
+      statusCode
+      errorMessage
+      answer {
         id
-        title
-      }
-      option {
-        id
-        option_text
+        question {
+          id
+          title
+        }
+        option {
+          id
+          option_text
+        }
       }
     }
   }
