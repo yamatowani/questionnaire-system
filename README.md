@@ -121,7 +121,7 @@
 |------------------------------|------------------------------------------------|------------------------------------------------------|---------------------------------|
 | `registerAdminUser`          | 管理者ユーザーの登録                  | `registerAdminUserInput: RegisterAdminUserInput!`  | `RegisterAdminUserOutput!`     |
 | `submitQuestion`             | アンケートを作成                             | `submitQuestionInput: SubmitQuestionInput!, adminUserId: Int!` | `SubmitQuestionOutput!`        |
-| `submitAnswer`               | 回答を提出する。                             | `submitAnswerInput: SubmitAnswerInput!`            | `SubmitAnswerOutput!`          |
+| `submitAnswer`               | アンケートに回答                             | `submitAnswerInput: SubmitAnswerInput!`            | `SubmitAnswerOutput!`          |
 | `authenticateAdminUser`      | 管理者ユーザーの認証                 | `authenticateAdminUserInput: AuthenticateAdminUserInput!` | `AuthResponse!`                |
 
 #### Input/Output仕様
@@ -135,7 +135,7 @@
 - **Output**:
   - `RegisterAdminUserOutput!`:
     - `success` (Boolean!): 成功したかをBooleanで返す
-    - `statusCode` (Float!): HTTPステータスコード(ハンドリングしやすいよう明示的に作りました)
+    - `statusCode` (Float!): HTTPステータスコード
     - `errorMessage` (String, nullable): エラーメッセージ
     - `user` (AdminUser, nullable):
       - `id` (ID!): 管理者ユーザーID。
