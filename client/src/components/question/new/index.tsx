@@ -1,23 +1,23 @@
 'use client';
 import { useMutation } from "@apollo/client";
 import { SUBMIT_QUESTION } from "@/lib/graphql/mutations/mutations";
-import { NewQuestionInput } from "@/types/types";
+import { SubmitQuestionInput } from "@/types/types";
 import { useState } from "react";
 import Link from "next/link";
 import useAuth from "@/hooks/useAuth";
 
 export default function NewQuestionForm() {
   const { logout,adminUserId  } = useAuth();
-  const [formData, setFormData] = useState<NewQuestionInput>({
+  const [formData, setFormData] = useState<SubmitQuestionInput>({
     title: '',
     options: [{ option_text: '' }],
   });
   const [questionUrl, setQuestionUrl] = useState<string | null>(null);
 
   const [addNewQuestion, { loading, error }] = useMutation(SUBMIT_QUESTION, {
-    variables: { newQuestionInput: formData, adminUserId: adminUserId },
+    variables: { submitQuestionInput: formData, adminUserId: adminUserId },
     onCompleted: (data) => {
-      const generatedUrl = data.createQuestion.url;
+      const generatedUrl = data.submitQuestion.url;
       const fullUrl = `${window.location.origin}/question/${generatedUrl}`;
       setQuestionUrl(generatedUrl);
       alert(`アンケートを作成しました! \n URLは"${fullUrl}"です`);

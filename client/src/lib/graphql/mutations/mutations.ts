@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const REGISTER_ADMIN_USER = gql`
-  mutation registerAdminUser($newAdminUserData: NewAdminUserInput!) {
-    registerAdminUser(newAdminUserData: $newAdminUserData) {
+  mutation registerAdminUser($registerAdminUserInput: RegisterAdminUserInput!) {
+    registerAdminUser(registerAdminUserInput: $registerAdminUserInput) {
       id
       name
       email
@@ -13,8 +13,8 @@ export const REGISTER_ADMIN_USER = gql`
 `;
 
 export const SUBMIT_QUESTION = gql`
-  mutation submitQuestion($newQuestionInput: NewQuestionInput!, $adminUserId: Int!) {
-    submitQuestion(newQuestionInput: $newQuestionInput, adminUserId: $adminUserId) {
+  mutation submitQuestion($submitQuestionInput: SubmitQuestionInput!, $adminUserId: Int!) {
+    submitQuestion(submitQuestionInput: $submitQuestionInput, adminUserId: $adminUserId) {
       id
       title
       url
@@ -30,10 +30,9 @@ export const SUBMIT_QUESTION = gql`
   }
 `;
 
-
 export const SUBMIT_ANSWER = gql`
-  mutation submitAnswer($newAnswerInput: NewAnswerInput!) {
-    submitAnswer(newAnswerInput: $newAnswerInput) {
+  mutation submitAnswer($submitAnswerInput: SubmitAnswerInput!) {
+    submitAnswer(submitAnswerInput: $submitAnswerInput) {
       question {
         id
         title
@@ -46,9 +45,9 @@ export const SUBMIT_ANSWER = gql`
   }
 `;
 
-export const AUTHENITCATE_ADMIN_USER = gql`
-  mutation authenticateAdminUser($authInput: AuthInput!) {
-    authenticateAdminUser(authInput: $authInput) {
+export const AUTHENTICATE_ADMIN_USER = gql`
+  mutation authenticateAdminUser($authenticateAdminUserInput: AuthenticateAdminUserInput!) {
+    authenticateAdminUser(authenticateAdminUserInput: $authenticateAdminUserInput) {
       access_token
     }
   }

@@ -1,12 +1,16 @@
 'use client';
 import { useMutation } from "@apollo/client";
 import { REGISTER_ADMIN_USER } from "@/lib/graphql/mutations/mutations";
-import { NewAdminUserInput } from "@/types/types";
+import { RegisterAdminUserInput } from "@/types/types";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import Link from "next/link";
 
 export default function AddAdminUserForm() {
-  const [formData, setFormData] = useState<NewAdminUserInput>({
+
+  const router = useRouter();
+
+  const [formData, setFormData] = useState<RegisterAdminUserInput>({
     name: '',
     email: '',
     password: '',
@@ -15,10 +19,11 @@ export default function AddAdminUserForm() {
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const [addNewAdminUser, { loading }] = useMutation(REGISTER_ADMIN_USER, {
-    variables: { newAdminUserData: formData },
+    variables: { registerAdminUserInput: formData },
     onCompleted: () => {
       alert('Admin User added Successfully!');
       setFormData({ name: '', email: '', password: '' });
+      router.push('/');
     },
     onError: (err) => {
       if (err.message.includes("Duplicate entry")) {

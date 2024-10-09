@@ -8,9 +8,6 @@ import { SubmitAnswerInput } from 'src/dto/input/submitAnswer';
 
 @Injectable()
 export class AnswerService {
-  create(submitAnswerInput: SubmitAnswerInput): Answer | PromiseLike<Answer> {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     @InjectRepository(Answer)
     private readonly answerRepository: Repository<Answer>,
@@ -34,9 +31,7 @@ export class AnswerService {
     });
   }
 
-  public async submitAnswer(
-    submitAnswerInput: SubmitAnswerInput,
-  ): Promise<Answer> {
+  public async create(submitAnswerInput: SubmitAnswerInput): Promise<Answer> {
     const { option_id, question_id } = submitAnswerInput;
 
     const relatedQuestion = await this.questionRepository.findOneBy({
