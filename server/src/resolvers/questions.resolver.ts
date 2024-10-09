@@ -1,8 +1,8 @@
 import { Query, Resolver, Mutation, Args, Int } from '@nestjs/graphql';
 import { QuestionService } from 'src/services/questions.service';
-import { NewQuestionInput } from 'src/dto/new-question.input';
+import { NewQuestionInput } from 'src/dto/input/new-question.input';
 import { Question } from 'src/entities/question.entity';
-import { QuestionWithAnswerCounts } from 'src/dto/questionWithAnswerCounts.dto';
+import { QuestionWithAnswerCounts } from 'src/dto/output/questionWithAnswerCounts.dto';
 
 @Resolver(() => Question)
 export class QuestionResolver {

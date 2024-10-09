@@ -4,7 +4,7 @@ import { In, Repository } from 'typeorm';
 import { Question } from 'src/entities/question.entity';
 import { Option } from 'src/entities/option.entity';
 import { Answer } from 'src/entities/answer.entity';
-import { NewAnswerInput } from 'src/dto/new-answer.input';
+import { NewAnswerInput } from 'src/dto/input/new-answer.input';
 
 @Injectable()
 export class AnswerService {

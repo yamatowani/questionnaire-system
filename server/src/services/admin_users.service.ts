@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AdminUser } from 'src/entities/admin_user.entity';
-import { NewAdminUserInput } from 'src/dto/new-admin_user.input';
+import { NewAdminUserInput } from 'src/dto/input/new-admin_user.input';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()

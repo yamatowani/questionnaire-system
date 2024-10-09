@@ -1,9 +1,9 @@
 import { Mutation, Resolver, Args } from '@nestjs/graphql';
 import { AdminUsersService } from '../services/admin_users.service';
 import { AdminUser } from 'src/entities/admin_user.entity';
-import { NewAdminUserInput } from 'src/dto/new-admin_user.input';
+import { NewAdminUserInput } from 'src/dto/input/new-admin_user.input';
 import { QuestionService } from 'src/services/questions.service';
-import { NewQuestionInput } from 'src/dto/new-question.input';
+import { NewQuestionInput } from 'src/dto/input/new-question.input';
 import { Question } from 'src/entities/question.entity';
 
 @Resolver(() => AdminUser)
