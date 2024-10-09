@@ -5,7 +5,8 @@ import { SubmitQuestionInput } from "@/types/types";
 import { useState } from "react";
 import Link from "next/link";
 import useAuth from "@/hooks/useAuth";
-import { Box, Button, TextField, Typography, Alert } from "@mui/material";
+import { Box, Button, TextField, Typography, Alert, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function NewQuestionForm() {
   const { adminUserId } = useAuth();
@@ -41,6 +42,11 @@ export default function NewQuestionForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const updatedOptions = [...formData.options];
     updatedOptions[index].option_text = e.target.value;
+    setFormData({ ...formData, options: updatedOptions });
+  };
+
+  const handleRemoveOption = (index: number) => {
+    const updatedOptions = formData.options.filter((_, i) => i !== index);
     setFormData({ ...formData, options: updatedOptions });
   };
 
@@ -82,16 +88,21 @@ export default function NewQuestionForm() {
         />
 
         {formData.options.map((option, index) => (
-          <TextField
-            key={index}
-            fullWidth
-            variant="outlined"
-            label={`選択肢 ${index + 1} を入力`}
-            onChange={(e) => handleChange(e, index)}
-            value={option.option_text}
-            required
-            sx={{ mb: 2 }}
-          />
+          <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <TextField
+              sx={{width: '90vh'}}
+              variant="outlined"
+              label={`選択肢 ${index + 1} を入力`}
+              onChange={(e) => handleChange(e, index)}
+              value={option.option_text}
+              required
+            />
+            {index > 0 && (
+              <IconButton onClick={() => handleRemoveOption(index)} aria-label="delete">
+                <CloseIcon />
+              </IconButton>
+            )}
+          </Box>
         ))}
 
         <Button variant="outlined" color="primary" onClick={addOption} sx={{ mb: 2 }}>
