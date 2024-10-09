@@ -1,17 +1,20 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { AuthResponse } from '../dto/output/auth.response';
-import { AuthInput } from '../dto/input/auth.input';
+import { AuthenticateAdminUserInput } from 'src/dto/input/authenticateAdminUser';
 
 @Resolver()
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
   @Mutation(() => AuthResponse)
-  async authenticateAdminUser(@Args('authInput') authInput: AuthInput) {
+  async authenticateAdminUser(
+    @Args('authenticateAdminUserInput')
+    authenticateAdminUserInput: AuthenticateAdminUserInput,
+  ) {
     const user = await this.authService.validateUser(
-      authInput.email,
-      authInput.password,
+      authenticateAdminUserInput.email,
+      authenticateAdminUserInput.password,
     );
     if (!user) {
       throw new Error('Invalid credentials');

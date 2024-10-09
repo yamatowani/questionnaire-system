@@ -1,6 +1,6 @@
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { AnswerService } from 'src/services/answers.service';
-import { NewAnswerInput } from 'src/dto/input/new-answer.input';
+import { SubmitAnswerInput } from 'src/dto/input/submitAnswer';
 import { Answer } from 'src/entities/answer.entity';
 
 @Resolver(() => Answer)
@@ -9,8 +9,8 @@ export class AnswerResolver {
 
   @Mutation(() => Answer)
   async submitAnswer(
-    @Args('newAnswerInput') newAnswerInput: NewAnswerInput,
+    @Args('submitAnswerInput') submitAnswerInput: SubmitAnswerInput,
   ): Promise<Answer> {
-    return this.answerService.create(newAnswerInput);
+    return this.answerService.create(submitAnswerInput);
   }
 }

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Question } from 'src/entities/question.entity';
 import { Option } from 'src/entities/option.entity';
-import { NewQuestionInput } from 'src/dto/input/new-question.input';
+import { SubmitQuestionInput } from 'src/dto/input/submitQuestion';
 import { AdminUser } from 'src/entities/admin_user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { Answer } from 'src/entities/answer.entity';
@@ -75,10 +75,10 @@ export class QuestionService {
   }
 
   async create(
-    newQuestionInput: NewQuestionInput,
+    submitQuestionInput: SubmitQuestionInput,
     adminUserId: number,
   ): Promise<Question> {
-    const { title, options } = newQuestionInput;
+    const { title, options } = submitQuestionInput;
 
     const adminUser = await this.adminUserRepository.findOne({
       where: { id: adminUserId },

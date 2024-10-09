@@ -65,33 +65,33 @@ type Query {
 }
 
 type Mutation {
-  registerAdminUser(newAdminUserData: NewAdminUserInput!): AdminUser!
-  submitQuestion(newQuestionInput: NewQuestionInput!, adminUserId: Int!): Question!
-  submitAnswer(newAnswerInput: NewAnswerInput!): Answer!
-  authenticateAdminUser(authInput: AuthInput!): AuthResponse!
+  registerAdminUser(registerAdminUserInput: RegisterAdminUserInput!): AdminUser!
+  submitQuestion(submitQuestionInput: SubmitQuestionInput!, adminUserId: Int!): Question!
+  submitAnswer(submitAnswerInput: SubmitAnswerInput!): Answer!
+  authenticateAdminUser(authenticateAdminUserInput: AuthenticateAdminUserInput!): AuthResponse!
 }
 
-input NewAdminUserInput {
+input RegisterAdminUserInput {
   name: String!
   email: String!
   password: String!
 }
 
-input NewQuestionInput {
+input SubmitQuestionInput {
   title: String!
-  options: [NewOptionInput!]!
+  options: [SubmitOptionInput!]!
 }
 
-input NewOptionInput {
+input SubmitOptionInput {
   option_text: String!
 }
 
-input NewAnswerInput {
+input SubmitAnswerInput {
   option_id: Int!
   question_id: Int!
 }
 
-input AuthInput {
+input AuthenticateAdminUserInput {
   email: String!
   password: String!
 }

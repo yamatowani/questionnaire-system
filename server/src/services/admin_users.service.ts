@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AdminUser } from 'src/entities/admin_user.entity';
-import { NewAdminUserInput } from 'src/dto/input/new-admin_user.input';
+import { RegisterAdminUserInput } from 'src/dto/input/registerAdminUser';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
@@ -13,19 +13,23 @@ export class AdminUsersService {
   ) {}
 
   async findOneByEmail(email: string): Promise<AdminUser | undefined> {
-    return this.adminUserRepository.findOneBy({ email: email });
+    return this.adminUserRepository.findOneBy({ email });
   }
 
   public async createNewAdminUser(
-    newAdminUserInput: NewAdminUserInput,
+    registerAdminUserInput: RegisterAdminUserInput,
   ): Promise<AdminUser> {
-    const hasedPassword = await bcrypt.hash(newAdminUserInput.password, 10);
+    const hashedPassword = await bcrypt.hash(
+      registerAdminUserInput.password,
+      10,
+    );
 
-    const newAdminUser = this.adminUserRepository.create({
-      ...newAdminUserInput,
-      password_digest: hasedPassword,
+    const createdAdminUser = this.adminUserRepository.create({
+      ...registerAdminUserInput,
+      password_digest: hashedPassword,
     });
-    await this.adminUserRepository.save(newAdminUser);
-    return newAdminUser;
+
+    await this.adminUserRepository.save(createdAdminUser);
+    return createdAdminUser;
   }
 }

@@ -1,7 +1,7 @@
 import { Mutation, Resolver, Args } from '@nestjs/graphql';
 import { AdminUsersService } from '../services/admin_users.service';
 import { AdminUser } from 'src/entities/admin_user.entity';
-import { NewAdminUserInput } from 'src/dto/input/new-admin_user.input';
+import { RegisterAdminUserInput } from 'src/dto/input/registerAdminUser';
 
 @Resolver(() => AdminUser)
 export class AdminUsersResolver {
@@ -9,12 +9,13 @@ export class AdminUsersResolver {
 
   @Mutation(() => AdminUser)
   public async registerAdminUser(
-    @Args('newAdminUserData') newAdminUserData: NewAdminUserInput,
+    @Args('registerAdminUserInput')
+    registerAdminUserInput: RegisterAdminUserInput,
   ): Promise<AdminUser> {
     return this.adminUsersService
-      .createNewAdminUser(newAdminUserData)
-      .catch((err) => {
-        throw err;
+      .createNewAdminUser(registerAdminUserInput)
+      .catch((error) => {
+        throw error;
       });
   }
 }

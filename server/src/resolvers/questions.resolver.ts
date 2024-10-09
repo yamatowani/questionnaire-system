@@ -1,6 +1,6 @@
 import { Query, Resolver, Mutation, Args, Int } from '@nestjs/graphql';
 import { QuestionService } from 'src/services/questions.service';
-import { NewQuestionInput } from 'src/dto/input/new-question.input';
+import { SubmitQuestionInput } from 'src/dto/input/submitQuestion';
 import { Question } from 'src/entities/question.entity';
 import { QuestionWithAnswerCounts } from 'src/dto/output/questionWithAnswerCounts.dto';
 
@@ -23,15 +23,15 @@ export class QuestionResolver {
   @Query(() => [QuestionWithAnswerCounts])
   async questionResults(
     @Args('adminUserId', { type: () => Int }) adminUserId: number,
-  ): Promise<any[]> {
+  ): Promise<QuestionWithAnswerCounts[]> {
     return this.questionService.getQuestionWithAnswerCounts(adminUserId);
   }
 
   @Mutation(() => Question)
   public async submitQuestion(
-    @Args('newQuestionInput') newQuestionInput: NewQuestionInput,
+    @Args('submitQuestionInput') submitQuestionInput: SubmitQuestionInput,
     @Args('adminUserId', { type: () => Int }) adminUserId: number,
   ): Promise<Question> {
-    return this.questionService.create(newQuestionInput, adminUserId);
+    return this.questionService.create(submitQuestionInput, adminUserId);
   }
 }
