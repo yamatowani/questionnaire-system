@@ -2,7 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { Question } from 'src/entities/question.entity';
 
 @ObjectType()
-export class SubmitQUestionOutput {
+export class SubmitQuestionOutput {
   @Field()
   success: boolean;
 

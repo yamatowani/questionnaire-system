@@ -3,7 +3,7 @@ import { QuestionService } from 'src/services/questions.service';
 import { SubmitQuestionInput } from 'src/dto/input/submitQuestion';
 import { Question } from 'src/entities/question.entity';
 import { QuestionWithAnswerCounts } from 'src/dto/output/questionWithAnswerCounts.dto';
-import { SubmitQUestionOutput } from 'src/dto/output/submitQuestion';
+import { SubmitQuestionOutput } from 'src/dto/output/submitQuestion';
 
 @Resolver(() => Question)
 export class QuestionResolver {
@@ -28,11 +28,11 @@ export class QuestionResolver {
     return this.questionService.getQuestionWithAnswerCounts(adminUserId);
   }
 
-  @Mutation(() => SubmitQUestionOutput)
+  @Mutation(() => SubmitQuestionOutput)
   public async submitQuestion(
     @Args('submitQuestionInput') submitQuestionInput: SubmitQuestionInput,
     @Args('adminUserId', { type: () => Int }) adminUserId: number,
-  ): Promise<SubmitQUestionOutput> {
+  ): Promise<SubmitQuestionOutput> {
     try {
       const question = await this.questionService.create(
         submitQuestionInput,
