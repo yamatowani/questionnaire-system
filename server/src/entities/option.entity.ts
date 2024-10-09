@@ -19,7 +19,7 @@ export class Option {
   @Field(() => ID)
   readonly id: number;
 
-  @Column('varchar', { nullable: true })
+  @Column('varchar')
   @Field()
   option_text: string;
 

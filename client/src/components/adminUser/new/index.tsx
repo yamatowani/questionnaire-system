@@ -2,12 +2,11 @@
 import { useMutation } from "@apollo/client";
 import { REGISTER_ADMIN_USER } from "@/lib/graphql/mutations/mutations";
 import { RegisterAdminUserInput } from "@/types/types";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 
 export default function AddAdminUserForm() {
-
   const router = useRouter();
 
   const [formData, setFormData] = useState<RegisterAdminUserInput>({
@@ -16,21 +15,28 @@ export default function AddAdminUserForm() {
     password: '',
   });
 
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const [addNewAdminUser, { loading }] = useMutation(REGISTER_ADMIN_USER, {
-    variables: { registerAdminUserInput: formData },
-    onCompleted: () => {
-      alert('Admin User added Successfully!');
-      setFormData({ name: '', email: '', password: '' });
-      router.push('/');
+    onCompleted: (data) => {
+      const { success, errorMessage } = data.registerAdminUser;
+
+      if (success) {
+        alert('Admin User added successfully!');
+        setFormData({ name: '', email: '', password: '' });
+        setError('');
+        router.push('/');
+      } else {
+        if (errorMessage.includes("Duplicate entry")) {
+          setError("このメールアドレスはすでに使用されています。別のメールアドレスをお試しください。");
+        } else {
+          setError(errorMessage);
+        }
+      }
     },
     onError: (err) => {
-      if (err.message.includes("Duplicate entry")) {
-        setErrorMessage("このメールアドレスはすでに使用されています。別のメールアドレスをお試しください。");
-      } else {
-        setErrorMessage(err.message);
-      }
+      console.error("Mutation error:", err);
+      setError("予期しないエラーが発生しました。再試行してください。");
     }
   });
 
@@ -40,7 +46,10 @@ export default function AddAdminUserForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addNewAdminUser();
+    setError('');
+    addNewAdminUser({
+      variables: { registerAdminUserInput: formData }
+    });
   };
 
   return (
@@ -51,8 +60,8 @@ export default function AddAdminUserForm() {
         <input type="email" name="email" placeholder="Email" onChange={handleChange} value={formData.email} required />
         <input type="password" name="password" placeholder="Password" onChange={handleChange} value={formData.password} required />
         <button type="submit" disabled={loading}>Create Admin User</button>
-        {errorMessage && <p>Error: {errorMessage}</p>}
       </form>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <Link href='/'>Back to Home</Link>
     </div>
   );

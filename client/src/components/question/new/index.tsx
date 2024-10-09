@@ -7,21 +7,29 @@ import Link from "next/link";
 import useAuth from "@/hooks/useAuth";
 
 export default function NewQuestionForm() {
-  const { logout,adminUserId  } = useAuth();
+  const { logout, adminUserId } = useAuth();
   const [formData, setFormData] = useState<SubmitQuestionInput>({
     title: '',
     options: [{ option_text: '' }],
   });
   const [questionUrl, setQuestionUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null); // エラーメッセージ用の状態
 
-  const [addNewQuestion, { loading, error }] = useMutation(SUBMIT_QUESTION, {
+  const [addNewQuestion, { loading }] = useMutation(SUBMIT_QUESTION, {
     variables: { submitQuestionInput: formData, adminUserId: adminUserId },
     onCompleted: (data) => {
-      const generatedUrl = data.submitQuestion.url;
-      const fullUrl = `${window.location.origin}/question/${generatedUrl}`;
-      setQuestionUrl(generatedUrl);
-      alert(`アンケートを作成しました! \n URLは"${fullUrl}"です`);
-      setFormData({ title: '', options: [{ option_text: '' }] });
+      const { success, errorMessage, question } = data.submitQuestion;
+
+      if (success) {
+        const fullUrl = `${window.location.origin}/question/${question.url}`;
+        setQuestionUrl(question.url);
+        alert(`アンケートを作成しました! \n URLは"${fullUrl}"です`);
+        setFormData({ title: '', options: [{ option_text: '' }] });
+        setError(null);
+      } else {
+        setError(errorMessage);
+        alert(`エラー: ${errorMessage}`);
+      }
     },
     onError: (error) => {
       console.error("Error creating question:", error);
@@ -81,7 +89,7 @@ export default function NewQuestionForm() {
 
         <button type="button" onClick={addOption}>選択肢を追加</button>
         <button type="submit" disabled={loading}>Create Question</button>
-        {error && <p>Error: {error.message}</p>}
+        {error && <p>Error: {error}</p>}
       </form>
 
       {questionUrl && (

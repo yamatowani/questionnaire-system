@@ -9,19 +9,25 @@ import { Option } from "@/types/types";
 export default function NewAnswerForm() {
   const params = useParams<{ url: string }>();
   const url = params.url;
+
   const { loading, error, data } = useQuery(GET_QUESTION_BY_URL, {
     variables: { url },
   });
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState<boolean>(false);
 
   const [createAnswer] = useMutation(SUBMIT_ANSWER, {
     onCompleted: () => {
+      setSubmitSuccess(true);
+      setSubmitError(null);
       alert("Answer submitted successfully!");
     },
     onError: (error) => {
       console.error("Error submitting answer:", error);
-      alert("Error: " + error.message);
+      setSubmitError("Error: " + error.message);
+      setSubmitSuccess(false);
     },
   });
 
@@ -49,9 +55,12 @@ export default function NewAnswerForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}> {/* フォームに onSubmit を追加 */}
+    <form onSubmit={handleSubmit}>
       <div>
         <h1>{question.title}</h1>
+        {submitError && <p style={{ color: 'red' }}>{submitError}</p>} {/* エラーメッセージの表示 */}
+        {submitSuccess && <p style={{ color: 'green' }}>Answer submitted successfully!</p>} {/* 成功メッセージの表示 */}
+        
         <ul>
           {question.options.map((option: Option) => (
             <li key={option.id}>

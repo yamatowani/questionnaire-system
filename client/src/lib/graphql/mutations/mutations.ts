@@ -3,11 +3,15 @@ import { gql } from '@apollo/client';
 export const REGISTER_ADMIN_USER = gql`
   mutation registerAdminUser($registerAdminUserInput: RegisterAdminUserInput!) {
     registerAdminUser(registerAdminUserInput: $registerAdminUserInput) {
-      id
-      name
-      email
-      created_at
-      updated_at
+      success
+      errorMessage
+      user {
+        id
+        name
+        email
+        created_at
+        updated_at
+      }
     }
   }
 `;
@@ -15,16 +19,20 @@ export const REGISTER_ADMIN_USER = gql`
 export const SUBMIT_QUESTION = gql`
   mutation submitQuestion($submitQuestionInput: SubmitQuestionInput!, $adminUserId: Int!) {
     submitQuestion(submitQuestionInput: $submitQuestionInput, adminUserId: $adminUserId) {
-      id
-      title
-      url
-      options {
+      success
+      errorMessage
+      question {
         id
-        option_text
-      }
-      admin_user {
-        id
-        name
+        title
+        url
+        options {
+          id
+          option_text
+        }
+        admin_user {
+          id
+          name
+        }
       }
     }
   }
@@ -33,13 +41,18 @@ export const SUBMIT_QUESTION = gql`
 export const SUBMIT_ANSWER = gql`
   mutation submitAnswer($submitAnswerInput: SubmitAnswerInput!) {
     submitAnswer(submitAnswerInput: $submitAnswerInput) {
-      question {
+      success
+      errorMessage
+      answer {
         id
-        title
-      }
-      option {
-        id
-        option_text
+        question {
+          id
+          title
+        }
+        option {
+          id
+          option_text
+        }
       }
     }
   }

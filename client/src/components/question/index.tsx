@@ -17,7 +17,14 @@ export default function Questions() {
   if (error) return <p>Error: {error.message}</p>;
 
   if (!data || !data.questions || data.questions.length === 0) {
-    return <p>作成したアンケートはありません</p>;
+    return (
+      <div>
+        <p>作成したアンケートはありません</p>
+        <button onClick={logout}>ログアウト</button>
+        <br />
+        <Link href='/question'>新しいアンケートを作成する</Link>
+      </div>
+    )
   }
 
   return (

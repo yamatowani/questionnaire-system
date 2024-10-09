@@ -3,6 +3,7 @@ import { QuestionService } from 'src/services/questions.service';
 import { SubmitQuestionInput } from 'src/dto/input/submitQuestion';
 import { Question } from 'src/entities/question.entity';
 import { QuestionWithAnswerCounts } from 'src/dto/output/questionWithAnswerCounts.dto';
+import { SubmitQuestionOutput } from 'src/dto/output/submitQuestion';
 
 @Resolver(() => Question)
 export class QuestionResolver {
@@ -27,11 +28,26 @@ export class QuestionResolver {
     return this.questionService.getQuestionWithAnswerCounts(adminUserId);
   }
 
-  @Mutation(() => Question)
+  @Mutation(() => SubmitQuestionOutput)
   public async submitQuestion(
     @Args('submitQuestionInput') submitQuestionInput: SubmitQuestionInput,
     @Args('adminUserId', { type: () => Int }) adminUserId: number,
-  ): Promise<Question> {
-    return this.questionService.create(submitQuestionInput, adminUserId);
+  ): Promise<SubmitQuestionOutput> {
+    try {
+      const question = await this.questionService.create(
+        submitQuestionInput,
+        adminUserId,
+      );
+
+      return {
+        success: true,
+        question: question,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        errorMessage: error.message || 'Internal Server error',
+      };
+    }
   }
 }

@@ -42,6 +42,12 @@ type AdminUser {
   questions: [Question!]!
 }
 
+type RegisterAdminUserOutput {
+  success: Boolean!
+  errorMessage: String
+  user: AdminUser
+}
+
 type AnswerCount {
   option_id: Int!
   option_text: String!
@@ -52,6 +58,18 @@ type QuestionWithAnswerCounts {
   questionId: Int!
   title: String!
   options: [AnswerCount!]!
+}
+
+type SubmitQuestionOutput {
+  success: Boolean!
+  errorMessage: String
+  question: Question
+}
+
+type SubmitAnswerOutput {
+  success: Boolean!
+  errorMessage: String
+  answer: Answer
 }
 
 type AuthResponse {
@@ -65,9 +83,9 @@ type Query {
 }
 
 type Mutation {
-  registerAdminUser(registerAdminUserInput: RegisterAdminUserInput!): AdminUser!
-  submitQuestion(submitQuestionInput: SubmitQuestionInput!, adminUserId: Int!): Question!
-  submitAnswer(submitAnswerInput: SubmitAnswerInput!): Answer!
+  registerAdminUser(registerAdminUserInput: RegisterAdminUserInput!): RegisterAdminUserOutput!
+  submitQuestion(submitQuestionInput: SubmitQuestionInput!, adminUserId: Int!): SubmitQuestionOutput!
+  submitAnswer(submitAnswerInput: SubmitAnswerInput!): SubmitAnswerOutput!
   authenticateAdminUser(authenticateAdminUserInput: AuthenticateAdminUserInput!): AuthResponse!
 }
 

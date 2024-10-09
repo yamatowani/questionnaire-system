@@ -16,7 +16,7 @@ export class AdminUser {
   @Field(() => ID)
   readonly id: number;
 
-  @Column('varchar', { length: 20, nullable: true })
+  @Column('varchar', { length: 20 })
   @Field()
   name: string;
 
@@ -24,7 +24,7 @@ export class AdminUser {
   @Field()
   email: string;
 
-  @Column('varchar', { nullable: true })
+  @Column('varchar')
   password_digest: string;
 
   @CreateDateColumn()

@@ -20,7 +20,7 @@ export class Question {
   @Field(() => ID)
   readonly id: number;
 
-  @Column('varchar', { nullable: true })
+  @Column('varchar')
   @Field()
   title: string;
 
