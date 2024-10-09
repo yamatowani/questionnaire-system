@@ -1,11 +1,10 @@
-
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useMutation } from '@apollo/client';
-import { LOGIN } from '@/lib/graphql/mutations/mutations'; // LOGINのインポートパスを調整してください
-import { LoginResponse } from '@/types/types';
+import { AUTHENTICATE_ADMIN_USER } from '@/lib/graphql/mutations/mutations';
+import { AuthenticateAdminUserResponse } from '@/types/types';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -13,9 +12,8 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-
-  const handleLoginSuccess = (data: LoginResponse) => {
-    const { access_token } = data.login;
+  const handleLoginSuccess = (data: AuthenticateAdminUserResponse) => {
+    const { access_token } = data.authenticateAdminUser;
     localStorage.setItem('token', access_token);
     alert('ログインに成功しました！');
     router.push('/');
@@ -25,7 +23,7 @@ const LoginPage = () => {
     setError('メールアドレスまたはパスワードが無効です');
   };
 
-  const [login, { loading }] = useMutation(LOGIN, {
+  const [login, { loading }] = useMutation(AUTHENTICATE_ADMIN_USER, {
     onCompleted: handleLoginSuccess,
     onError: handleLoginError,
   });
@@ -41,7 +39,7 @@ const LoginPage = () => {
     setError(''); 
     await login({
       variables: {
-        authInput: { email, password },
+        authenticateAdminUserInput: { email, password },
       },
     });
   };

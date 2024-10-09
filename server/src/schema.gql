@@ -59,40 +59,39 @@ type AuthResponse {
 }
 
 type Query {
-  getQuestionByUrl(url: String!): Question!
-  getAllQuestionsByAdminUserId(adminUserId: Int!): [Question!]!
-  getQuestionWithAnswerCounts(adminUserId: Int!): [QuestionWithAnswerCounts!]!
-  getAnswerByAdminUser(adminUserId: Int!): [Answer!]!
+  questionByUrl(url: String!): Question!
+  questions(adminUserId: Int!): [Question!]!
+  questionResults(adminUserId: Int!): [QuestionWithAnswerCounts!]!
 }
 
 type Mutation {
-  addNewAdminUser(newAdminUserData: NewAdminUserInput!): AdminUser!
-  createQuestion(newQuestionInput: NewQuestionInput!, adminUserId: Int!): Question!
-  createAnswer(newAnswerInput: NewAnswerInput!): Answer!
-  login(authInput: AuthInput!): AuthResponse!
+  registerAdminUser(registerAdminUserInput: RegisterAdminUserInput!): AdminUser!
+  submitQuestion(submitQuestionInput: SubmitQuestionInput!, adminUserId: Int!): Question!
+  submitAnswer(submitAnswerInput: SubmitAnswerInput!): Answer!
+  authenticateAdminUser(authenticateAdminUserInput: AuthenticateAdminUserInput!): AuthResponse!
 }
 
-input NewAdminUserInput {
+input RegisterAdminUserInput {
   name: String!
   email: String!
   password: String!
 }
 
-input NewQuestionInput {
+input SubmitQuestionInput {
   title: String!
-  options: [NewOptionInput!]!
+  options: [SubmitOptionInput!]!
 }
 
-input NewOptionInput {
+input SubmitOptionInput {
   option_text: String!
 }
 
-input NewAnswerInput {
+input SubmitAnswerInput {
   option_id: Int!
   question_id: Int!
 }
 
-input AuthInput {
+input AuthenticateAdminUserInput {
   email: String!
   password: String!
 }

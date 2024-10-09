@@ -1,7 +1,7 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
 
 @InputType()
-export class NewAnswerInput {
+export class SubmitAnswerInput {
   @Field(() => Int)
   option_id: number;
 

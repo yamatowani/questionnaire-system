@@ -1,8 +1,9 @@
 export type AdminUser = {
-  id: number,
+  id: number;
   name: string;
   email: string;
-  password: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export type Question = {
@@ -10,31 +11,35 @@ export type Question = {
   title: string;
   url: string;
   options: Option[];
+  created_at: string;
+  updated_at: string;
 }
 
 export type Option = {
   id: number;
   option_text: string;
-  question_id: string;
+  question_id: number;
+  created_at: string;
+  updated_at: string;
 }
 
-export type NewAdminUserInput = {
+export type RegisterAdminUserInput = {
   name: string;
   email: string;
   password: string;
 }
 
-export type NewQuestionInput = {
+export type SubmitQuestionInput = {
   title: string;
-  options: NewOptionInput[];
+  options: SubmitOptionInput[];
 }
 
-export type NewOptionInput = {
+export type SubmitOptionInput = {
   option_text: string;
 }
 
-export type LoginResponse = {
-  login: {
+export type AuthenticateAdminUserResponse = {
+  authenticateAdminUser: {
     access_token: string;
   };
 }
