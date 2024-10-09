@@ -60,15 +60,16 @@ export default function Questions() {
         </Button>
       </Link>
       <br />
-      <Button variant="outlined" color="primary" onClick={logout} sx={{ mt: 2 }}>
-        ログアウト
-      </Button>
-      <br />
       <Link href='/question' passHref>
         <Button variant="contained" color="primary" sx={{ mt: 2 }}>
           新しいアンケートを作成する
         </Button>
       </Link>
+      <br />
+      <br />
+      <Button variant="outlined" color="primary" onClick={logout} sx={{ mt: 2 }}>
+        ログアウト
+      </Button>
     </Box>
   );
 }
