@@ -8,7 +8,7 @@ export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
   @Mutation(() => AuthResponse)
-  async login(@Args('authInput') authInput: AuthInput) {
+  async authenticateAdminUser(@Args('authInput') authInput: AuthInput) {
     const user = await this.authService.validateUser(
       authInput.email,
       authInput.password,

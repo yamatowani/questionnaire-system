@@ -28,7 +28,7 @@ export class QuestionResolver {
   }
 
   @Mutation(() => Question)
-  public async createQuestion(
+  public async submitQuestion(
     @Args('newQuestionInput') newQuestionInput: NewQuestionInput,
     @Args('adminUserId', { type: () => Int }) adminUserId: number,
   ): Promise<Question> {

@@ -8,7 +8,7 @@ export class AnswerResolver {
   constructor(private readonly answerService: AnswerService) {}
 
   @Mutation(() => Answer)
-  async createAnswer(
+  async submitAnswer(
     @Args('newAnswerInput') newAnswerInput: NewAnswerInput,
   ): Promise<Answer> {
     return this.answerService.create(newAnswerInput);
