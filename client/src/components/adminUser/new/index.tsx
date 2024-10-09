@@ -1,6 +1,6 @@
 'use client';
 import { useMutation } from "@apollo/client";
-import { ADD_NEW_ADMIN_USER } from "@/lib/graphql/mutations/mutations";
+import { REGISTER_ADMIN_USER } from "@/lib/graphql/mutations/mutations";
 import { NewAdminUserInput } from "@/types/types";
 import { useState } from "react";
 import Link from "next/link";
@@ -14,7 +14,7 @@ export default function AddAdminUserForm() {
 
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const [addNewAdminUser, { loading }] = useMutation(ADD_NEW_ADMIN_USER, {
+  const [addNewAdminUser, { loading }] = useMutation(REGISTER_ADMIN_USER, {
     variables: { newAdminUserData: formData },
     onCompleted: () => {
       alert('Admin User added Successfully!');

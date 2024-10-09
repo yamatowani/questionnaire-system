@@ -1,7 +1,7 @@
 'use client';
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_QUESTION_BY_URL } from "@/lib/graphql/queries/query";
-import { CREATE_ANSWER } from "@/lib/graphql/mutations/mutations";
+import { SUBMIT_ANSWER } from "@/lib/graphql/mutations/mutations";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
@@ -20,7 +20,7 @@ export default function NewAnswerForm() {
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
-  const [createAnswer] = useMutation(CREATE_ANSWER, {
+  const [createAnswer] = useMutation(SUBMIT_ANSWER, {
     onCompleted: () => {
       alert("Answer submitted successfully!");
     },

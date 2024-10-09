@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useMutation } from '@apollo/client';
-import { LOGIN } from '@/lib/graphql/mutations/mutations'; // LOGINのインポートパスを調整してください
+import { AUTHENITCATE_ADMIN_USER } from '@/lib/graphql/mutations/mutations';
 import { LoginResponse } from '@/types/types';
 
 const LoginPage = () => {
@@ -25,7 +25,7 @@ const LoginPage = () => {
     setError('メールアドレスまたはパスワードが無効です');
   };
 
-  const [login, { loading }] = useMutation(LOGIN, {
+  const [login, { loading }] = useMutation(AUTHENITCATE_ADMIN_USER, {
     onCompleted: handleLoginSuccess,
     onError: handleLoginError,
   });

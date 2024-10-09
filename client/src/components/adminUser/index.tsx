@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client';
 import { GET_ADMIN_USERS } from "@/lib/graphql/queries/query";
 import { AdminUser } from "@/types/types";

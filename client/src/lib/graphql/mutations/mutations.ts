@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
-export const ADD_NEW_ADMIN_USER = gql`
-  mutation AddNewAdminUser($newAdminUserData: NewAdminUserInput!) {
-    addNewAdminUser(newAdminUserData: $newAdminUserData) {
+export const REGISTER_ADMIN_USER = gql`
+  mutation registerAdminUser($newAdminUserData: NewAdminUserInput!) {
+    registerAdminUser(newAdminUserData: $newAdminUserData) {
       id
       name
       email
@@ -12,9 +12,9 @@ export const ADD_NEW_ADMIN_USER = gql`
   }
 `;
 
-export const CREATE_QUESTION = gql`
-  mutation createQuestion($newQuestionInput: NewQuestionInput!, $adminUserId: Int!) {
-    createQuestion(newQuestionInput: $newQuestionInput, adminUserId: $adminUserId) {
+export const SUBMIT_QUESTION = gql`
+  mutation submitQuestion($newQuestionInput: NewQuestionInput!, $adminUserId: Int!) {
+    submitQuestion(newQuestionInput: $newQuestionInput, adminUserId: $adminUserId) {
       id
       title
       url
@@ -31,9 +31,9 @@ export const CREATE_QUESTION = gql`
 `;
 
 
-export const CREATE_ANSWER = gql`
-  mutation createAnswer($newAnswerInput: NewAnswerInput!) {
-    createAnswer(newAnswerInput: $newAnswerInput) {
+export const SUBMIT_ANSWER = gql`
+  mutation submitAnswer($newAnswerInput: NewAnswerInput!) {
+    submitAnswer(newAnswerInput: $newAnswerInput) {
       question {
         id
         title
@@ -46,9 +46,9 @@ export const CREATE_ANSWER = gql`
   }
 `;
 
-export const LOGIN = gql`
-  mutation login($authInput: AuthInput!) {
-    login(authInput: $authInput) {
+export const AUTHENITCATE_ADMIN_USER = gql`
+  mutation authenticateAdminUser($authInput: AuthInput!) {
+    authenticateAdminUser(authInput: $authInput) {
       access_token
     }
   }
