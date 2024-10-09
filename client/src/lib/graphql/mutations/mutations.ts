@@ -20,16 +20,21 @@ export const REGISTER_ADMIN_USER = gql`
 export const SUBMIT_QUESTION = gql`
   mutation submitQuestion($submitQuestionInput: SubmitQuestionInput!, $adminUserId: Int!) {
     submitQuestion(submitQuestionInput: $submitQuestionInput, adminUserId: $adminUserId) {
-      id
-      title
-      url
-      options {
+      success
+      statusCode
+      errorMessage
+      question {
         id
-        option_text
-      }
-      admin_user {
-        id
-        name
+        title
+        url
+        options {
+          id
+          option_text
+        }
+        admin_user {
+          id
+          name
+        }
       }
     }
   }

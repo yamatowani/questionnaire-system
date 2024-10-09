@@ -61,6 +61,13 @@ type QuestionWithAnswerCounts {
   options: [AnswerCount!]!
 }
 
+type SubmitQUestionOutput {
+  success: Boolean!
+  statusCode: Float!
+  errorMessage: String
+  question: Question
+}
+
 type AuthResponse {
   access_token: String!
 }
@@ -73,7 +80,7 @@ type Query {
 
 type Mutation {
   registerAdminUser(registerAdminUserInput: RegisterAdminUserInput!): RegisterAdminUserOutput!
-  submitQuestion(submitQuestionInput: SubmitQuestionInput!, adminUserId: Int!): Question!
+  submitQuestion(submitQuestionInput: SubmitQuestionInput!, adminUserId: Int!): SubmitQUestionOutput!
   submitAnswer(submitAnswerInput: SubmitAnswerInput!): Answer!
   authenticateAdminUser(authenticateAdminUserInput: AuthenticateAdminUserInput!): AuthResponse!
 }
