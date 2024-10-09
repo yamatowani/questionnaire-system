@@ -5,6 +5,13 @@ import { RegisterAdminUserInput } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import { 
+  Box, 
+  Button, 
+  TextField, 
+  Typography, 
+  Alert 
+} from '@mui/material';
 
 export default function AddAdminUserForm() {
   const router = useRouter();
@@ -22,7 +29,7 @@ export default function AddAdminUserForm() {
       const { success, errorMessage } = data.registerAdminUser;
 
       if (success) {
-        alert('Admin User added successfully!');
+        alert('アカウントが作成されました!');
         setFormData({ name: '', email: '', password: '' });
         setError('');
         router.push('/');
@@ -53,16 +60,52 @@ export default function AddAdminUserForm() {
   };
 
   return (
-    <div>
-      <h1>アカウントを作成する</h1>
+    <Box sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
+      <Typography variant="h4" component="h1" gutterBottom>
+        アカウントを作成する
+      </Typography>
       <form onSubmit={handleSubmit}>
-        <input type="text" name="name" placeholder="Name" onChange={handleChange} value={formData.name} required />
-        <input type="email" name="email" placeholder="Email" onChange={handleChange} value={formData.email} required />
-        <input type="password" name="password" placeholder="Password" onChange={handleChange} value={formData.password} required />
-        <button type="submit" disabled={loading}>Create Admin User</button>
+        <TextField
+          label="名前"
+          name="name"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          onChange={handleChange}
+          value={formData.name}
+          required
+        />
+        <TextField
+          label="Email"
+          name="email"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          onChange={handleChange}
+          value={formData.email}
+          required
+        />
+        <TextField
+          label="Password"
+          name="password"
+          type="password"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          onChange={handleChange}
+          value={formData.password}
+          required
+        />
+        <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading}>
+          アカウントを作成
+        </Button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <Link href='/'>Back to Home</Link>
-    </div>
+      {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
+      <Link href='/' style={{ textDecoration: 'none' }}>
+        <Button variant="outlined" color="primary" fullWidth sx={{ marginTop: '16px' }}>
+          ホームに戻る
+        </Button>
+      </Link>
+    </Box>
   );
 }

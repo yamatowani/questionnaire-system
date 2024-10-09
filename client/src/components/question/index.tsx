@@ -4,6 +4,7 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_QUESTIONS_BY_ADMIN_USER_ID } from "@/lib/graphql/queries/query";
 import { Question } from "@/types/types";
 import useAuth from "@/hooks/useAuth";
+import { Box, Button, Typography, CircularProgress, Alert, List, ListItem, ListItemText } from "@mui/material";
 
 export default function Questions() {
   const { logout, adminUserId } = useAuth();
@@ -12,36 +13,62 @@ export default function Questions() {
     variables: { adminUserId },
   });
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <CircularProgress />;
 
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) return <Alert severity="error">Error: {error.message}</Alert>;
 
   if (!data || !data.questions || data.questions.length === 0) {
     return (
-      <div>
-        <p>作成したアンケートはありません</p>
-        <button onClick={logout}>ログアウト</button>
+      <Box sx={{ textAlign: 'center', mt: 4 }}>
+        <Typography variant="h6">作成したアンケートはありません</Typography>
+        <Button variant="outlined" color="primary" onClick={logout} sx={{ mt: 2 }}>
+          ログアウト
+        </Button>
         <br />
-        <Link href='/question'>新しいアンケートを作成する</Link>
-      </div>
-    )
+        <Link href='/question' passHref>
+          <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+            新しいアンケートを作成する
+          </Button>
+        </Link>
+      </Box>
+    );
   }
 
   return (
-    <div>
-      <h2>作成したアンケート一覧</h2>
-      <ul>
+    <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        作成したアンケート一覧
+      </Typography>
+      <List>
         {data.questions.map((question: Question) => (
-          <li key={question.id}>
-            <Link href={`/question/${question.url}`}>タイトル: {question.title}</Link>
-          </li>
+          <ListItem key={question.id} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
+            <ListItemText
+              primary={
+                <Link href={`/question/${question.url}`} passHref>
+                  <Typography variant="h6" component="span" sx={{ textDecoration: 'underline', cursor: 'pointer' }}>
+                    タイトル: {question.title}
+                  </Typography>
+                </Link>
+              }
+            />
+          </ListItem>
         ))}
-      </ul>
-      <Link href='/answer'>アンケートの結果を見る</Link>
+      </List>
+      <Link href='/answer' passHref>
+        <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+          アンケートの結果を見る
+        </Button>
+      </Link>
       <br />
-      <button onClick={logout}>ログアウト</button>
+      <Button variant="outlined" color="primary" onClick={logout} sx={{ mt: 2 }}>
+        ログアウト
+      </Button>
       <br />
-      <Link href='/question'>新しいアンケートを作成する</Link>
-    </div>
+      <Link href='/question' passHref>
+        <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+          新しいアンケートを作成する
+        </Button>
+      </Link>
+    </Box>
   );
 }
