@@ -5,15 +5,16 @@ import { SubmitQuestionInput } from "@/types/types";
 import { useState } from "react";
 import Link from "next/link";
 import useAuth from "@/hooks/useAuth";
+import { Box, Button, TextField, Typography, Alert } from "@mui/material";
 
 export default function NewQuestionForm() {
-  const { logout, adminUserId } = useAuth();
+  const { adminUserId } = useAuth();
   const [formData, setFormData] = useState<SubmitQuestionInput>({
     title: '',
     options: [{ option_text: '' }],
   });
   const [questionUrl, setQuestionUrl] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null); // エラーメッセージ用の状態
+  const [error, setError] = useState<string | null>(null);
 
   const [addNewQuestion, { loading }] = useMutation(SUBMIT_QUESTION, {
     variables: { submitQuestionInput: formData, adminUserId: adminUserId },
@@ -65,41 +66,58 @@ export default function NewQuestionForm() {
   };
 
   return (
-    <div>
+    <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        新しいアンケートを作成
+      </Typography>
       <form onSubmit={handleSubmit}>
-        <input 
-          type="text"
-          name="title"
-          placeholder="質問項目を入力"
+        <TextField
+          fullWidth
+          variant="outlined"
+          label="質問項目を入力"
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           value={formData.title}
           required
+          sx={{ mb: 2 }}
         />
 
         {formData.options.map((option, index) => (
-          <input
+          <TextField
             key={index}
-            type="text"
-            placeholder="選択肢を入力"
+            fullWidth
+            variant="outlined"
+            label={`選択肢 ${index + 1} を入力`}
             onChange={(e) => handleChange(e, index)}
             value={option.option_text}
             required
+            sx={{ mb: 2 }}
           />
         ))}
 
-        <button type="button" onClick={addOption}>選択肢を追加</button>
-        <button type="submit" disabled={loading}>Create Question</button>
-        {error && <p>Error: {error}</p>}
+        <Button variant="outlined" color="primary" onClick={addOption} sx={{ mb: 2 }}>
+          選択肢を追加
+        </Button>
+        <br />
+        <Button type="submit" variant="contained" color="primary" disabled={loading}>
+          アンケートを作成
+        </Button>
+
+        {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
       </form>
 
       {questionUrl && (
-        <div>
-          <button onClick={copyToClipboard}>URLをコピー</button>
-        </div>
+        <Box sx={{ mt: 2 }}>
+          <Button variant="outlined" onClick={copyToClipboard}>
+            URLをコピー
+          </Button>
+        </Box>
       )}
-      <button onClick={logout}>ログアウト</button>
       <br />
-      <Link href='/'>ホームに戻る</Link>
-    </div>
+      <Link href='/' passHref>
+        <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+          ホームに戻る
+        </Button>
+      </Link>
+    </Box>
   );
 }

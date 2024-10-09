@@ -5,6 +5,7 @@ import { SUBMIT_ANSWER } from "@/lib/graphql/mutations/mutations";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { Option } from "@/types/types";
+import { Box, Button, Typography, RadioGroup, FormControlLabel, Radio } from "@mui/material";
 
 export default function NewAnswerForm() {
   const params = useParams<{ url: string }>();
@@ -16,18 +17,14 @@ export default function NewAnswerForm() {
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [submitSuccess, setSubmitSuccess] = useState<boolean>(false);
 
   const [createAnswer] = useMutation(SUBMIT_ANSWER, {
     onCompleted: () => {
-      setSubmitSuccess(true);
       setSubmitError(null);
-      alert("Answer submitted successfully!");
+      alert("回答を記録しました!");
     },
-    onError: (error) => {
-      console.error("Error submitting answer:", error);
-      setSubmitError("Error: " + error.message);
-      setSubmitSuccess(false);
+    onError: () => {
+      alert(submitError)
     },
   });
 
@@ -55,31 +52,26 @@ export default function NewAnswerForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <h1>{question.title}</h1>
-        {submitError && <p style={{ color: 'red' }}>{submitError}</p>} {/* エラーメッセージの表示 */}
-        {submitSuccess && <p style={{ color: 'green' }}>Answer submitted successfully!</p>} {/* 成功メッセージの表示 */}
-        
-        <ul>
+    <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        {question.title}
+      </Typography>
+
+      <form onSubmit={handleSubmit}>
+        <RadioGroup onChange={(e) => setSelectedOption(Number(e.target.value))}>
           {question.options.map((option: Option) => (
-            <li key={option.id}>
-              <label>
-                <input
-                  type="radio"
-                  value={option.id}
-                  onChange={() => setSelectedOption(Number(option.id))}
-                  name="option"
-                />
-                {option.option_text}
-              </label>
-            </li>
+            <FormControlLabel
+              key={option.id}
+              control={<Radio />}
+              label={option.option_text}
+              value={option.id.toString()}
+            />
           ))}
-        </ul>
-        <button type="submit" disabled={!selectedOption}>
-          Submit Answer
-        </button>
-      </div>
-    </form>
+        </RadioGroup>
+        <Button type="submit" variant="contained" color="primary" disabled={!selectedOption}>
+          回答する
+        </Button>
+      </form>
+    </Box>
   );
 }

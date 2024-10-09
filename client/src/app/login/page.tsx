@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useMutation } from '@apollo/client';
 import { AUTHENTICATE_ADMIN_USER } from '@/lib/graphql/mutations/mutations';
 import { AuthenticateAdminUserResponse } from '@/types/types';
+import { TextField, Button, Typography, Container, Box, Alert } from '@mui/material';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -36,7 +37,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(''); 
+    setError('');
     await login({
       variables: {
         authenticateAdminUserInput: { email, password },
@@ -45,32 +46,53 @@ const LoginPage = () => {
   };
 
   return (
-    <div>
-      <h1>ログイン</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          value={email}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          value={password}
-          required
-        />
-        <button type="submit" disabled={loading}>ログイン</button>
-      </form>
-      <br />
-      <p>アカウントをお持ちでない方はこちら↓</p>
-      <Link href='/admin_user'>アカウントを作成する</Link>
-    </div>
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          mt: 8,
+          mb: 4,
+          padding: 2,
+          border: '1px solid #ccc',
+          borderRadius: 2,
+          boxShadow: 3,
+        }}
+      >
+        <Typography variant="h5">ログイン</Typography>
+        {error && <Alert severity="error">{error}</Alert>}
+        <form onSubmit={handleSubmit} style={{ width: '100%', marginTop: '1rem' }}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Email"
+            name="email"
+            autoComplete="email"
+            onChange={handleChange}
+            value={email}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            onChange={handleChange}
+            value={password}
+          />
+          <Button type="submit" fullWidth variant="contained" color="primary" disabled={loading}>
+            {loading ? 'ログイン中...' : 'ログイン'}
+          </Button>
+        </form>
+          <Link href='/admin_user'>アカウントを作成する</Link>
+      </Box>
+    </Container>
   );
 };
 
