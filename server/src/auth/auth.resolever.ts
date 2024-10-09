@@ -1,7 +1,7 @@
-import { Args, Mutation, Resolver } from "@nestjs/graphql";
-import { AuthService } from "./auth.service";
-import { AuthResponse } from "../dto/output/auth.response";
-import { AuthInput } from "../dto/input/auth.input";
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { AuthService } from './auth.service';
+import { AuthResponse } from '../dto/output/auth.response';
+import { AuthInput } from '../dto/input/auth.input';
 
 @Resolver()
 export class AuthResolver {
@@ -9,11 +9,14 @@ export class AuthResolver {
 
   @Mutation(() => AuthResponse)
   async login(@Args('authInput') authInput: AuthInput) {
-    const user = await this.authService.validateUser(authInput.email, authInput.password);
+    const user = await this.authService.validateUser(
+      authInput.email,
+      authInput.password,
+    );
     if (!user) {
-      throw new Error('Invalid credentials')
+      throw new Error('Invalid credentials');
     }
-    return this.authService.login(user)
+    return this.authService.login(user);
   }
 }
 

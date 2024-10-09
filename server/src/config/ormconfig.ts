@@ -10,6 +10,6 @@ const source = new DataSource({
   entities: ['src/entities/*.ts'],
   migrations: ['src/migration/*.ts'],
   synchronize: true, // dev 環境のみtrueを許可
-});  
+});
 
 export default source;
