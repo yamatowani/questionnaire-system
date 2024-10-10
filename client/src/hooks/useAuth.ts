@@ -1,33 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const useAuth = () => {
   const router = useRouter();
-  const [adminUserId, setAdminUserId] = useState<number | null>(null);
+
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
 
     if (!token) {
-      router.push('/login');
-    } else {
-      try {
-        const decodedToken = jwt.decode(token) as JwtPayload;
-        setAdminUserId(Number(decodedToken.sub));
-      } catch (error) {
-        console.error('Token decoding error:', error);
-        router.push('/login');
-      }
+      router.push('/login'); 
     }
-  }, [router]);
+  }, [router, token]);
 
   const logout = () => {
     localStorage.removeItem('token');
     router.push('/login');
   };
 
-  return { logout, adminUserId };
+  return { logout, token };
 };
 
 export default useAuth;

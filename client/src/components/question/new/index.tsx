@@ -9,7 +9,7 @@ import { Box, Button, TextField, Typography, Alert, IconButton } from "@mui/mate
 import CloseIcon from "@mui/icons-material/Close";
 
 export default function NewQuestionForm() {
-  const { adminUserId } = useAuth();
+  const { token } = useAuth();
   const [formData, setFormData] = useState<SubmitQuestionInput>({
     title: '',
     options: [{ option_text: '' }],
@@ -18,7 +18,12 @@ export default function NewQuestionForm() {
   const [error, setError] = useState<string | null>(null);
 
   const [addNewQuestion, { loading }] = useMutation(SUBMIT_QUESTION, {
-    variables: { submitQuestionInput: formData, adminUserId: adminUserId },
+    variables: { submitQuestionInput: formData },
+    context :{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    },
     onCompleted: (data) => {
       const { success, errorMessage, question } = data.submitQuestion;
 

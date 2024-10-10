@@ -7,10 +7,14 @@ import AnswersChart from "./chart";
 import { Box, Button, Typography, CircularProgress, Alert } from "@mui/material";
 
 export default function Answers() {
-  const { adminUserId } = useAuth();
+  const { token } = useAuth();
 
   const { data, loading, error } = useQuery(QUESTION_RESULTS, {
-    variables: { adminUserId },
+    context: {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    },
   });
 
   if (loading) return <CircularProgress />;
