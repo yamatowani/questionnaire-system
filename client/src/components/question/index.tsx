@@ -7,10 +7,14 @@ import useAuth from "@/hooks/useAuth";
 import { Box, Button, Typography, CircularProgress, Alert, List, ListItem, ListItemText } from "@mui/material";
 
 export default function Questions() {
-  const { logout, adminUserId } = useAuth();
+  const { logout, token } = useAuth();
 
   const { data, loading, error } = useQuery(GET_ALL_QUESTIONS_BY_ADMIN_USER_ID, {
-    variables: { adminUserId },
+    context: {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
   });
 
   if (loading) return <CircularProgress />;
