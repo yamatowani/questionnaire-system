@@ -1,4 +1,6 @@
 import { Query, Resolver, Mutation, Args, Int } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/auth-guard';
 import { QuestionService } from 'src/services/questions.service';
 import { SubmitQuestionInput } from 'src/dto/input/submitQuestion';
 import { Question } from 'src/entities/question.entity';
@@ -14,6 +16,7 @@ export class QuestionResolver {
     return this.questionService.getQuestionByUrl(url);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Query(() => [Question])
   public async questions(
     @Args('adminUserId', { type: () => Int }) adminUserId: number,
@@ -21,6 +24,7 @@ export class QuestionResolver {
     return this.questionService.getAllQuestionsByAdminUserId(adminUserId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Query(() => [QuestionWithAnswerCounts])
   async questionResults(
     @Args('adminUserId', { type: () => Int }) adminUserId: number,
