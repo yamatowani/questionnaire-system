@@ -69,8 +69,8 @@
 | Query                | Description                                            | Input Type        | Output Type       |
 |----------------------|-------------------------------------------------------|--------------------|--------------------|
 | `questionByUrl`      | 指定したURLに基づいてアンケートを取得             | `url: String!`     | `Question!`        |
-| `questions`          | 指定された管理者ユーザーの質問リストを取得     | `adminUserId: Int!`| `[Question!]!`     |
-| `questionResults`    | 管理者ユーザーによって作成された質問の結果を取得| `adminUserId: Int!`| `[QuestionWithAnswerCounts!]!` |
+| `questions`          | 指定された管理者ユーザーの質問リストを取得     | NULL | `[Question!]!`     |
+| `questionResults`    | 管理者ユーザーによって作成された質問の結果を取得| NULL | `[QuestionWithAnswerCounts!]!` |
 
 ### Input/Output仕様
 
@@ -88,8 +88,6 @@
     - `updated_at` (DateTime!): 更新日時
 
 ##### `questions`
-- **Input**:
-  - `adminUserId` (Int!): 管理者ユーザーID
 - **Output**:
   - `[Question!]!`:
     - `id` (ID!): アンケートID
@@ -99,8 +97,6 @@
     - `updated_at` (DateTime!): 更新日時
 
 ##### `questionResults`
-- **Input**:
-  - `adminUserId` (Int!): 管理者ユーザーID
 - **Output**:
   - `[QuestionWithAnswerCounts!]!`:
     - `questionId` (Int!): アンケートID
@@ -117,7 +113,7 @@
 | Mutation                     | Description                                     | Input Type                                            | Output Type                    |
 |------------------------------|------------------------------------------------|------------------------------------------------------|---------------------------------|
 | `registerAdminUser`          | 管理者ユーザーの登録                  | `registerAdminUserInput: RegisterAdminUserInput!`  | `RegisterAdminUserOutput!`     |
-| `submitQuestion`             | アンケートを作成                             | `submitQuestionInput: SubmitQuestionInput!, adminUserId: Int!` | `SubmitQuestionOutput!`        |
+| `submitQuestion`             | アンケートを作成                             | `submitQuestionInput: SubmitQuestionInput!` | `SubmitQuestionOutput!`        |
 | `submitAnswer`               | アンケートに回答                             | `submitAnswerInput: SubmitAnswerInput!`            | `SubmitAnswerOutput!`          |
 | `authenticateAdminUser`      | 管理者ユーザーの認証                 | `authenticateAdminUserInput: AuthenticateAdminUserInput!` | `AuthResponse!`                |
 
@@ -147,7 +143,6 @@
     - `options` ([SubmitOptionInput!]!):
       - `SubmitOptionInput`:
         - `option_text` (String!): 選択肢のテキスト。
-  - `adminUserId` (Int!): 管理者ユーザーID。
 - **Output**:
   - `SubmitQuestionOutput!`:
     - `success` (Boolean!): 成功したかをBooleanで返す
