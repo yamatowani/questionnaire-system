@@ -78,13 +78,13 @@ type SubmitAnswerOutput {
 
 type Query {
   questionByUrl(url: String!): Question!
-  questions(adminUserId: Int!): [Question!]!
-  questionResults(adminUserId: Int!): [QuestionWithAnswerCounts!]!
+  questions: [Question!]!
+  questionResults: [QuestionWithAnswerCounts!]!
 }
 
 type Mutation {
   registerAdminUser(registerAdminUserInput: RegisterAdminUserInput!): RegisterAdminUserOutput!
-  submitQuestion(submitQuestionInput: SubmitQuestionInput!, adminUserId: Int!): SubmitQuestionOutput!
+  submitQuestion(submitQuestionInput: SubmitQuestionInput!): SubmitQuestionOutput!
   authenticateAdminUser(authenticateAdminUserInput: AuthenticateAdminUserInput!): AuthResponse!
   submitAnswer(submitAnswerInput: SubmitAnswerInput!): SubmitAnswerOutput!
 }
