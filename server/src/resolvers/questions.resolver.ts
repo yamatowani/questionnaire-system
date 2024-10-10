@@ -32,6 +32,7 @@ export class QuestionResolver {
     return this.questionService.getQuestionWithAnswerCounts(adminUserId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Mutation(() => SubmitQuestionOutput)
   public async submitQuestion(
     @Args('submitQuestionInput') submitQuestionInput: SubmitQuestionInput,
