@@ -66,27 +66,27 @@ type SubmitQuestionOutput {
   question: Question
 }
 
+type AuthResponse {
+  access_token: String!
+}
+
 type SubmitAnswerOutput {
   success: Boolean!
   errorMessage: String
   answer: Answer
 }
 
-type AuthResponse {
-  access_token: String!
-}
-
 type Query {
   questionByUrl(url: String!): Question!
-  questions(adminUserId: Int!): [Question!]!
-  questionResults(adminUserId: Int!): [QuestionWithAnswerCounts!]!
+  questions: [Question!]!
+  questionResults: [QuestionWithAnswerCounts!]!
 }
 
 type Mutation {
   registerAdminUser(registerAdminUserInput: RegisterAdminUserInput!): RegisterAdminUserOutput!
-  submitQuestion(submitQuestionInput: SubmitQuestionInput!, adminUserId: Int!): SubmitQuestionOutput!
-  submitAnswer(submitAnswerInput: SubmitAnswerInput!): SubmitAnswerOutput!
+  submitQuestion(submitQuestionInput: SubmitQuestionInput!): SubmitQuestionOutput!
   authenticateAdminUser(authenticateAdminUserInput: AuthenticateAdminUserInput!): AuthResponse!
+  submitAnswer(submitAnswerInput: SubmitAnswerInput!): SubmitAnswerOutput!
 }
 
 input RegisterAdminUserInput {
@@ -104,12 +104,12 @@ input SubmitOptionInput {
   option_text: String!
 }
 
-input SubmitAnswerInput {
-  option_id: Int!
-  question_id: Int!
-}
-
 input AuthenticateAdminUserInput {
   email: String!
   password: String!
+}
+
+input SubmitAnswerInput {
+  option_id: Int!
+  question_id: Int!
 }

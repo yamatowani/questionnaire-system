@@ -1,4 +1,6 @@
-import { Query, Resolver, Mutation, Args, Int } from '@nestjs/graphql';
+import { Query, Resolver, Mutation, Args, Int, Context } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/auth-guard';
 import { QuestionService } from 'src/services/questions.service';
 import { SubmitQuestionInput } from 'src/dto/input/submitQuestion';
 import { Question } from 'src/entities/question.entity';
@@ -14,26 +16,30 @@ export class QuestionResolver {
     return this.questionService.getQuestionByUrl(url);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Query(() => [Question])
-  public async questions(
-    @Args('adminUserId', { type: () => Int }) adminUserId: number,
-  ): Promise<Question[]> {
+  public async questions(@Context('req') req): Promise<Question[]> {
+    const adminUserId = req.adminUserId;
     return this.questionService.getAllQuestionsByAdminUserId(adminUserId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Query(() => [QuestionWithAnswerCounts])
   async questionResults(
-    @Args('adminUserId', { type: () => Int }) adminUserId: number,
+    @Context('req') req,
   ): Promise<QuestionWithAnswerCounts[]> {
+    const adminUserId = req.adminUserId;
     return this.questionService.getQuestionWithAnswerCounts(adminUserId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Mutation(() => SubmitQuestionOutput)
   public async submitQuestion(
     @Args('submitQuestionInput') submitQuestionInput: SubmitQuestionInput,
-    @Args('adminUserId', { type: () => Int }) adminUserId: number,
+    @Context('req') req,
   ): Promise<SubmitQuestionOutput> {
     try {
+      const adminUserId = req.adminUserId;
       const question = await this.questionService.create(
         submitQuestionInput,
         adminUserId,
