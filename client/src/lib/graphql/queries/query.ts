@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const QUESTION_RESULTS = gql`
-  query questionResults($adminUserId: Int!) {
-  questionResults(adminUserId: $adminUserId) {
+  query questionResults {
+  questionResults {
     questionId
     title
     options {
@@ -28,8 +28,8 @@ export const GET_QUESTION_BY_URL = gql`
 `;
 
 export const GET_ALL_QUESTIONS_BY_ADMIN_USER_ID = gql`
-  query questions($adminUserId: Int!) {
-    questions(adminUserId: $adminUserId) {
+  query questions {
+    questions {
       id
       title
       url
