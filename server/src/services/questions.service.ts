@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { Question } from 'src/entities/question.entity';
 import { Option } from 'src/entities/option.entity';
 import { SubmitQuestionInput } from 'src/dto/input/submitQuestion';
@@ -80,32 +80,36 @@ export class QuestionService {
   ): Promise<Question> {
     const { title, options } = submitQuestionInput;
 
-    const adminUser = await this.adminUserRepository.findOne({
-      where: { id: adminUserId },
-    });
-    if (!adminUser) {
-      throw new NotFoundException('Admin user not found');
-    }
-
-    const question = this.questionRepository.create({
-      title,
-      url: uuidv4(),
-      admin_user: adminUser,
-    });
-    const savedQuestion = await this.questionRepository.save(question);
-
-    const savedOptions = await Promise.all(
-      options.map((option) => {
-        const newOption = this.optionRepository.create({
-          option_text: option.option_text,
-          question: savedQuestion,
+    return await this.questionRepository.manager.transaction(
+      async (entityManager: EntityManager) => {
+        const adminUser = await entityManager.findOne(AdminUser, {
+          where: { id: adminUserId },
         });
-        return this.optionRepository.save(newOption);
-      }),
+        if (!adminUser) {
+          throw new NotFoundException('Admin user not found');
+        }
+
+        const question = entityManager.create(Question, {
+          title,
+          url: uuidv4(),
+          admin_user: adminUser,
+        });
+        const savedQuestion = await entityManager.save(Question, question);
+
+        const savedOptions = await Promise.all(
+          options.map((option) => {
+            const newOption = entityManager.create(Option, {
+              option_text: option.option_text,
+              question: savedQuestion,
+            });
+            return entityManager.save(Option, newOption);
+          }),
+        );
+
+        savedQuestion.options = savedOptions;
+
+        return savedQuestion;
+      },
     );
-
-    savedQuestion.options = savedOptions;
-
-    return savedQuestion;
   }
 }
