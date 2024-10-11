@@ -5,7 +5,7 @@ import { SUBMIT_ANSWER } from "@/lib/graphql/mutations/mutations";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { Option } from "@/types/types";
-import { Box, Button, Typography, RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import { Box, Button, Typography, RadioGroup, FormControlLabel, Radio, CircularProgress, Alert } from "@mui/material";
 
 export default function NewAnswerForm() {
   const params = useParams<{ url: string }>();
@@ -17,23 +17,21 @@ export default function NewAnswerForm() {
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [createAnswer] = useMutation(SUBMIT_ANSWER, {
     onCompleted: () => {
       setSubmitError(null);
       alert("回答を記録しました!");
+      setIsSubmitting(true);
     },
-    onError: () => {
-      alert(submitError)
+    onError: (error) => {
+      setSubmitError(error.message || "回答の送信中にエラーが発生しました");
     },
   });
 
-  if (error) {
-    console.error("Error fetching question:", error);
-    return <p>Error: {error.message}</p>;
-  }
-
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <CircularProgress />;
+  if (error) return <Alert severity="error">Error: {error.message}</Alert>;
 
   const question = data.questionByUrl;
 
@@ -58,7 +56,7 @@ export default function NewAnswerForm() {
       </Typography>
 
       <form onSubmit={handleSubmit}>
-        <RadioGroup onChange={(e) => setSelectedOption(Number(e.target.value))}>
+        <RadioGroup value={selectedOption?.toString() || ""} onChange={(e) => setSelectedOption(Number(e.target.value))}>
           {question.options.map((option: Option) => (
             <FormControlLabel
               key={option.id}
@@ -68,9 +66,15 @@ export default function NewAnswerForm() {
             />
           ))}
         </RadioGroup>
-        <Button type="submit" variant="contained" color="primary" disabled={!selectedOption}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={!selectedOption || isSubmitting}
+        >
           回答する
         </Button>
+        {submitError && <Alert severity="error" sx={{ mt: 2 }}>{submitError}</Alert>}
       </form>
     </Box>
   );
