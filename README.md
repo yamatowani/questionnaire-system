@@ -191,11 +191,21 @@ erDiagram
         timestamp updated_at "更新日時"
     }
 
-    Questions {
+    Surveys {
         int id PK "アンケートID"
-        varchar title "アンケート質問文"
+        varchar title "アンケートタイトル"
         varchar url "アンケートURL"
         bigint admin_user_id FK "アンケートを作成した管理ユーザーID"
+        timestamp created_at "作成日時"
+        timestamp updated_at "更新日時"
+    }
+
+    Questions {
+        int id PK "質問ID"
+        varchar question_text "質問項目"
+        bigint survey_id FK "質問が属するアンケートID"
+        boolean has_multiple_options "複数選択が可能か"
+        boolean allows_other "その他の自由回答を許可するか"
         timestamp created_at "作成日時"
         timestamp updated_at "更新日時"
     }
@@ -208,59 +218,28 @@ erDiagram
         timestamp updated_at "更新日時"
     }
 
+    OptionAnswers {
+        int id PK "OptionAnswersID"
+        bigint option_id FK "選択肢ID"
+        bigint answer_id FK "回答ID"
+        timestamp created_at "作成日時"
+        timestamp updated_at "更新日時"
+    }
+
     Answers {
         int id PK "回答ID"
-        int option_id FK "選択した選択肢ID"
-        int question_id FK "回答が属する質問ID"
+        bigint question_id FK "回答が属する質問ID"
+        varchar other_response "自由回答用のテキスト"
         timestamp created_at "作成日時"
         timestamp updated_at "更新日時"
     }
 
     %% リレーションシップ
-    AdminUsers ||--o{ Questions : "作成する"
+    AdminUsers ||--o{ Surveys : "作成する"
+    Surveys ||--o{ Questions : "複数の質問を持つ"
     Questions ||--|{ Options : "複数の選択肢を持つ"
     Questions ||--o{ Answers : "複数の回答を持つ"
-    Options ||--o{ Answers : "回答は選択肢に属する"
+    Options ||--o{ OptionAnswers : "0以上の回答を持つ"
+    Answers ||--o{ OptionAnswers : "回答は選択肢に属する"
 
 ```
-### `admin_users` テーブル
-
-| Field           | Type         | Null | Key | Default              | Extra                                            |
-|-----------------|--------------|------|-----|----------------------|--------------------------------------------------|
-| id   | int          | NO   | PRI | NULL                 | auto_increment                                   |
-| name            | varchar(20)  | NO  |     | NULL                 |                                                  |
-| email           | varchar(255) | NO   |     | NULL                 |                                                  |
-| password_digest | varchar(255) | NO  |     | NULL                 |                                                  |
-| created_at      | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED                                |
-| updated_at      | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6) |
-
-### `questions` テーブル
-
-| Field         | Type         | Null | Key | Default              | Extra                                            |
-|---------------|--------------|------|-----|----------------------|--------------------------------------------------|
-| id   | int          | NO   | PRI | NULL                 | auto_increment                                   |
-| title         | varchar(255) | NO  |     | NULL                 |                                                  |
-| url           | varchar(255) | NO   |     | NULL                 |                                                  |
-| created_at    | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED                                |
-| updated_at    | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6) |
-| admin_user_id | int          | YES  | MUL | NULL                 |                                                  |
-
-### `options` テーブル
-
-| Field         | Type         | Null | Key | Default              | Extra                                            |
-|---------------|--------------|------|-----|----------------------|--------------------------------------------------|
-| id     | int          | NO   | PRI | NULL                 | auto_increment                                   |
-| option_text   | varchar(255) | NO  |     | NULL                 |                                                  |
-| created_at    | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED                                |
-| updated_at    | datetime(6)  | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6) |
-| question_id   | int          | YES  | MUL | NULL                 |                                                  |
-
-### `answers` テーブル
-
-| Field       | Type        | Null | Key | Default              | Extra                                            |
-|-------------|-------------|------|-----|----------------------|--------------------------------------------------|
-| id   | int         | NO   | PRI | NULL                 | auto_increment                                   |
-| option_id   | int         | NO   | MUL | NULL                 |                                                  |
-| question_id | int         | NO   | MUL | NULL                 |                                                  |
-| created_at  | datetime(6) | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED                                |
-| updated_at  | datetime(6) | NO   |     | CURRENT_TIMESTAMP(6) | DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6) |
