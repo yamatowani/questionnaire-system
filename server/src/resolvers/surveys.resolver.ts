@@ -1,14 +1,14 @@
 import { Query, Resolver, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/auth-guard';
-import { QuestionService } from 'src/services/questions.service';
+import { SurveyService } from 'src/services/surveys.service';
 import { SubmitQuestionInput } from 'src/dto/input/submitQuestion';
 import { Question } from 'src/entities/question.entity';
 import { QuestionWithAnswerCounts } from 'src/dto/output/questionWithAnswerCounts.dto';
 import { SubmitQuestionOutput } from 'src/dto/output/submitQuestion';
 
 @Resolver(() => Question)
-export class QuestionResolver {
+export class SurveyResolver {
   constructor(private readonly questionService: QuestionService) {}
 
   @Query(() => Question)

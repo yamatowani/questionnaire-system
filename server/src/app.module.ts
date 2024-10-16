@@ -10,7 +10,7 @@ import { AdminUser } from './entities/admin_user.entity';
 import { Question } from './entities/question.entity';
 import { Option } from './entities/option.entity';
 import { Answer } from './entities/answer.entity';
-import { QuestionsModule } from './modules/questions.module';
+import { QuestionsModule } from './modules/surveys.module';
 import { AnswerModule } from './modules/answers.module';
 import { AuthModule } from './auth/auth.module';
 

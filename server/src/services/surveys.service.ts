@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Answer } from 'src/entities/answer.entity';
 
 @Injectable()
-export class QuestionService {
+export class SurveyService {
   constructor(
     @InjectRepository(Question)
     private readonly questionRepository: Repository<Question>,
