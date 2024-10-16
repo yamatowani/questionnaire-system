@@ -1,13 +1,16 @@
 'use client';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_QUESTIONS_BY_ADMIN_USER_ID } from "@/lib/graphql/queries/query";
 import { Question } from "@/types/types";
 import useAuth from "@/hooks/useAuth";
-import { Box, Button, Typography, CircularProgress, Alert, List, ListItem, ListItemText } from "@mui/material";
+import { Box, Button, Typography, CircularProgress, List, ListItem, ListItemText } from "@mui/material";
 
 export default function Questions() {
   const { logout, token } = useAuth();
+  const router = useRouter();
 
   const { data, loading, error } = useQuery(GET_ALL_QUESTIONS_BY_ADMIN_USER_ID, {
     context: {
@@ -17,9 +20,13 @@ export default function Questions() {
     }
   });
 
-  if (loading) return <CircularProgress />;
+  useEffect(() => {
+    if (error) {
+      router.push('/login');
+    }
+  }, [error, router]);
 
-  if (error) return <Alert severity="error">Error: {error.message}</Alert>;
+  if (loading) return <CircularProgress />;
 
   if (!data || !data.questions || data.questions.length === 0) {
     return (
