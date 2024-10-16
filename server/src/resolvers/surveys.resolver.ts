@@ -1,53 +1,55 @@
-import { Query, Resolver, Mutation, Args, Int, Context } from '@nestjs/graphql';
+import { Query, Resolver, Mutation, Args, Context } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/auth-guard';
 import { SurveyService } from 'src/services/surveys.service';
-import { SubmitQuestionInput } from 'src/dto/input/submitQuestion';
+import { SubmitSurveyInput } from 'src/dto/input/submitSurvey';
+import { Survey } from 'src/entities/survey.entity';
 import { Question } from 'src/entities/question.entity';
-import { QuestionWithAnswerCounts } from 'src/dto/output/questionWithAnswerCounts.dto';
-import { SubmitQuestionOutput } from 'src/dto/output/submitQuestion';
+// import { QuestionWithAnswerCounts } from 'src/dto/output/questionWithAnswerCounts.dto';
+import { SubmitSurveyOutput } from 'src/dto/output/submitSurvey';
 
-@Resolver(() => Question)
+@Resolver(() => Survey)
 export class SurveyResolver {
-  constructor(private readonly questionService: QuestionService) {}
+  constructor(private readonly surveyService: SurveyService) {}
 
   @Query(() => Question)
-  public async questionByUrl(@Args('url') url: string): Promise<Question> {
-    return this.questionService.getQuestionByUrl(url);
+  public async surveyByUrl(@Args('url') url: string): Promise<Survey> {
+    return this.surveyService.surveyByUrl(url);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Query(() => [Question])
-  public async questions(@Context('req') req): Promise<Question[]> {
+  @Query(() => [Survey])
+  public async surveys(@Context('req') req): Promise<Survey[]> {
     const adminUserId = req.adminUserId;
-    return this.questionService.getAllQuestionsByAdminUserId(adminUserId);
+    return this.surveyService.surveys(adminUserId);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Query(() => [QuestionWithAnswerCounts])
-  async questionResults(
-    @Context('req') req,
-  ): Promise<QuestionWithAnswerCounts[]> {
-    const adminUserId = req.adminUserId;
-    return this.questionService.getQuestionWithAnswerCounts(adminUserId);
-  }
+  // あとでやる
+  // @UseGuards(JwtAuthGuard)
+  // @Query(() => [QuestionWithAnswerCounts])
+  // async questionResults(
+  //   @Context('req') req,
+  // ): Promise<QuestionWithAnswerCounts[]> {
+  //   const adminUserId = req.adminUserId;
+  //   return this.questionService.getQuestionWithAnswerCounts(adminUserId);
+  // }
 
   @UseGuards(JwtAuthGuard)
-  @Mutation(() => SubmitQuestionOutput)
+  @Mutation(() => SubmitSurveyOutput)
   public async submitQuestion(
-    @Args('submitQuestionInput') submitQuestionInput: SubmitQuestionInput,
+    @Args('submitSurvetInput') submitSurveyInput: SubmitSurveyInput,
     @Context('req') req,
-  ): Promise<SubmitQuestionOutput> {
+  ): Promise<SubmitSurveyOutput> {
     try {
       const adminUserId = req.adminUserId;
-      const question = await this.questionService.create(
-        submitQuestionInput,
+      const survey = await this.surveyService.create(
+        submitSurveyInput,
         adminUserId,
       );
 
       return {
         success: true,
-        question: question,
+        survey: survey,
       };
     } catch (error) {
       return {
