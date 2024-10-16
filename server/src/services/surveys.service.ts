@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
+import { Survey } from 'src/entities/survey.entity';
 import { Question } from 'src/entities/question.entity';
 import { Option } from 'src/entities/option.entity';
 import { SubmitQuestionInput } from 'src/dto/input/submitQuestion';
@@ -11,6 +12,8 @@ import { Answer } from 'src/entities/answer.entity';
 @Injectable()
 export class SurveyService {
   constructor(
+    @InjectRepository(Survey)
+    private readonly surveyRepository: Repository<Survey>,
     @InjectRepository(Question)
     private readonly questionRepository: Repository<Question>,
     @InjectRepository(Option)
@@ -21,56 +24,56 @@ export class SurveyService {
     private readonly answerRepository: Repository<Answer>,
   ) {}
 
-  public async getAllQuestionsByAdminUserId(
-    adminUserId: number,
-  ): Promise<Question[]> {
-    const questions = await this.questionRepository.find({
+  public async surveys(adminUserId: number): Promise<Survey[]> {
+    const surveys = await this.surveyRepository.find({
       where: { admin_user: { id: adminUserId } },
-      relations: ['options', 'answers'],
+      relations: ['questions', 'options', 'answers'],
     });
-    return questions;
+    return surveys;
   }
 
-  public async getQuestionWithAnswerCounts(
-    adminUserId: number,
-  ): Promise<any[]> {
-    const questions = await this.questionRepository.find({
-      where: { admin_user: { id: adminUserId } },
-      relations: ['options'],
-    });
+  // 結果カウントはあとで作ります
 
-    const result: any[] = await Promise.all(
-      questions.map(async (question) => {
-        const optionsWithCounts: any[] = await Promise.all(
-          question.options.map(async (option) => {
-            const count = await this.answerRepository.count({
-              where: { option: { id: option.id } },
-              relations: ['option', 'question'],
-            });
+  // public async getQuestionWithAnswerCounts(
+  //   adminUserId: number,
+  // ): Promise<any[]> {
+  //   const questions = await this.questionRepository.find({
+  //     where: { admin_user: { id: adminUserId } },
+  //     relations: ['options'],
+  //   });
 
-            return {
-              option_id: option.id,
-              option_text: option.option_text,
-              count: count,
-            };
-          }),
-        );
+  //   const result: any[] = await Promise.all(
+  //     questions.map(async (question) => {
+  //       const optionsWithCounts: any[] = await Promise.all(
+  //         question.options.map(async (option) => {
+  //           const count = await this.answerRepository.count({
+  //             where: { option: { id: option.id } },
+  //             relations: ['option', 'question'],
+  //           });
 
-        return {
-          questionId: question.id,
-          title: question.title,
-          options: optionsWithCounts,
-        };
-      }),
-    );
+  //           return {
+  //             option_id: option.id,
+  //             option_text: option.option_text,
+  //             count: count,
+  //           };
+  //         }),
+  //       );
 
-    return result;
-  }
+  //       return {
+  //         questionId: question.id,
+  //         title: question.title,
+  //         options: optionsWithCounts,
+  //       };
+  //     }),
+  //   );
 
-  public async getQuestionByUrl(url: string): Promise<Question> {
-    return this.questionRepository.findOne({
+  //   return result;
+  // }
+
+  public async survetByUrl(url: string): Promise<Survey> {
+    return this.surveyRepository.findOne({
       where: { url },
-      relations: ['options'],
+      relations: ['questions', 'options'],
     });
   }
 
