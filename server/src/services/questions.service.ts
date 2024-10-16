@@ -88,7 +88,6 @@ export class QuestionService {
         if (!adminUser) {
           throw new NotFoundException('Admin user not found');
         }
-
         const question = entityManager.create(Question, {
           title,
           url: uuidv4(),
@@ -96,18 +95,16 @@ export class QuestionService {
         });
         const savedQuestion = await entityManager.save(Question, question);
 
-        const savedOptions = await Promise.all(
-          options.map((option) => {
-            const newOption = entityManager.create(Option, {
-              option_text: option.option_text,
-              question: savedQuestion,
-            });
-            return entityManager.save(Option, newOption);
-          }),
-        );
-
+        const savedOptions: Option[] = [];
+        for (const option of options) {
+          const newOption = entityManager.create(Option, {
+            option_text: option.option_text,
+            question: savedQuestion,
+          });
+          const savedOption = await entityManager.save(Option, newOption);
+          savedOptions.push(savedOption);
+        }
         savedQuestion.options = savedOptions;
-
         return savedQuestion;
       },
     );
