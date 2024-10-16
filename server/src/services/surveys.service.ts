@@ -4,7 +4,7 @@ import { EntityManager, Repository } from 'typeorm';
 import { Survey } from 'src/entities/survey.entity';
 import { Question } from 'src/entities/question.entity';
 import { Option } from 'src/entities/option.entity';
-import { SubmitQuestionInput } from 'src/dto/input/submitQuestion';
+import { SubmitSurveyInput } from 'src/dto/input/submitSurvey';
 import { AdminUser } from 'src/entities/admin_user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { Answer } from 'src/entities/answer.entity';
@@ -70,20 +70,17 @@ export class SurveyService {
   //   return result;
   // }
 
-  public async survetByUrl(url: string): Promise<Survey> {
+  public async surveyByUrl(url: string): Promise<Survey> {
     return this.surveyRepository.findOne({
       where: { url },
       relations: ['questions', 'options'],
     });
   }
-
   async create(
-    submitQuestionInput: SubmitQuestionInput,
+    submitSurveyInput: SubmitSurveyInput,
     adminUserId: number,
-  ): Promise<Question> {
-    const { title, options } = submitQuestionInput;
-
-    return await this.questionRepository.manager.transaction(
+  ): Promise<Survey> {
+    return await this.surveyRepository.manager.transaction(
       async (entityManager: EntityManager) => {
         const adminUser = await entityManager.findOne(AdminUser, {
           where: { id: adminUserId },
@@ -91,24 +88,33 @@ export class SurveyService {
         if (!adminUser) {
           throw new NotFoundException('Admin user not found');
         }
-        const question = entityManager.create(Question, {
-          title,
+
+        const survey = entityManager.create(Survey, {
+          title: submitSurveyInput.title,
           url: uuidv4(),
           admin_user: adminUser,
         });
-        const savedQuestion = await entityManager.save(Question, question);
+        const savedSurvey = await entityManager.save(Survey, survey);
 
-        const savedOptions: Option[] = [];
-        for (const option of options) {
-          const newOption = entityManager.create(Option, {
-            option_text: option.option_text,
-            question: savedQuestion,
+        for (const question of submitSurveyInput.questions) {
+          const newQuestion = entityManager.create(Question, {
+            question_text: question.question_text,
+            has_multiple_options: question.has_multiple_options,
+            allows_other: question.allows_other,
+            survey: savedSurvey,
           });
-          const savedOption = await entityManager.save(Option, newOption);
-          savedOptions.push(savedOption);
+          const savedQuestion = await entityManager.save(Question, newQuestion);
+
+          for (const option of question.options) {
+            const newOption = entityManager.create(Option, {
+              option_text: option.option_text,
+              question: savedQuestion,
+            });
+
+            await entityManager.save(Option, newOption);
+          }
         }
-        savedQuestion.options = savedOptions;
-        return savedQuestion;
+        return savedSurvey;
       },
     );
   }
