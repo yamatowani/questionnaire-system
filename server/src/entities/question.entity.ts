@@ -31,6 +31,14 @@ export class Question {
   @Field(() => Survey)
   survey: Survey;
 
+  @Column()
+  @Field()
+  has_multiple_options: boolean;
+
+  @Column()
+  @Field()
+  allows_other: boolean;
+
   @OneToMany(() => Option, (option) => option.question, {
     onDelete: 'CASCADE',
   })
