@@ -13,7 +13,7 @@ import { Answer } from './answer.entity';
 
 @Entity({ name: 'option_answers' })
 @ObjectType()
-export class OptionnAnswer {
+export class OptionAnswer {
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   readonly id: number;
