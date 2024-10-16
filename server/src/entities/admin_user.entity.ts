@@ -6,8 +6,8 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { Question } from './question.entity';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { Survey } from './survey.entity';
 
 @Entity({ name: 'admin_users' })
 @ObjectType()
@@ -35,9 +35,9 @@ export class AdminUser {
   @Field()
   readonly updated_at?: Date;
 
-  @OneToMany(() => Question, (question) => question.admin_user, {
+  @OneToMany(() => Survey, (survey) => survey.admin_user, {
     onDelete: 'CASCADE',
   })
-  @Field(() => [Question])
-  questions: Question[];
+  @Field(() => [Survey])
+  surveys: Survey[];
 }

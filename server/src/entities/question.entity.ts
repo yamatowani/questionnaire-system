@@ -8,10 +8,10 @@ import {
   OneToMany,
   JoinColumn,
 } from 'typeorm';
-import { AdminUser } from './admin_user.entity';
 import { Option } from './option.entity';
 import { Answer } from './answer.entity';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { Survey } from './survey.entity';
 
 @Entity({ name: 'questions' })
 @ObjectType()
@@ -22,18 +22,14 @@ export class Question {
 
   @Column('varchar')
   @Field()
-  title: string;
+  question_text: string;
 
-  @Column('varchar', { unique: true, nullable: false })
-  @Field()
-  url: string;
-
-  @ManyToOne(() => AdminUser, (admin_user) => admin_user.questions, {
+  @ManyToOne(() => Survey, (survey) => survey.questions, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'admin_user_id' })
-  @Field(() => AdminUser)
-  admin_user: AdminUser;
+  @JoinColumn({ name: 'survey_id' })
+  @Field(() => Survey)
+  survey: Survey;
 
   @OneToMany(() => Option, (option) => option.question, {
     onDelete: 'CASCADE',
