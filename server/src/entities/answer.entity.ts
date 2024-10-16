@@ -5,6 +5,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  Column,
 } from 'typeorm';
 import { Question } from './question.entity';
 import { Option } from './option.entity';
@@ -16,6 +17,10 @@ export class Answer {
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   readonly id: number;
+
+  @Column()
+  @Field()
+  other_response: boolean;
 
   @CreateDateColumn()
   readonly created_at?: Date;
