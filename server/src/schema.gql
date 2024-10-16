@@ -4,6 +4,7 @@
 
 type Answer {
   id: Int!
+  other_response: Boolean!
   question: Question!
   option: Option!
 }
@@ -24,11 +25,22 @@ scalar DateTime
 
 type Question {
   id: ID!
+  question_text: String!
+  has_multiple_options: Boolean!
+  allows_other: Boolean!
+  options: [Option!]!
+  answers: [Answer!]
+  survey: Survey!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Survey {
+  id: ID!
   title: String!
   url: String!
   admin_user: AdminUser!
-  options: [Option!]!
-  answers: [Answer!]
+  questions: [Question!]!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -39,7 +51,7 @@ type AdminUser {
   email: String!
   created_at: DateTime!
   updated_at: DateTime!
-  questions: [Question!]!
+  surveys: [Survey!]!
 }
 
 type RegisterAdminUserOutput {
@@ -48,26 +60,14 @@ type RegisterAdminUserOutput {
   user: AdminUser
 }
 
-type AnswerCount {
-  option_id: Int!
-  option_text: String!
-  count: Int!
-}
-
-type QuestionWithAnswerCounts {
-  questionId: Int!
-  title: String!
-  options: [AnswerCount!]!
-}
-
-type SubmitQuestionOutput {
-  success: Boolean!
-  errorMessage: String
-  question: Question
-}
-
 type AuthResponse {
   access_token: String!
+}
+
+type SubmitSurveyOutput {
+  success: Boolean!
+  errorMessage: String
+  survey: Survey
 }
 
 type SubmitAnswerOutput {
@@ -77,14 +77,13 @@ type SubmitAnswerOutput {
 }
 
 type Query {
-  questionByUrl(url: String!): Question!
-  questions: [Question!]!
-  questionResults: [QuestionWithAnswerCounts!]!
+  surveyByUrl(url: String!): Question!
+  surveys: [Survey!]!
 }
 
 type Mutation {
   registerAdminUser(registerAdminUserInput: RegisterAdminUserInput!): RegisterAdminUserOutput!
-  submitQuestion(submitQuestionInput: SubmitQuestionInput!): SubmitQuestionOutput!
+  submitQuestion(submitSurvetInput: SubmitSurveyInput!): SubmitSurveyOutput!
   authenticateAdminUser(authenticateAdminUserInput: AuthenticateAdminUserInput!): AuthResponse!
   submitAnswer(submitAnswerInput: SubmitAnswerInput!): SubmitAnswerOutput!
 }
@@ -95,8 +94,15 @@ input RegisterAdminUserInput {
   password: String!
 }
 
-input SubmitQuestionInput {
+input SubmitSurveyInput {
   title: String!
+  questions: [SubmitQuestionInput!]!
+}
+
+input SubmitQuestionInput {
+  question_text: String!
+  has_multiple_options: Boolean!
+  allows_other: Boolean!
   options: [SubmitOptionInput!]!
 }
 

@@ -17,19 +17,19 @@ export class AnswerService {
     private readonly optionRepository: Repository<Option>,
   ) {}
 
-  public async getAnswersByAdminUser(adminUserId: number): Promise<Answer[]> {
-    const relatedQuestions = await this.questionRepository.find({
-      where: { admin_user: { id: adminUserId } },
-      relations: ['options'],
-    });
+  // public async getAnswersByAdminUser(adminUserId: number): Promise<Answer[]> {
+  //   const relatedQuestions = await this.questionRepository.find({
+  //     where: { admin_user: { id: adminUserId } },
+  //     relations: ['options'],
+  //   });
 
-    const questionIds = relatedQuestions.map((question) => question.id);
+  //   const questionIds = relatedQuestions.map((question) => question.id);
 
-    return this.answerRepository.find({
-      relations: ['question', 'option'],
-      where: { question: { id: In(questionIds) } },
-    });
-  }
+  //   return this.answerRepository.find({
+  //     relations: ['question', 'option'],
+  //     where: { question: { id: In(questionIds) } },
+  //   });
+  // }
 
   public async create(submitAnswerInput: SubmitAnswerInput): Promise<Answer> {
     const { option_id, question_id } = submitAnswerInput;

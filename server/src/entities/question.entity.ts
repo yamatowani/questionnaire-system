@@ -24,13 +24,6 @@ export class Question {
   @Field()
   question_text: string;
 
-  @ManyToOne(() => Survey, (survey) => survey.questions, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'survey_id' })
-  @Field(() => Survey)
-  survey: Survey;
-
   @Column()
   @Field()
   has_multiple_options: boolean;
@@ -50,6 +43,13 @@ export class Question {
   })
   @Field(() => [Answer], { nullable: true })
   answers: Answer[];
+
+  @ManyToOne(() => Survey, (survey) => survey.questions, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'survey_id' })
+  @Field(() => Survey)
+  survey: Survey;
 
   @CreateDateColumn()
   @Field()

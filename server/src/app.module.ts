@@ -7,10 +7,11 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { AdminUsersModule } from './modules/admin_users.module';
 import { AdminUser } from './entities/admin_user.entity';
+import { Survey } from './entities/survey.entity';
 import { Question } from './entities/question.entity';
 import { Option } from './entities/option.entity';
 import { Answer } from './entities/answer.entity';
-import { QuestionsModule } from './modules/surveys.module';
+import { SurveyModule } from './modules/survey.module';
 import { AnswerModule } from './modules/answers.module';
 import { AuthModule } from './auth/auth.module';
 
@@ -23,7 +24,7 @@ import { AuthModule } from './auth/auth.module';
       username: 'sample',
       password: 'sample',
       database: 'sample',
-      entities: [AdminUser, Question, Option, Answer],
+      entities: [AdminUser, Survey, Question, Option, Answer],
       synchronize: true,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -33,7 +34,7 @@ import { AuthModule } from './auth/auth.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     AdminUsersModule,
-    QuestionsModule,
+    SurveyModule,
     AnswerModule,
     AuthModule,
   ],
