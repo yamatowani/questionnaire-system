@@ -1,8 +1,8 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { SubmitOptionInput } from './submitOption';
+import { SubmitQuestionInput } from './submitQuestion';
 
 @InputType()
-export class SubmitQuestionInput {
+export class SubmitSurveyInput {
   @Field()
   question_text: string;
 
@@ -12,6 +12,6 @@ export class SubmitQuestionInput {
   @Field()
   allows_other: boolean;
 
-  @Field(() => [SubmitOptionInput])
-  options: SubmitOptionInput[];
+  @Field(() => [SubmitQuestionInput])
+  questions: SubmitQuestionInput[];
 }
