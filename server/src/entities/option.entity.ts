@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { Question } from './question.entity';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { OptionAnswer } from './optionAnswer.entity';
+import { Answer } from './answer.entity';
 
 @Entity({ name: 'options' })
 @ObjectType()
@@ -30,9 +30,9 @@ export class Option {
   @Field(() => Question)
   question: Question;
 
-  @OneToMany(() => OptionAnswer, (optionAnswer) => optionAnswer.option)
-  @Field(() => [OptionAnswer])
-  optionAnswers: OptionAnswer[];
+  @OneToMany(() => Answer, (answer) => answer.option)
+  @Field(() => [Answer])
+  answers: Answer[];
 
   @CreateDateColumn()
   @Field()

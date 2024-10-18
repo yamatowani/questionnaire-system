@@ -11,7 +11,6 @@ import { Survey } from './entities/survey.entity';
 import { Question } from './entities/question.entity';
 import { Option } from './entities/option.entity';
 import { Answer } from './entities/answer.entity';
-import { OptionAnswer } from './entities/optionAnswer.entity';
 import { SurveyModule } from './modules/survey.module';
 import { AnswerModule } from './modules/answers.module';
 import { AuthModule } from './auth/auth.module';
@@ -25,7 +24,7 @@ import { AuthModule } from './auth/auth.module';
       username: 'sample',
       password: 'sample',
       database: 'sample',
-      entities: [AdminUser, Survey, Question, Option, Answer, OptionAnswer],
+      entities: [AdminUser, Survey, Question, Option, Answer],
       synchronize: true,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
