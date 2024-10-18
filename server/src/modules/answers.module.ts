@@ -6,18 +6,9 @@ import { Answer } from 'src/entities/answer.entity';
 import { Question } from 'src/entities/question.entity';
 import { Option } from 'src/entities/option.entity';
 import { AdminUser } from 'src/entities/admin_user.entity';
-import { OptionAnswer } from 'src/entities/optionAnswer.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      Answer,
-      Question,
-      Option,
-      AdminUser,
-      OptionAnswer,
-    ]),
-  ],
+  imports: [TypeOrmModule.forFeature([Answer, Question, Option, AdminUser])],
   providers: [AnswerResolver, AnswerService],
   exports: [AnswerService],
 })
