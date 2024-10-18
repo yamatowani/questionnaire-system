@@ -40,18 +40,22 @@ export class AnswerService {
       const relatedQuestion = await this.questionRepository.findOneBy({
         id: question_id,
       });
+      for (const selectedOption of options) {
+        const { option_id, other_response } = selectedOption;
 
-      const createdAnswer = this.answerRepository.create({
-        question: relatedQuestion,
-        other_response:
-          options.find((option) => option.other_response)?.other_response || '',
-      });
+        const relatedOption = await this.optionRepository.findOneBy({
+          id: option_id,
+        });
 
-      const savedAnswer = await this.answerRepository.save(createdAnswer);
-
-      answers.push(savedAnswer);
+        const createdAnswer = this.answerRepository.create({
+          question: relatedQuestion,
+          option: relatedOption,
+          other_response: other_response || '',
+        });
+        const savedAnswer = await this.answerRepository.save(createdAnswer);
+        answers.push(savedAnswer);
+      }
     }
-
     return answers;
   }
 }
