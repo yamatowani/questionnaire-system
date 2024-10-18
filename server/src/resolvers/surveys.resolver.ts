@@ -37,7 +37,7 @@ export class SurveyResolver {
   @UseGuards(JwtAuthGuard)
   @Mutation(() => SubmitSurveyOutput)
   public async submitSurvey(
-    @Args('submitSurvetInput') submitSurveyInput: SubmitSurveyInput,
+    @Args('submitSurveyInput') submitSurveyInput: SubmitSurveyInput,
     @Context('req') req,
   ): Promise<SubmitSurveyOutput> {
     try {
