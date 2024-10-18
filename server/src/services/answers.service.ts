@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { Question } from 'src/entities/question.entity';
 import { Option } from 'src/entities/option.entity';
 import { Answer } from 'src/entities/answer.entity';
-import { OptionAnswer } from 'src/entities/optionAnswer.entity';
 import { SubmitAnswerInput } from 'src/dto/input/submitAnswer';
 
 @Injectable()
@@ -16,8 +15,6 @@ export class AnswerService {
     private readonly questionRepository: Repository<Question>,
     @InjectRepository(Option)
     private readonly optionRepository: Repository<Option>,
-    @InjectRepository(OptionAnswer)
-    private readonly optionAnswerRepository: Repository<OptionAnswer>,
   ) {}
 
   // public async getAnswersByAdminUser(adminUserId: number): Promise<Answer[]> {
