@@ -9,6 +9,6 @@ export class SubmitAnswerOutput {
   @Field({ nullable: true })
   errorMessage?: string;
 
-  @Field(() => Answer, { nullable: true })
+  @Field(() => [Answer], { nullable: true })
   answer?: Answer[];
 }

@@ -6,6 +6,12 @@ type Answer {
   id: Int!
   other_response: String
   question: Question!
+  optionAnswers: [OptionAnswer!]!
+}
+
+type OptionAnswer {
+  id: Int!
+  answer: Answer!
   option: Option!
 }
 
@@ -13,7 +19,7 @@ type Option {
   id: ID!
   option_text: String!
   question: Question!
-  answers: [Answer!]!
+  optionAnswers: [OptionAnswer!]!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -73,7 +79,7 @@ type SubmitSurveyOutput {
 type SubmitAnswerOutput {
   success: Boolean!
   errorMessage: String
-  answer: Answer
+  answer: [Answer!]
 }
 
 type Query {
