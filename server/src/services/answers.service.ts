@@ -4,6 +4,7 @@ import { In, Repository } from 'typeorm';
 import { Question } from 'src/entities/question.entity';
 import { Option } from 'src/entities/option.entity';
 import { Answer } from 'src/entities/answer.entity';
+import { OptionAnswer } from 'src/entities/optionAnswer.entity';
 import { SubmitAnswerInput } from 'src/dto/input/submitAnswer';
 
 @Injectable()
@@ -15,6 +16,8 @@ export class AnswerService {
     private readonly questionRepository: Repository<Question>,
     @InjectRepository(Option)
     private readonly optionRepository: Repository<Option>,
+    @InjectRepository(OptionAnswer)
+    private readonly optionAnswerRepository: Repository<OptionAnswer>,
   ) {}
 
   // public async getAnswersByAdminUser(adminUserId: number): Promise<Answer[]> {
@@ -31,20 +34,40 @@ export class AnswerService {
   //   });
   // }
 
-  public async create(submitAnswerInput: SubmitAnswerInput): Promise<Answer> {
-    const { option_id, question_id } = submitAnswerInput;
+  public async create(submitAnswerInput: SubmitAnswerInput): Promise<Answer[]> {
+    const answers: Answer[] = [];
+    for (const questionAnswer of submitAnswerInput.question_answers) {
+      const { question_id, options } = questionAnswer;
 
-    const relatedQuestion = await this.questionRepository.findOneBy({
-      id: question_id,
-    });
-    const relatedOption = await this.optionRepository.findOneBy({
-      id: option_id,
-    });
+      const relatedQuestion = await this.questionRepository.findOneBy({
+        id: question_id,
+      });
 
-    const createdAnswer = this.answerRepository.create({
-      option: relatedOption,
-      question: relatedQuestion,
-    });
-    return this.answerRepository.save(createdAnswer);
+      for (const selectedOption of options) {
+        const { option_id, other_response } = selectedOption;
+
+        const relatedOption = await this.optionRepository.findOneBy({
+          id: option_id,
+        });
+
+        const createdAnswer = this.answerRepository.create({
+          option: relatedOption,
+          question: relatedQuestion,
+          other_response,
+        });
+
+        const savedAnswer = await this.answerRepository.save(createdAnswer);
+
+        answers.push(savedAnswer);
+
+        const optionAnswer = this.optionAnswerRepository.create({
+          answer: savedAnswer,
+          option: relatedOption,
+        });
+        await this.optionAnswerRepository.save(optionAnswer);
+      }
+    }
+
+    return answers;
   }
 }
