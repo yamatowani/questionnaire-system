@@ -6,10 +6,11 @@ import {
   ManyToOne,
   JoinColumn,
   Column,
+  OneToMany,
 } from 'typeorm';
 import { Question } from './question.entity';
-import { Option } from './option.entity';
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { OptionAnswer } from './optionAnswer.entity';
 
 @Entity({ name: 'answers' })
 @ObjectType()
@@ -18,7 +19,7 @@ export class Answer {
   @Field(() => Int)
   readonly id: number;
 
-  @Column()
+  @Column({ nullable: true })
   @Field({ nullable: true })
   other_response: string;
 
@@ -35,10 +36,7 @@ export class Answer {
   @Field(() => Question)
   question: Question;
 
-  @ManyToOne(() => Option, (option) => option.answers, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'option_id' })
-  @Field(() => Option)
-  option: Option;
+  @OneToMany(() => OptionAnswer, (optionAnswer) => optionAnswer.answer)
+  @Field(() => [OptionAnswer])
+  optionAnswers: OptionAnswer[];
 }
