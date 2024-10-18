@@ -10,5 +10,5 @@ export class SubmitAnswerOutput {
   errorMessage?: string;
 
   @Field(() => Answer, { nullable: true })
-  answer?: Answer;
+  answer?: Answer[];
 }

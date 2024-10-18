@@ -19,8 +19,8 @@ export class Answer {
   readonly id: number;
 
   @Column()
-  @Field()
-  other_response: boolean;
+  @Field({ nullable: true })
+  other_response: string;
 
   @CreateDateColumn()
   readonly created_at?: Date;

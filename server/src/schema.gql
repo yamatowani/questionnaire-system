@@ -4,7 +4,7 @@
 
 type Answer {
   id: Int!
-  other_response: Boolean!
+  other_response: String!
   question: Question!
   option: Option!
 }
@@ -116,6 +116,15 @@ input AuthenticateAdminUserInput {
 }
 
 input SubmitAnswerInput {
-  option_id: Int!
+  question_answers: [SubmitQuestionAnswerInput!]!
+}
+
+input SubmitQuestionAnswerInput {
   question_id: Int!
+  options: [SubmitOptionAnswerInput!]!
+}
+
+input SubmitOptionAnswerInput {
+  option_id: Int!
+  other_response: String
 }
