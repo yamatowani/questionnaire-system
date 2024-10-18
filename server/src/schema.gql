@@ -77,7 +77,7 @@ type SubmitAnswerOutput {
 }
 
 type Query {
-  surveyByUrl(url: String!): Question!
+  surveyByUrl(url: String!): Survey!
   surveys: [Survey!]!
 }
 

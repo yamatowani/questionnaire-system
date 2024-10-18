@@ -4,7 +4,6 @@ import { JwtAuthGuard } from 'src/auth/auth-guard';
 import { SurveyService } from 'src/services/surveys.service';
 import { SubmitSurveyInput } from 'src/dto/input/submitSurvey';
 import { Survey } from 'src/entities/survey.entity';
-import { Question } from 'src/entities/question.entity';
 // import { QuestionWithAnswerCounts } from 'src/dto/output/questionWithAnswerCounts.dto';
 import { SubmitSurveyOutput } from 'src/dto/output/submitSurvey';
 
@@ -12,7 +11,7 @@ import { SubmitSurveyOutput } from 'src/dto/output/submitSurvey';
 export class SurveyResolver {
   constructor(private readonly surveyService: SurveyService) {}
 
-  @Query(() => Question)
+  @Query(() => Survey)
   public async surveyByUrl(@Args('url') url: string): Promise<Survey> {
     return this.surveyService.surveyByUrl(url);
   }
