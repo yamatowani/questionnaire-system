@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Question } from 'src/entities/question.entity';
 import { Option } from 'src/entities/option.entity';
 import { Answer } from 'src/entities/answer.entity';
@@ -36,6 +36,7 @@ export class AnswerService {
 
   public async create(submitAnswerInput: SubmitAnswerInput): Promise<Answer[]> {
     const answers: Answer[] = [];
+
     for (const questionAnswer of submitAnswerInput.question_answers) {
       const { question_id, options } = questionAnswer;
 
@@ -43,29 +44,32 @@ export class AnswerService {
         id: question_id,
       });
 
+      const createdAnswer = this.answerRepository.create({
+        question: relatedQuestion,
+        other_response:
+          options.find((option) => option.other_response)?.other_response || '',
+      });
+
+      const savedAnswer = await this.answerRepository.save(createdAnswer);
+
+      const optionAnswers: OptionAnswer[] = [];
       for (const selectedOption of options) {
-        const { option_id, other_response } = selectedOption;
+        const { option_id } = selectedOption;
 
         const relatedOption = await this.optionRepository.findOneBy({
           id: option_id,
         });
-
-        const createdAnswer = this.answerRepository.create({
-          option: relatedOption,
-          question: relatedQuestion,
-          other_response,
-        });
-
-        const savedAnswer = await this.answerRepository.save(createdAnswer);
-
-        answers.push(savedAnswer);
 
         const optionAnswer = this.optionAnswerRepository.create({
           answer: savedAnswer,
           option: relatedOption,
         });
         await this.optionAnswerRepository.save(optionAnswer);
+        optionAnswers.push(optionAnswer);
       }
+
+      savedAnswer.optionAnswers = optionAnswers;
+      answers.push(savedAnswer);
     }
 
     return answers;
