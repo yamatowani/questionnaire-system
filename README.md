@@ -218,28 +218,21 @@ erDiagram
         timestamp updated_at "更新日時"
     }
 
-    OptionAnswers {
-        int id PK "OptionAnswersID"
-        bigint option_id FK "選択肢ID"
-        bigint answer_id FK "回答ID"
-        timestamp created_at "作成日時"
-        timestamp updated_at "更新日時"
-    }
-
     Answers {
         int id PK "回答ID"
-        bigint question_id FK "回答が属する質問ID"
-        varchar other_response "自由回答用のテキスト"
+        bigint question_id FK "質問ID"
+        bigint option_id FK "選択肢ID"
+        varchar other_response "その他の回答"
         timestamp created_at "作成日時"
         timestamp updated_at "更新日時"
     }
 
+    
     %% リレーションシップ
     AdminUsers ||--o{ Surveys : "作成する"
-    Surveys ||--o{ Questions : "複数の質問を持つ"
+    Surveys ||--|{ Questions : "複数の質問を持つ"
     Questions ||--|{ Options : "複数の選択肢を持つ"
-    Questions ||--o{ Answers : "複数の回答を持つ"
-    Options ||--o{ OptionAnswers : "0以上の回答を持つ"
-    Answers ||--o{ OptionAnswers : "回答は選択肢に属する"
+    Options ||--o{ Answers : "0以上の回答を持つ"
+    Questions ||--o{ Answers : "0以上の回答を持つ"
 
 ```
