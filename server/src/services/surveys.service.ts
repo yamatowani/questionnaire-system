@@ -27,7 +27,7 @@ export class SurveyService {
   public async surveys(adminUserId: number): Promise<Survey[]> {
     const surveys = await this.surveyRepository.find({
       where: { admin_user: { id: adminUserId } },
-      relations: ['questions', 'options', 'answers'],
+      relations: ['questions'],
     });
     return surveys;
   }
@@ -73,7 +73,7 @@ export class SurveyService {
   public async surveyByUrl(url: string): Promise<Survey> {
     return this.surveyRepository.findOne({
       where: { url },
-      relations: ['questions', 'options'],
+      relations: ['questions', 'questions.options'],
     });
   }
   async create(
