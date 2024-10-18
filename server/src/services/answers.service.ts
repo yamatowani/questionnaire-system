@@ -49,23 +49,6 @@ export class AnswerService {
 
       const savedAnswer = await this.answerRepository.save(createdAnswer);
 
-      const optionAnswers: OptionAnswer[] = [];
-      for (const selectedOption of options) {
-        const { option_id } = selectedOption;
-
-        const relatedOption = await this.optionRepository.findOneBy({
-          id: option_id,
-        });
-
-        const optionAnswer = this.optionAnswerRepository.create({
-          answer: savedAnswer,
-          option: relatedOption,
-        });
-        await this.optionAnswerRepository.save(optionAnswer);
-        optionAnswers.push(optionAnswer);
-      }
-
-      savedAnswer.optionAnswers = optionAnswers;
       answers.push(savedAnswer);
     }
 

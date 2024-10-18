@@ -6,12 +6,6 @@ type Answer {
   id: Int!
   other_response: String
   question: Question!
-  optionAnswers: [OptionAnswer!]!
-}
-
-type OptionAnswer {
-  id: Int!
-  answer: Answer!
   option: Option!
 }
 
@@ -19,7 +13,7 @@ type Option {
   id: ID!
   option_text: String!
   question: Question!
-  optionAnswers: [OptionAnswer!]!
+  answers: [Answer!]!
   created_at: DateTime!
   updated_at: DateTime!
 }
