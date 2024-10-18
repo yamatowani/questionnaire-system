@@ -4,7 +4,7 @@
 
 type Answer {
   id: Int!
-  other_response: String!
+  other_response: String
   question: Question!
   option: Option!
 }
