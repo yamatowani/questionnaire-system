@@ -18,16 +18,6 @@ export class Answer {
   @Field(() => Int)
   readonly id: number;
 
-  @Column({ nullable: true })
-  @Field({ nullable: true })
-  other_response: string;
-
-  @CreateDateColumn()
-  readonly created_at?: Date;
-
-  @UpdateDateColumn()
-  readonly updated_at?: Date;
-
   @ManyToOne(() => Question, (question) => question.answers, {
     onDelete: 'CASCADE',
   })
@@ -41,4 +31,14 @@ export class Answer {
   @JoinColumn({ name: 'option_id' })
   @Field(() => Option)
   option: Option;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  other_response: string;
+
+  @CreateDateColumn()
+  readonly created_at?: Date;
+
+  @UpdateDateColumn()
+  readonly updated_at?: Date;
 }

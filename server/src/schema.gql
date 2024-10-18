@@ -4,9 +4,9 @@
 
 type Answer {
   id: Int!
-  other_response: String
   question: Question!
   option: Option!
+  other_response: String
 }
 
 type Option {
