@@ -83,7 +83,7 @@ type Query {
 
 type Mutation {
   registerAdminUser(registerAdminUserInput: RegisterAdminUserInput!): RegisterAdminUserOutput!
-  submitQuestion(submitSurvetInput: SubmitSurveyInput!): SubmitSurveyOutput!
+  submitSurvey(submitSurvetInput: SubmitSurveyInput!): SubmitSurveyOutput!
   authenticateAdminUser(authenticateAdminUserInput: AuthenticateAdminUserInput!): AuthResponse!
   submitAnswer(submitAnswerInput: SubmitAnswerInput!): SubmitAnswerOutput!
 }
