@@ -8,6 +8,11 @@ import { SubmitSurveyInput } from 'src/dto/input/submitSurvey';
 import { AdminUser } from 'src/entities/admin_user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { Answer } from 'src/entities/answer.entity';
+import {
+  SurveyResult,
+  Questions,
+  AnswerCounts,
+} from 'src/dto/output/surveyResult';
 
 @Injectable()
 export class SurveyService {
@@ -31,15 +36,20 @@ export class SurveyService {
     });
     return surveys;
   }
-  public async surveyResult(url: string): Promise<any> {
+
+  public async surveyResult(url: string): Promise<SurveyResult> {
     const survey = await this.surveyRepository.findOne({
       where: { url },
       relations: ['questions', 'questions.options'],
     });
 
-    const questions = await Promise.all(
+    if (!survey) {
+      throw new NotFoundException('Survey not found');
+    }
+
+    const questions: Questions[] = await Promise.all(
       survey.questions.map(async (question) => {
-        const options = await Promise.all(
+        const options: AnswerCounts[] = await Promise.all(
           question.options.map(async (option) => {
             const count = await this.answerRepository.count({
               where: { option: { id: option.id } },
@@ -47,7 +57,7 @@ export class SurveyService {
             });
 
             return {
-              optionId: option.id,
+              option_id: option.id,
               optionText: option.option_text,
               count: count,
             };
@@ -57,7 +67,7 @@ export class SurveyService {
         return {
           questionId: question.id,
           questionText: question.question_text,
-          answerCounts: options,
+          questionResults: options, // 修正: questionResults に対応
         };
       }),
     );
@@ -75,6 +85,7 @@ export class SurveyService {
       relations: ['questions', 'questions.options'],
     });
   }
+
   async create(
     submitSurveyInput: SubmitSurveyInput,
     adminUserId: number,

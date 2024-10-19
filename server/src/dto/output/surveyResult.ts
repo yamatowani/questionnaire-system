@@ -12,7 +12,7 @@ export class SurveyResult {
   questions: Questions[];
 }
 
-@ObjectType()
+export @ObjectType()
 class Questions {
   @Field(() => Int)
   questionId: number;
@@ -24,7 +24,7 @@ class Questions {
   questionResults: AnswerCounts[];
 }
 
-@ObjectType()
+export @ObjectType()
 class AnswerCounts {
   @Field(() => Int)
   option_id: number;
