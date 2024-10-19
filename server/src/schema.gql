@@ -64,6 +64,24 @@ type AuthResponse {
   access_token: String!
 }
 
+type SurveyResult {
+  surveyId: Int!
+  title: String!
+  questions: [Questions!]!
+}
+
+type Questions {
+  questionId: Int!
+  questionText: String!
+  questionResults: [AnswerCounts!]!
+}
+
+type AnswerCounts {
+  option_id: Int!
+  optionText: String!
+  count: Int!
+}
+
 type SubmitSurveyOutput {
   success: Boolean!
   errorMessage: String
@@ -79,6 +97,7 @@ type SubmitAnswerOutput {
 type Query {
   surveyByUrl(url: String!): Survey!
   surveys: [Survey!]!
+  surveyResult(url: String!): SurveyResult!
 }
 
 type Mutation {

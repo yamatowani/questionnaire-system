@@ -4,7 +4,7 @@ import { JwtAuthGuard } from 'src/auth/auth-guard';
 import { SurveyService } from 'src/services/surveys.service';
 import { SubmitSurveyInput } from 'src/dto/input/submitSurvey';
 import { Survey } from 'src/entities/survey.entity';
-// import { QuestionWithAnswerCounts } from 'src/dto/output/questionWithAnswerCounts.dto';
+import { SurveyResult } from 'src/dto/output/surveyResult';
 import { SubmitSurveyOutput } from 'src/dto/output/submitSurvey';
 
 @Resolver(() => Survey)
@@ -23,15 +23,11 @@ export class SurveyResolver {
     return this.surveyService.surveys(adminUserId);
   }
 
-  // あとでやる
-  // @UseGuards(JwtAuthGuard)
-  // @Query(() => [QuestionWithAnswerCounts])
-  // async questionResults(
-  //   @Context('req') req,
-  // ): Promise<QuestionWithAnswerCounts[]> {
-  //   const adminUserId = req.adminUserId;
-  //   return this.questionService.getQuestionWithAnswerCounts(adminUserId);
-  // }
+  @UseGuards(JwtAuthGuard)
+  @Query(() => SurveyResult)
+  async surveyResult(@Args('url') url: string): Promise<SurveyResult> {
+    return this.surveyService.surveyResult(url);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Mutation(() => SubmitSurveyOutput)
