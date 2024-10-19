@@ -67,7 +67,7 @@ export class SurveyService {
         return {
           questionId: question.id,
           questionText: question.question_text,
-          questionResults: options, // 修正: questionResults に対応
+          questionResults: options,
         };
       }),
     );
