@@ -50,8 +50,8 @@ export class SurveyService {
                 });
 
                 return {
-                  option_id: option.id,
-                  option_text: option.option_text,
+                  optionId: option.id,
+                  optionText: option.option_text,
                   count: count,
                 };
               }),
@@ -59,7 +59,7 @@ export class SurveyService {
 
             return {
               questionId: question.id,
-              title: question.question_text,
+              questionText: question.question_text,
               options: options,
             };
           }),
