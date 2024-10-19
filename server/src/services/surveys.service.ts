@@ -32,43 +32,49 @@ export class SurveyService {
     return surveys;
   }
 
-  // 結果カウントはあとで作ります
+  public async surveyResults(adminUserId: number): Promise<any[]> {
+    const surveys = await this.surveyRepository.find({
+      where: { admin_user: { id: adminUserId } },
+      relations: ['questions', 'questions.options'],
+    });
 
-  // public async getQuestionWithAnswerCounts(
-  //   adminUserId: number,
-  // ): Promise<any[]> {
-  //   const questions = await this.questionRepository.find({
-  //     where: { admin_user: { id: adminUserId } },
-  //     relations: ['options'],
-  //   });
+    const result: any[] = await Promise.all(
+      surveys.map(async (survey) => {
+        const optionsWithCounts: any[] = await Promise.all(
+          survey.questions.map(async (question) => {
+            const options = await Promise.all(
+              question.options.map(async (option) => {
+                const count = await this.answerRepository.count({
+                  where: { option: { id: option.id } },
+                  relations: ['option', 'question'],
+                });
 
-  //   const result: any[] = await Promise.all(
-  //     questions.map(async (question) => {
-  //       const optionsWithCounts: any[] = await Promise.all(
-  //         question.options.map(async (option) => {
-  //           const count = await this.answerRepository.count({
-  //             where: { option: { id: option.id } },
-  //             relations: ['option', 'question'],
-  //           });
+                return {
+                  option_id: option.id,
+                  option_text: option.option_text,
+                  count: count,
+                };
+              }),
+            );
 
-  //           return {
-  //             option_id: option.id,
-  //             option_text: option.option_text,
-  //             count: count,
-  //           };
-  //         }),
-  //       );
+            return {
+              questionId: question.id,
+              title: question.question_text,
+              options: options,
+            };
+          }),
+        );
 
-  //       return {
-  //         questionId: question.id,
-  //         title: question.title,
-  //         options: optionsWithCounts,
-  //       };
-  //     }),
-  //   );
+        return {
+          surveyId: survey.id,
+          title: survey.title,
+          questions: optionsWithCounts,
+        };
+      }),
+    );
 
-  //   return result;
-  // }
+    return result;
+  }
 
   public async surveyByUrl(url: string): Promise<Survey> {
     return this.surveyRepository.findOne({
