@@ -1,9 +1,9 @@
-import Questions from "@/components/question"
+import Surveys from "@/components/survey"
 
 export default function Home() {
   return (
     <main>
-      <Questions />
+      <Surveys />
     </main>
   )
 }

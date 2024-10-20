@@ -1,4 +1,4 @@
-import NewQuestionForm from "@/components/question/new"
+import NewQuestionForm from "@/components/survey/new"
 
 export default function AdminUserPage() {
   return (
