@@ -51,7 +51,7 @@ export default function Surveys() {
         作成したアンケート一覧
       </Typography>
       <List>
-        {data.survey.map((survey: Survey) => (
+        {data.surveys.map((survey: Survey) => (
           <ListItem key={survey.id} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
             <ListItemText
               primary={
