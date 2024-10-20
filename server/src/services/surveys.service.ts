@@ -32,7 +32,7 @@ export class SurveyService {
   public async surveys(adminUserId: number): Promise<Survey[]> {
     const surveys = await this.surveyRepository.find({
       where: { admin_user: { id: adminUserId } },
-      relations: ['questions'],
+      relations: ['questions', 'questions.options'],
     });
     return surveys;
   }
