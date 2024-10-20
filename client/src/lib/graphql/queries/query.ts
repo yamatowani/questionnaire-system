@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const GET_SURVEY_BY_URL = gql`
+export const SURVEY_BY_URL = gql`
   query surveyByUrl($url: String!) {
     surveyByUrl(url: $url) {
       id
