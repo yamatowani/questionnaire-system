@@ -6,6 +6,15 @@ export type AdminUser = {
   updated_at: string;
 }
 
+export type Survey = {
+  id: number;
+  title: string;
+  url: string;
+  questions: [Question]
+  created_at: string;
+  updated_at: string;
+}
+
 export type Question = {
   id: number;
   title: string;
