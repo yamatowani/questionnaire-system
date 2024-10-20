@@ -17,8 +17,7 @@ export type Survey = {
 
 export type Question = {
   id: number;
-  title: string;
-  url: string;
+  question_text: string;
   options: Option[];
   created_at: string;
   updated_at: string;

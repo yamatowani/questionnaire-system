@@ -1,17 +1,17 @@
 'use client';
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_QUESTION_BY_URL } from "@/lib/graphql/queries/query";
+import { SURVEY_BY_URL } from "@/lib/graphql/queries/query";
 import { SUBMIT_ANSWER } from "@/lib/graphql/mutations/mutations";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { Option } from "@/types/types";
-import { Box, Button, Typography, RadioGroup, FormControlLabel, Radio, CircularProgress, Alert } from "@mui/material";
+import { Option, Question } from "@/types/types";
+import { Box, Button, Typography, RadioGroup, FormControlLabel, Radio, CircularProgress, Alert, FormGroup } from "@mui/material";
 
 export default function NewAnswerForm() {
   const params = useParams<{ url: string }>();
   const url = params.url;
 
-  const { loading, error, data } = useQuery(GET_QUESTION_BY_URL, {
+  const { loading, error, data } = useQuery(SURVEY_BY_URL, {
     variables: { url },
   });
 
@@ -33,7 +33,7 @@ export default function NewAnswerForm() {
   if (loading) return <CircularProgress />;
   if (error) return <Alert severity="error">Error: {error.message}</Alert>;
 
-  const question = data.questionByUrl;
+  const survey = data.surveyByUrl;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +41,7 @@ export default function NewAnswerForm() {
       await createAnswer({
         variables: {
           submitAnswerInput: {
-            question_id: Number(question.id),
+            question_id: Number(survey.id),
             option_id: selectedOption,
           },
         },
@@ -52,19 +52,27 @@ export default function NewAnswerForm() {
   return (
     <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4 }}>
       <Typography variant="h4" gutterBottom>
-        {question.title}
+        {survey.title}
       </Typography>
 
       <form onSubmit={handleSubmit}>
         <RadioGroup value={selectedOption?.toString() || ""} onChange={(e) => setSelectedOption(Number(e.target.value))}>
-          {question.options.map((option: Option) => (
-            <FormControlLabel
-              key={option.id}
-              control={<Radio />}
-              label={option.option_text}
-              value={option.id.toString()}
-            />
-          ))}
+          {survey.questions.map((question: Question) => (
+        <div key={question.id}>
+          <Typography variant="h6">{question.question_text}</Typography>
+          <FormGroup>
+            {question.options.map((option: Option) => (
+              <FormControlLabel
+                key={option.id}
+                control={<Radio />}
+                label={option.option_text}
+                value={option.id.toString()}
+              />
+            ))}
+          </FormGroup>
+        </div>
+      ))}
+
         </RadioGroup>
         <Button
           type="submit"
