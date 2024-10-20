@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { SURVEYS } from "@/lib/graphql/queries/query";
-import { Question } from "@/types/types";
+import { Survey } from "@/types/types";
 import useAuth from "@/hooks/useAuth";
 import { Box, Button, Typography, CircularProgress, List, ListItem, ListItemText } from "@mui/material";
 
-export default function Questions() {
+export default function Surveys() {
   const { logout, token } = useAuth();
   const router = useRouter();
 
@@ -28,7 +28,7 @@ export default function Questions() {
 
   if (loading) return <CircularProgress />;
 
-  if (!data || !data.questions || data.questions.length === 0) {
+  if (!data || !data.surveys || data.surveys.length === 0) {
     return (
       <Box sx={{ textAlign: 'center', mt: 4 }}>
         <Typography variant="h6">作成したアンケートはありません</Typography>
@@ -36,7 +36,7 @@ export default function Questions() {
           ログアウト
         </Button>
         <br />
-        <Link href='/question' passHref>
+        <Link href='/survey' passHref>
           <Button variant="contained" color="primary" sx={{ mt: 2 }}>
             新しいアンケートを作成する
           </Button>
@@ -51,13 +51,13 @@ export default function Questions() {
         作成したアンケート一覧
       </Typography>
       <List>
-        {data.questions.map((question: Question) => (
-          <ListItem key={question.id} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
+        {data.survey.map((survey: Survey) => (
+          <ListItem key={survey.id} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
             <ListItemText
               primary={
-                <Link href={`/question/${question.url}`} passHref>
+                <Link href={`/survey/${survey.url}`} passHref>
                   <Typography variant="h6" component="span" sx={{ textDecoration: 'underline', cursor: 'pointer' }}>
-                    タイトル: {question.title}
+                    タイトル: {survey.title}
                   </Typography>
                 </Link>
               }
@@ -71,7 +71,7 @@ export default function Questions() {
         </Button>
       </Link>
       <br />
-      <Link href='/question' passHref>
+      <Link href='/survey' passHref>
         <Button variant="contained" color="primary" sx={{ mt: 2 }}>
           新しいアンケートを作成する
         </Button>
