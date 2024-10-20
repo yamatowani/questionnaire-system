@@ -1,41 +1,52 @@
 import { gql } from "@apollo/client";
 
-export const QUESTION_RESULTS = gql`
-  query questionResults {
-  questionResults {
-    questionId
-    title
-    options {
-      option_id
-      option_text
-      count 
-    }
-  }
-}
-`;
-
-export const GET_QUESTION_BY_URL = gql`
-  query questionByUrl($url: String!) {
-    questionByUrl(url: $url) {
+export const GET_SURVEY_BY_URL = gql`
+  query surveyByUrl($url: String!) {
+    surveyByUrl(url: $url) {
       id
       title
-      options {
+      questions {
         id
-        option_text
+        question_text
+        options {
+          id
+          option_text
+        }
+      }
+    }
+  }
+`;
+export const SURVEYS = gql`
+  query surveys {
+    surveys {
+      id
+      title
+      url
+      questions {
+        id
+        question_text
+        options {
+          id
+          option_text
+        }
       }
     }
   }
 `;
 
-export const GET_ALL_QUESTIONS_BY_ADMIN_USER_ID = gql`
-  query questions {
-    questions {
-      id
+export const SURVEY_RESULT = gql`
+  query surveyResult($url: String!) {
+    surveyResult(url: $url) {
+      surveyId
       title
-      url
-      options {
-        id
-        option_text
+      questions {
+        questionId
+        questionText
+        questionResults {
+          option_id
+          optionText
+          count
+        }
       }
     }
   }
