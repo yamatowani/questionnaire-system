@@ -34,6 +34,7 @@ export default function NewAnswerForm() {
   if (error) return <Alert severity="error">Error: {error.message}</Alert>;
 
   const survey = data.surveyByUrl;
+  console.log(survey.questions)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,21 +59,23 @@ export default function NewAnswerForm() {
       <form onSubmit={handleSubmit}>
         <RadioGroup value={selectedOption?.toString() || ""} onChange={(e) => setSelectedOption(Number(e.target.value))}>
           {survey.questions.map((question: Question) => (
-        <div key={question.id}>
-          <Typography variant="h6">{question.question_text}</Typography>
-          <FormGroup>
-            {question.options.map((option: Option) => (
-              <FormControlLabel
-                key={option.id}
-                control={<Radio />}
-                label={option.option_text}
-                value={option.id.toString()}
-              />
-            ))}
-          </FormGroup>
-        </div>
-      ))}
-
+            <div key={question.id}>
+              <Typography variant="h5">{question.question_text}</Typography>
+              {question.has_multiple_options && (
+                <Typography variant="body1">当てはまる選択肢を全てお選びください</Typography>
+              )}
+              <FormGroup>
+                {question.options.map((option: Option) => (
+                  <FormControlLabel
+                    key={option.id}
+                    control={<Radio />}
+                    label={option.option_text}
+                    value={option.id.toString()}
+                  />
+                ))}
+              </FormGroup>
+            </div>
+          ))}
         </RadioGroup>
         <Button
           type="submit"
