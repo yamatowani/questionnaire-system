@@ -16,18 +16,24 @@ export const REGISTER_ADMIN_USER = gql`
   }
 `;
 
-export const SUBMIT_QUESTION = gql`
-  mutation submitQuestion($submitQuestionInput: SubmitQuestionInput!) {
-    submitQuestion(submitQuestionInput: $submitQuestionInput) {
+export const SUBMIT_SURVEY = gql`
+  mutation submitSurvey($submitSurveyInput: SubmitSurveyInput!) {
+    submitSurvey(submitSurveyInput: $submitSurveyInput) {
       success
       errorMessage
-      question {
+      survey {
         id
         title
         url
-        options {
+        questions {
           id
-          option_text
+          question_text
+          has_multiple_options
+          allows_other
+          options {
+            id
+            option_text
+          }
         }
         admin_user {
           id
@@ -47,12 +53,13 @@ export const SUBMIT_ANSWER = gql`
         id
         question {
           id
-          title
+          question_text
         }
         option {
           id
           option_text
         }
+        other_response
       }
     }
   }
