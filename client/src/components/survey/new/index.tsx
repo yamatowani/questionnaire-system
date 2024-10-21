@@ -35,7 +35,7 @@ export default function NewSurveyForm() {
       const { success, errorMessage, survey } = data.submitSurvey;
 
       if (success) {
-        const fullUrl = `${window.location.origin}/survey/${survey.id}`;
+        const fullUrl = `${window.location.origin}/survey/${survey.url}`;
         setSurveyUrl(fullUrl);
         alert(`アンケートを作成しました! \n URLは"${fullUrl}"です`);
         setFormData({
@@ -76,6 +76,11 @@ export default function NewSurveyForm() {
     updatedQuestions[qIndex].options = updatedQuestions[qIndex].options.filter((_, i) => i !== oIndex);
     setFormData({ ...formData, questions: updatedQuestions });
   };
+
+  const handleRemoveQuestion = (qIndex: number) => {
+    const updatedQuestions = formData.questions.filter((_, i) => i !== qIndex);
+    setFormData({ ...formData, questions: updatedQuestions });
+  };  
 
   const addOption = (qIndex: number) => {
     const updatedQuestions = [...formData.questions];
@@ -152,15 +157,20 @@ export default function NewSurveyForm() {
         />
         {formData.questions.map((question, qIndex) => (
           <Box key={qIndex} sx={{ mt: 4, mb: 2, p: 2, border: '1px solid #ccc', borderRadius: 2 }}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              label={`質問 ${qIndex + 1} を入力`}
-              onChange={(e) => handleChange(e, qIndex)}
-              value={question.question_text}
-              required
-              sx={{ mb: 2 }}
-            />
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label={`質問 ${qIndex + 1} を入力`}
+                onChange={(e) => handleChange(e, qIndex)}
+                value={question.question_text}
+                required
+                sx={{ mb: 2, flexGrow: 1 }} // ボックスが広がるように
+              />
+              <IconButton onClick={() => handleRemoveQuestion(qIndex)}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
             <FormControlLabel
               control={
                 <Checkbox
@@ -190,15 +200,6 @@ export default function NewSurveyForm() {
                   required
                   sx={{ mr: 1 }}
                 />
-                {option.option_text === "その他" && (
-                  <TextField
-                    variant="outlined"
-                    label="その他の回答を入力"
-                    value={option.option_text || ""}
-                    onChange={(e) => handleChange(e, qIndex)}
-                    sx={{ ml: 2 }}
-                  />
-                )}
                 <IconButton onClick={() => handleRemoveOption(qIndex, oIndex)}>
                   <CloseIcon />
                 </IconButton>
@@ -209,6 +210,7 @@ export default function NewSurveyForm() {
             </Button>
           </Box>
         ))}
+
         <Button variant="outlined" onClick={addQuestion} sx={{ mt: 2 }}>
           質問を追加
         </Button>
