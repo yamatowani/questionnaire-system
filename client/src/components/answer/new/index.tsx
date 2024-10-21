@@ -41,15 +41,13 @@ export default function NewAnswerForm() {
     setSelectedOptions((prev) => {
       const currentOptions = prev[questionId] || [];
       if (hasMultipleOptions) {
-        // 複数選択の場合
         if (currentOptions.includes(optionId)) {
-          return { ...prev, [questionId]: currentOptions.filter(id => id !== optionId) }; // 選択を解除
+          return { ...prev, [questionId]: currentOptions.filter(id => id !== optionId) };
         } else {
-          return { ...prev, [questionId]: [...currentOptions, optionId] }; // 選択肢を追加
+          return { ...prev, [questionId]: [...currentOptions, optionId] };
         }
       } else {
-        // 単一選択の場合
-        return { ...prev, [questionId]: [optionId] }; // 選択肢を1つだけにする
+        return { ...prev, [questionId]: [optionId] };
       }
     });
   };
@@ -61,24 +59,65 @@ export default function NewAnswerForm() {
     }));
   };
 
+  const validateResponses = () => {
+    const errors: string[] = [];
+    for (const question of survey.questions) {
+      const selected = selectedOptions[question.id] || [];
+      const isOtherSelected = selected.includes(question.options.find(option => option.option_text === 'その他')?.id);
+
+      if (selected.length === 0) {
+        errors.push(`「${question.question_text}」に回答してください。`);
+      }
+
+      if (isOtherSelected && !otherResponses[question.id]) {
+        errors.push(`「${question.question_text}」の「その他」を選択した場合は、テキストエリアに回答を入力してください。`);
+      }
+
+      if (!isOtherSelected && otherResponses[question.id]) {
+        errors.push(`「${question.question_text}」で「その他」を選択していない場合は、テキストエリアを空にしてください。`);
+      }
+    }
+    return errors;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    const validationErrors = validateResponses();
+    if (validationErrors.length > 0) {
+      setSubmitError(validationErrors.join('\n'));
+      setIsSubmitting(false);
+      
+      window.scrollTo({ top: 0, behavior: 'auto' });
+      
+      return;
+    }
+
     const responses = survey.questions.map((question: Question) => ({
-      question_id: question.id,
-      options: (selectedOptions[question.id] || [])
-        .map(optionId => ({
-          option_id: optionId,
-          other_response: otherResponses[question.id] || "",
-        })),
+      question_id: Number(question.id),
+      options: (selectedOptions[question.id] || []).map(optionId => ({
+        option_id: Number(optionId),
+        other_response: otherResponses[question.id] || "",
+      })),
     }));
 
-    await createAnswer({
-      variables: {
-        submitAnswerInput: {
-          question_answers: responses,
+    console.log("Submitting Responses:", responses);
+
+    try {
+      await createAnswer({
+        variables: {
+          submitAnswerInput: {
+            question_answers: responses,
+          },
         },
-      },
-    });
+      });
+    } catch (error) {
+      console.error("Error submitting answers:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -90,6 +129,14 @@ export default function NewAnswerForm() {
       <Divider sx={{ mb: 2 }} />
 
       <form onSubmit={handleSubmit}>
+        {submitError && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {submitError.split('\n').map((msg, index) => (
+              <div key={index}>{msg}</div>
+            ))}
+          </Alert>
+        )}
+
         <FormGroup>
           {survey.questions.map((question: Question) => (
             <Box key={question.id} sx={{ mb: 4, p: 2, border: '1px solid #e0e0e0', borderRadius: 2 }}>
@@ -109,7 +156,19 @@ export default function NewAnswerForm() {
                     />
                   ))
                 ) : (
-                  <RadioGroup value={selectedOptions[question.id]?.[0] || ""} onChange={(e) => handleOptionChange(question.id, Number(e.target.value), false)}>
+                  <RadioGroup
+                    value={selectedOptions[question.id]?.[0] || ""}
+                    onChange={(e) => {
+                      const selectedId = Number(e.target.value);
+                      handleOptionChange(question.id, selectedId, false);
+                      // 「その他」が選択された場合の処理
+                      if (selectedId === question.options.find(option => option.option_text === 'その他')?.id) {
+                        handleOtherResponseChange(question.id, otherResponses[question.id] || "");
+                      } else {
+                        handleOtherResponseChange(question.id, "");
+                      }
+                    }}
+                  >
                     {question.options.map((option: Option) => (
                       <FormControlLabel
                         key={option.id}
@@ -121,6 +180,7 @@ export default function NewAnswerForm() {
                   </RadioGroup>
                 )}
               </FormGroup>
+
               {question.allows_other && (
                 <TextField
                   fullWidth
@@ -139,13 +199,12 @@ export default function NewAnswerForm() {
           type="submit"
           variant="contained"
           color="primary"
-          disabled={Object.keys(selectedOptions).length === 0 || isSubmitting}
+          disabled={isSubmitting}
           fullWidth
           sx={{ mt: 2 }}
         >
           回答する
         </Button>
-        {submitError && <Alert severity="error" sx={{ mt: 2 }}>{submitError}</Alert>}
       </form>
     </Box>
   );
