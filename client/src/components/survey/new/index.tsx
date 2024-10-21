@@ -17,7 +17,7 @@ export default function NewSurveyForm() {
         question_text: '',
         has_multiple_options: false,
         allows_other: false,
-        options: [{ option_text: '', isSelected: false }]
+        options: [{ option_text: '' }]
       }
     ],
   });
@@ -45,7 +45,7 @@ export default function NewSurveyForm() {
               question_text: '',
               has_multiple_options: false,
               allows_other: false,
-              options: [{ option_text: '', isSelected: false }]
+              options: [{ option_text: '' }]
             }
           ],
         });
@@ -79,7 +79,7 @@ export default function NewSurveyForm() {
 
   const addOption = (qIndex: number) => {
     const updatedQuestions = [...formData.questions];
-    updatedQuestions[qIndex].options.push({ option_text: '', isSelected: false });
+    updatedQuestions[qIndex].options.push({ option_text: '' });
     setFormData({ ...formData, questions: updatedQuestions });
   };
 
@@ -92,7 +92,7 @@ export default function NewSurveyForm() {
           question_text: '',
           has_multiple_options: false,
           allows_other: false,
-          options: [{ option_text: '', isSelected: false }]
+          options: [{ option_text: '' }]
         }
       ],
     });
@@ -112,7 +112,7 @@ export default function NewSurveyForm() {
   
     if (question.allows_other) {
       if (!question.options.some(option => option.option_text === "その他")) {
-        question.options.push({ option_text: "その他", isSelected: false });
+        question.options.push({ option_text: "その他" });
       }
     } else {
       question.options = question.options.filter(option => option.option_text !== "その他");
@@ -190,11 +190,11 @@ export default function NewSurveyForm() {
                   required
                   sx={{ mr: 1 }}
                 />
-                {option.option_text === "Other" && (
+                {option.option_text === "その他" && (
                   <TextField
                     variant="outlined"
                     label="その他の回答を入力"
-                    value={option.other_text || ""}
+                    value={option.option_text || ""}
                     onChange={(e) => handleChange(e, qIndex)}
                     sx={{ ml: 2 }}
                   />
