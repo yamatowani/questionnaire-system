@@ -104,6 +104,24 @@ export default function NewSurveyForm() {
     setFormData({ ...formData, questions: updatedQuestions });
   };
 
+  const handleOtherOptionsChange = (qIndex: number) => {
+    const updatedQuestions = [...formData.questions];
+    const question = updatedQuestions[qIndex];
+  
+    question.allows_other = !question.allows_other;
+  
+    if (question.allows_other) {
+      if (!question.options.some(option => option.option_text === "その他")) {
+        question.options.push({ option_text: "その他", isSelected: false });
+      }
+    } else {
+      question.options = question.options.filter(option => option.option_text !== "その他");
+    }
+  
+    setFormData({ ...formData, questions: updatedQuestions });
+  };
+  
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     submitSurvey();
@@ -151,6 +169,15 @@ export default function NewSurveyForm() {
                 />
               }
               label="複数選択を許可する"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={question.allows_other}
+                  onChange={() => handleOtherOptionsChange(qIndex)}
+                />
+              }
+              label="任意回答を作成する"
             />
             {question.options.map((option, oIndex) => (
               <Box key={oIndex} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
