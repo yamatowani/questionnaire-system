@@ -1,37 +1,54 @@
 'use client';
 import { useMutation } from "@apollo/client";
 import { SUBMIT_SURVEY } from "@/lib/graphql/mutations/mutations";
-import { SubmitQuestionInput } from "@/types/types";
+import { SubmitSurveyInput } from "@/types/types";
 import { useState } from "react";
 import Link from "next/link";
 import useAuth from "@/hooks/useAuth";
-import { Box, Button, TextField, Typography, Alert, IconButton } from "@mui/material";
+import { Box, Button, TextField, Typography, Alert, IconButton, FormControlLabel, Checkbox } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-export default function NewQuestionForm() {
+export default function NewSurveyForm() {
   const { token } = useAuth();
-  const [formData, setFormData] = useState<SubmitQuestionInput>({
+  const [formData, setFormData] = useState<SubmitSurveyInput>({
     title: '',
-    options: [{ option_text: '' }],
+    questions: [
+      {
+        question_text: '',
+        has_multiple_options: false,
+        allows_other: false,
+        options: [{ option_text: '', isSelected: false }]
+      }
+    ],
   });
-  const [questionUrl, setQuestionUrl] = useState<string | null>(null);
+  const [surveyUrl, setSurveyUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const [addNewQuestion, { loading }] = useMutation(SUBMIT_SURVEY, {
-    variables: { submitQuestionInput: formData },
-    context :{
+  const [submitSurvey, { loading }] = useMutation(SUBMIT_SURVEY, {
+    variables: { submitSurveyInput: formData },
+    context: {
       headers: {
         Authorization: `Bearer ${token}`
       }
     },
     onCompleted: (data) => {
-      const { success, errorMessage, question } = data.submitQuestion;
+      const { success, errorMessage, survey } = data.submitSurvey;
 
       if (success) {
-        const fullUrl = `${window.location.origin}/question/${question.url}`;
-        setQuestionUrl(question.url);
+        const fullUrl = `${window.location.origin}/survey/${survey.id}`;
+        setSurveyUrl(fullUrl);
         alert(`アンケートを作成しました! \n URLは"${fullUrl}"です`);
-        setFormData({ title: '', options: [{ option_text: '' }] });
+        setFormData({
+          title: '',
+          questions: [
+            {
+              question_text: '',
+              has_multiple_options: false,
+              allows_other: false,
+              options: [{ option_text: '', isSelected: false }]
+            }
+          ],
+        });
         setError(null);
       } else {
         setError(errorMessage);
@@ -39,39 +56,63 @@ export default function NewQuestionForm() {
       }
     },
     onError: (error) => {
-      console.error("Error creating question:", error);
+      console.error("Error creating survey:", error);
       alert(`Error: ${error.message}`);
     },
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const updatedOptions = [...formData.options];
-    updatedOptions[index].option_text = e.target.value;
-    setFormData({ ...formData, options: updatedOptions });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, qIndex: number, oIndex?: number) => {
+    const updatedQuestions = [...formData.questions];
+    if (oIndex !== undefined) {
+      updatedQuestions[qIndex].options[oIndex].option_text = e.target.value;
+    } else {
+      updatedQuestions[qIndex].question_text = e.target.value;
+    }
+    setFormData({ ...formData, questions: updatedQuestions });
   };
 
-  const handleRemoveOption = (index: number) => {
-    const updatedOptions = formData.options.filter((_, i) => i !== index);
-    setFormData({ ...formData, options: updatedOptions });
+  const handleRemoveOption = (qIndex: number, oIndex: number) => {
+    const updatedQuestions = [...formData.questions];
+    updatedQuestions[qIndex].options = updatedQuestions[qIndex].options.filter((_, i) => i !== oIndex);
+    setFormData({ ...formData, questions: updatedQuestions });
+  };
+
+  const addOption = (qIndex: number) => {
+    const updatedQuestions = [...formData.questions];
+    updatedQuestions[qIndex].options.push({ option_text: '', isSelected: false });
+    setFormData({ ...formData, questions: updatedQuestions });
+  };
+
+  const addQuestion = () => {
+    setFormData({
+      ...formData,
+      questions: [
+        ...formData.questions,
+        {
+          question_text: '',
+          has_multiple_options: false,
+          allows_other: false,
+          options: [{ option_text: '', isSelected: false }]
+        }
+      ],
+    });
+  };
+
+  const handleMultipleOptionsChange = (qIndex: number) => {
+    const updatedQuestions = [...formData.questions];
+    updatedQuestions[qIndex].has_multiple_options = !updatedQuestions[qIndex].has_multiple_options;
+    setFormData({ ...formData, questions: updatedQuestions });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addNewQuestion();
-  };
-
-  const addOption = () => {
-    setFormData({
-      ...formData,
-      options: [...formData.options, { option_text: '' }],
-    });
+    submitSurvey();
   };
 
   const copyToClipboard = () => {
-    if (questionUrl) {
-      const fullUrl = `${window.location.origin}/question/${questionUrl}`;
-      navigator.clipboard.writeText(fullUrl).then(() => {
-        alert(`URL "${fullUrl}" がコピーされました!`);
+    if (surveyUrl) {
+      navigator.clipboard.writeText(surveyUrl).then(() => {
+        alert(`URL "${surveyUrl}" がコピーされました!`);
       });
     }
   };
@@ -85,51 +126,79 @@ export default function NewQuestionForm() {
         <TextField
           fullWidth
           variant="outlined"
-          label="質問項目を入力"
+          label="アンケートタイトルを入力"
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           value={formData.title}
           required
           sx={{ mb: 2 }}
         />
-
-        {formData.options.map((option, index) => (
-          <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+        {formData.questions.map((question, qIndex) => (
+          <Box key={qIndex} sx={{ mt: 4, mb: 2, p: 2, border: '1px solid #ccc', borderRadius: 2 }}>
             <TextField
-              sx={{width: '90vh'}}
+              fullWidth
               variant="outlined"
-              label={`選択肢 ${index + 1} を入力`}
-              onChange={(e) => handleChange(e, index)}
-              value={option.option_text}
+              label={`質問 ${qIndex + 1} を入力`}
+              onChange={(e) => handleChange(e, qIndex)}
+              value={question.question_text}
               required
+              sx={{ mb: 2 }}
             />
-            {index > 0 && (
-              <IconButton onClick={() => handleRemoveOption(index)} aria-label="delete">
-                <CloseIcon />
-              </IconButton>
-            )}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={question.has_multiple_options}
+                  onChange={() => handleMultipleOptionsChange(qIndex)}
+                />
+              }
+              label="複数選択を許可する"
+            />
+            {question.options.map((option, oIndex) => (
+              <Box key={oIndex} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  label={`選択肢 ${oIndex + 1} を入力`}
+                  onChange={(e) => handleChange(e, qIndex, oIndex)}
+                  value={option.option_text}
+                  required
+                  sx={{ mr: 1 }}
+                />
+                {option.option_text === "Other" && (
+                  <TextField
+                    variant="outlined"
+                    label="その他の回答を入力"
+                    value={option.other_text || ""}
+                    onChange={(e) => handleChange(e, qIndex)}
+                    sx={{ ml: 2 }}
+                  />
+                )}
+                <IconButton onClick={() => handleRemoveOption(qIndex, oIndex)}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+            ))}
+            <Button variant="outlined" onClick={() => addOption(qIndex)}>
+              選択肢を追加
+            </Button>
           </Box>
         ))}
-
-        <Button variant="outlined" color="primary" onClick={addOption} sx={{ mb: 2 }}>
-          選択肢を追加
+        <Button variant="outlined" onClick={addQuestion} sx={{ mt: 2 }}>
+          質問を追加
         </Button>
         <br />
-        <Button type="submit" variant="contained" color="primary" disabled={loading}>
+        <Button type="submit" variant="contained" color="primary" disabled={loading} sx={{ mt: 2 }}>
           アンケートを作成
         </Button>
-
         {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
       </form>
-
-      {questionUrl && (
+      {surveyUrl && (
         <Box sx={{ mt: 2 }}>
           <Button variant="outlined" onClick={copyToClipboard}>
             URLをコピー
           </Button>
         </Box>
       )}
-      <br />
-      <Link href='/' passHref>
+      <Link href="/" passHref>
         <Button variant="contained" color="primary" sx={{ mt: 2 }}>
           ホームに戻る
         </Button>
