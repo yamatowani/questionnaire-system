@@ -64,7 +64,7 @@ export type AuthenticateAdminUserResponse = {
 export type SubmitAnswerInput = {
   question_answers: SubmitQuestionAnswerInput[];
 }
-type SubmitQuestionAnswerInput = {
+export type SubmitQuestionAnswerInput = {
   question_id: number;
   options: SubmitOptionAnswerInput[];
 }
