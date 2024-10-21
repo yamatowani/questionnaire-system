@@ -60,3 +60,16 @@ export type AuthenticateAdminUserResponse = {
     access_token: string;
   };
 }
+
+export type SubmitAnswerInput = {
+  question_answers: SubmitQuestionAnswerInput[];
+}
+type SubmitQuestionAnswerInput = {
+  question_id: number;
+  options: SubmitOptionAnswerInput[];
+}
+
+type SubmitOptionAnswerInput = {
+  option_id: number;
+  other_response: string;
+}
