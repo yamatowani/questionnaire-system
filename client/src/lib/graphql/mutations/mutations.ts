@@ -25,20 +25,6 @@ export const SUBMIT_SURVEY = gql`
         id
         title
         url
-        questions {
-          id
-          question_text
-          has_multiple_options
-          allows_other
-          options {
-            id
-            option_text
-          }
-        }
-        admin_user {
-          id
-          name
-        }
       }
     }
   }

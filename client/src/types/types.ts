@@ -50,7 +50,7 @@ type SubmitQuestionInput = {
   options: SubmitOptionInput[];
 }
 
-export type SubmitOptionInput = {
+type SubmitOptionInput = {
   option_text: string;
 }
 
