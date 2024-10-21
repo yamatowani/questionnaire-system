@@ -126,7 +126,6 @@ export default function NewSurveyForm() {
     setFormData({ ...formData, questions: updatedQuestions });
   };
   
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     submitSurvey();
@@ -141,10 +140,11 @@ export default function NewSurveyForm() {
   };
 
   return (
-    <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4 }}>
-      <Typography variant="h4" gutterBottom>
+    <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4, p: 3, border: '1px solid #ddd', borderRadius: 2, boxShadow: 3 }}>
+      <Typography variant="h4" gutterBottom textAlign="center">
         新しいアンケートを作成
       </Typography>
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <form onSubmit={handleSubmit}>
         <TextField
           fullWidth
@@ -156,39 +156,42 @@ export default function NewSurveyForm() {
           sx={{ mb: 2 }}
         />
         {formData.questions.map((question, qIndex) => (
-          <Box key={qIndex} sx={{ mt: 4, mb: 2, p: 2, border: '1px solid #ccc', borderRadius: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                label={`質問 ${qIndex + 1} を入力`}
-                onChange={(e) => handleChange(e, qIndex)}
-                value={question.question_text}
-                required
-                sx={{ mb: 2, flexGrow: 1 }} // ボックスが広がるように
+          <Box key={qIndex} sx={{ mt: 2, mb: 2, p: 2, border: '1px solid #ccc', borderRadius: 2, position: 'relative' }}>
+            <IconButton onClick={() => handleRemoveQuestion(qIndex)} color="error" sx={{ position: 'absolute', top: 10, right: 10 }}>
+              <CloseIcon />
+            </IconButton>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              質問 {qIndex + 1}
+            </Typography>
+            <TextField
+              fullWidth
+              variant="outlined"
+              label={`質問 ${qIndex + 1} を入力`}
+              onChange={(e) => handleChange(e, qIndex)}
+              value={question.question_text}
+              required
+              sx={{ mb: 2 }}
+            />
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={question.has_multiple_options}
+                    onChange={() => handleMultipleOptionsChange(qIndex)}
+                  />
+                }
+                label="複数選択を許可する"
               />
-              <IconButton onClick={() => handleRemoveQuestion(qIndex)}>
-                <CloseIcon />
-              </IconButton>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={question.allows_other}
+                    onChange={() => handleOtherOptionsChange(qIndex)}
+                  />
+                }
+                label="任意回答を作成する"
+              />
             </Box>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={question.has_multiple_options}
-                  onChange={() => handleMultipleOptionsChange(qIndex)}
-                />
-              }
-              label="複数選択を許可する"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={question.allows_other}
-                  onChange={() => handleOtherOptionsChange(qIndex)}
-                />
-              }
-              label="任意回答を作成する"
-            />
             {question.options.map((option, oIndex) => (
               <Box key={oIndex} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <TextField
@@ -200,35 +203,38 @@ export default function NewSurveyForm() {
                   required
                   sx={{ mr: 1 }}
                 />
-                <IconButton onClick={() => handleRemoveOption(qIndex, oIndex)}>
+                <IconButton onClick={() => handleRemoveOption(qIndex, oIndex)} color="error">
                   <CloseIcon />
                 </IconButton>
               </Box>
             ))}
-            <Button variant="outlined" onClick={() => addOption(qIndex)}>
+            <Button variant="outlined" onClick={() => addOption(qIndex)} sx={{ mb: 1 }}>
               選択肢を追加
             </Button>
           </Box>
         ))}
-
-        <Button variant="outlined" onClick={addQuestion} sx={{ mt: 2 }}>
-          質問を追加
-        </Button>
-        <br />
-        <Button type="submit" variant="contained" color="primary" disabled={loading} sx={{ mt: 2 }}>
-          アンケートを作成
-        </Button>
-        {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+          <Button variant="outlined" onClick={addQuestion}>
+            質問を追加
+          </Button>
+          <Button type="submit" variant="contained" color="primary" disabled={loading}>
+            アンケートを作成
+          </Button>
+        </Box>
       </form>
       {surveyUrl && (
         <Box sx={{ mt: 2 }}>
-          <Button variant="outlined" onClick={copyToClipboard}>
+          <Typography variant="h6">作成したアンケートのURL:</Typography>
+          <Typography variant="body1" sx={{ wordBreak: 'break-all' }}>
+            {surveyUrl}
+          </Typography>
+          <Button variant="outlined" onClick={copyToClipboard} sx={{ mt: 1 }}>
             URLをコピー
           </Button>
         </Box>
       )}
-      <Link href="/" passHref>
-        <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+      <Link href="/">
+        <Button variant="outlined" sx={{ mt: 2 }}>
           ホームに戻る
         </Button>
       </Link>
