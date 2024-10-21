@@ -38,8 +38,15 @@ export type RegisterAdminUserInput = {
   password: string;
 }
 
-export type SubmitQuestionInput = {
+export type SubmitSurveyInput = {
   title: string;
+  questions: SubmitQuestionInput[];
+}
+
+type SubmitQuestionInput = {
+  question_text: string;
+  has_multiple_options: boolean;
+  allows_other: boolean;
   options: SubmitOptionInput[];
 }
 
