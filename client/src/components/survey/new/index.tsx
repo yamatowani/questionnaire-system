@@ -1,6 +1,6 @@
 'use client';
 import { useMutation } from "@apollo/client";
-import { SUBMIT_QUESTION } from "@/lib/graphql/mutations/mutations";
+import { SUBMIT_SURVEY } from "@/lib/graphql/mutations/mutations";
 import { SubmitQuestionInput } from "@/types/types";
 import { useState } from "react";
 import Link from "next/link";
@@ -17,7 +17,7 @@ export default function NewQuestionForm() {
   const [questionUrl, setQuestionUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const [addNewQuestion, { loading }] = useMutation(SUBMIT_QUESTION, {
+  const [addNewQuestion, { loading }] = useMutation(SUBMIT_SURVEY, {
     variables: { submitQuestionInput: formData },
     context :{
       headers: {
