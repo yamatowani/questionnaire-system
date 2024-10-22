@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { Question } from 'src/entities/question.entity';
 import { Option } from 'src/entities/option.entity';
 import { Answer } from 'src/entities/answer.entity';
@@ -17,74 +17,54 @@ export class AnswerService {
     private readonly optionRepository: Repository<Option>,
   ) {}
 
-  // public async getAnswersByAdminUser(adminUserId: number): Promise<Answer[]> {
-  //   const relatedQuestions = await this.questionRepository.find({
-  //     where: { admin_user: { id: adminUserId } },
-  //     relations: ['options'],
-  //   });
-
-  //   const questionIds = relatedQuestions.map((question) => question.id);
-
-  //   return this.answerRepository.find({
-  //     relations: ['question', 'option'],
-  //     where: { question: { id: In(questionIds) } },
-  //   });
-  // }
-
   public async create(submitAnswerInput: SubmitAnswerInput): Promise<Answer[]> {
     const answers: Answer[] = [];
 
-    for (const questionAnswer of submitAnswerInput.question_answers) {
-      const { question_id, options } = questionAnswer;
+    return await this.answerRepository.manager.transaction(
+      async (entityManager: EntityManager) => {
+        for (const questionAnswer of submitAnswerInput.question_answers) {
+          const { question_id, options } = questionAnswer;
 
-      const relatedQuestion = await this.questionRepository.findOneBy({
-        id: question_id,
-      });
+          const relatedQuestion = await entityManager.findOne(Question, {
+            where: { id: question_id },
+          });
+          if (options.length === 0) {
+            throw new BadRequestException(
+              `質問 "${relatedQuestion.question_text}" に回答してください`,
+            );
+          }
 
-      if (!relatedQuestion) {
-        throw new BadRequestException(`質問ID ${question_id} が存在しません`);
-      }
+          for (const selectedOption of options) {
+            const { option_id, other_response } = selectedOption;
 
-      if (options.length === 0) {
-        throw new BadRequestException(
-          `質問 "${relatedQuestion.question_text}" に回答がありません`,
-        );
-      }
+            const relatedOption = await entityManager.findOne(Option, {
+              where: { id: option_id },
+            });
 
-      for (const selectedOption of options) {
-        const { option_id, other_response } = selectedOption;
+            if (relatedOption.option_text === 'その他' && !other_response) {
+              throw new BadRequestException(
+                `質問 "${relatedQuestion.question_text}" で「その他」を選択した場合はテキストを入力してください`,
+              );
+            }
 
-        const relatedOption = await this.optionRepository.findOneBy({
-          id: option_id,
-        });
+            if (relatedOption.option_text !== 'その他' && other_response) {
+              throw new BadRequestException(
+                `質問 "${relatedQuestion.question_text}" で「その他」以外が選択した場合はテキストは入力しないでください`,
+              );
+            }
 
-        if (!relatedOption) {
-          throw new BadRequestException(`選択肢ID ${option_id} が存在しません`);
+            const createdAnswer = entityManager.create(Answer, {
+              question: relatedQuestion,
+              option: relatedOption,
+              other_response: other_response || '',
+            });
+
+            const savedAnswer = await entityManager.save(createdAnswer);
+            answers.push(savedAnswer);
+          }
         }
-
-        if (relatedOption.option_text === 'その他' && !other_response) {
-          throw new BadRequestException(
-            `質問 "${relatedQuestion.question_text}" で「その他」が選択されましたが、回答が入力されていません`,
-          );
-        }
-
-        if (relatedOption.option_text !== 'その他' && other_response) {
-          throw new BadRequestException(
-            `質問 "${relatedQuestion.question_text}" で「その他」以外が選択されましたが、テキストが入力されています`,
-          );
-        }
-
-        const createdAnswer = this.answerRepository.create({
-          question: relatedQuestion,
-          option: relatedOption,
-          other_response: other_response || '',
-        });
-
-        const savedAnswer = await this.answerRepository.save(createdAnswer);
-        answers.push(savedAnswer);
-      }
-    }
-
-    return answers;
+        return answers;
+      },
+    );
   }
 }
