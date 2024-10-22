@@ -1,9 +1,9 @@
-import Answers from "@/components/answer"
+import SurveyResult from "@/components/answer"
 
 export default function AnswersPage() {
   return (
     <div>
-       <Answers />
+       <SurveyResult />
     </div>
   )
 }

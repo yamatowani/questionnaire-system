@@ -1,15 +1,15 @@
 'use client';
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
-import { QUESTION_RESULTS } from "@/lib/graphql/queries/query";
+import { SURVEY_RESULT } from "@/lib/graphql/queries/query";
 import useAuth from "@/hooks/useAuth";
 import AnswersChart from "./chart";
 import { Box, Button, Typography, CircularProgress, Alert } from "@mui/material";
 
-export default function Answers() {
+export default function SurveyResult() {
   const { token } = useAuth();
 
-  const { data, loading, error } = useQuery(QUESTION_RESULTS, {
+  const { data, loading, error } = useQuery(SURVEY_RESULT, {
     context: {
       headers: {
         Authorization: `Bearer ${token}`
