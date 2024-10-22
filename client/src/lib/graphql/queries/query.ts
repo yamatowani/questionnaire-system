@@ -49,6 +49,8 @@ export const SURVEY_RESULT = gql`
           optionText
           count
         }
+      otherCount
+      otherResponses
       }
     }
   }
