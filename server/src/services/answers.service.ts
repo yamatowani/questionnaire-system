@@ -49,7 +49,7 @@ export class AnswerService {
 
             if (relatedOption.option_text !== 'その他' && other_response) {
               throw new BadRequestException(
-                `質問 "${relatedQuestion.question_text}" で「その他」以外が選択した場合はテキストは入力しないでください`,
+                `質問 "${relatedQuestion.question_text}" で「その他」以外を選択した場合はテキストは入力しないでください`,
               );
             }
 
