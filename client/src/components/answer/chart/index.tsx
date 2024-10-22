@@ -60,9 +60,24 @@ export default function AnswersChart({ surveyResult }) {
                     callbacks: {
                       label: (tooltipItem) => {
                         return `${tooltipItem.label}: ${tooltipItem.raw} 回答`;
-                      }
-                    }
-                  }
+                      },
+                    },
+                  },
+                },
+                scales: {
+                  x: {
+                    ticks: {
+                      stepSize: 1
+                    },
+                  },
+                  y: {
+                    grid: {
+                      display: true
+                    },
+                    ticks: {
+                      stepSize: 1
+                    },
+                  },
                 },
               }}
             />
