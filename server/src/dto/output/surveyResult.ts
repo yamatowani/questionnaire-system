@@ -12,8 +12,8 @@ export class SurveyResult {
   questions: Questions[];
 }
 
-export @ObjectType()
-class Questions {
+@ObjectType()
+export class Questions {
   @Field(() => Int)
   questionId: number;
 
@@ -22,10 +22,16 @@ class Questions {
 
   @Field(() => [AnswerCounts])
   questionResults: AnswerCounts[];
+
+  @Field(() => Int, { nullable: true })
+  otherCount?: number;
+
+  @Field(() => [String], { nullable: true })
+  otherResponses?: string[];
 }
 
-export @ObjectType()
-class AnswerCounts {
+@ObjectType()
+export class AnswerCounts {
   @Field(() => Int)
   option_id: number;
 
