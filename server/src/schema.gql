@@ -74,6 +74,8 @@ type Questions {
   questionId: Int!
   questionText: String!
   questionResults: [AnswerCounts!]!
+  otherCount: Int
+  otherResponses: [String!]
 }
 
 type AnswerCounts {

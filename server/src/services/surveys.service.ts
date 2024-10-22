@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager, IsNull, Not, Repository } from 'typeorm';
 import { Survey } from 'src/entities/survey.entity';
 import { Question } from 'src/entities/question.entity';
 import { Option } from 'src/entities/option.entity';
@@ -42,20 +42,19 @@ export class SurveyService {
       where: { url },
       relations: ['questions', 'questions.options'],
     });
-
+  
     if (!survey) {
       throw new NotFoundException('Survey not found');
     }
-
+  
     const questions: Questions[] = await Promise.all(
       survey.questions.map(async (question) => {
         const options: AnswerCounts[] = await Promise.all(
           question.options.map(async (option) => {
             const count = await this.answerRepository.count({
               where: { option: { id: option.id } },
-              relations: ['option', 'question'],
             });
-
+  
             return {
               option_id: option.id,
               optionText: option.option_text,
@@ -63,21 +62,29 @@ export class SurveyService {
             };
           }),
         );
-
+  
+        // その他の回答を取得するロジックを追加
+        const otherResponses = await this.answerRepository.find({
+          where: { question: { id: question.id }, option: { id: null } }, // null のオプションを持つ回答を取得
+        });
+  
         return {
           questionId: question.id,
           questionText: question.question_text,
           questionResults: options,
+          otherCount: otherResponses.length, // その他の回答数をカウント
+          otherResponses: otherResponses.map(response => response.other_response), // その他の回答を配列として返す
         };
       }),
     );
-
+  
     return {
       surveyId: survey.id,
       title: survey.title,
       questions: questions,
     };
   }
+  
 
   public async surveyByUrl(url: string): Promise<Survey> {
     return this.surveyRepository.findOne({
