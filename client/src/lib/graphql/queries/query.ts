@@ -24,7 +24,6 @@ export const SURVEYS = gql`
       id
       title
       url
-      }
     }
   }
 `;
