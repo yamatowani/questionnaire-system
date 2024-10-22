@@ -44,7 +44,6 @@ export default function AnswersChart({ surveyResult }) {
           ],
         };
 
-        // 空の回答を除外
         const filteredOtherResponses = question.otherResponses.filter(response => response.trim() !== "");
 
         return (
