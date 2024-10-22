@@ -110,63 +110,69 @@ export default function NewAnswerForm() {
           </Alert>
         )}
 
-        <FormGroup>
-          {survey.questions.map((question: Question) => (
-            <Box key={question.id} sx={{ mb: 4, p: 2, border: '1px solid #e0e0e0', borderRadius: 2 }}>
-              <Typography variant="h5">{question.question_text}</Typography>
-              <FormGroup sx={{ mt: 2 }}>
-                {question.has_multiple_options ? (
-                  question.options.map((option: Option) => (
+       <FormGroup>
+        {survey.questions.map((question: Question) => (
+          <Box key={question.id} sx={{ mb: 4, p: 2, border: '1px solid #e0e0e0', borderRadius: 2 }}>
+            <Typography variant="h5">{question.question_text}</Typography>
+            {question.has_multiple_options && (
+              <Typography variant="subtitle1" color="textSecondary" sx={{ mb: 1 }}>
+                当てはまるものを全てお選びください
+              </Typography>
+            )}
+            <FormGroup sx={{ mt: 2 }}>
+              {question.has_multiple_options ? (
+                question.options.map((option: Option) => (
+                  <FormControlLabel
+                    key={option.id}
+                    control={
+                      <Checkbox
+                        checked={selectedOptions[question.id]?.includes(option.id) || false}
+                        onChange={() => handleOptionChange(question.id, option.id, true)}
+                      />
+                    }
+                    label={option.option_text}
+                  />
+                ))
+              ) : (
+                <RadioGroup
+                  value={selectedOptions[question.id]?.[0] || ""}
+                  onChange={(e) => {
+                    const selectedId = Number(e.target.value);
+                    handleOptionChange(question.id, selectedId, false);
+                    if (selectedId === question.options.find(option => option.option_text === 'その他')?.id) {
+                      handleOtherResponseChange(question.id, otherResponses[question.id] || "");
+                    } else {
+                      handleOtherResponseChange(question.id, "");
+                    }
+                  }}
+                >
+                  {question.options.map((option: Option) => (
                     <FormControlLabel
                       key={option.id}
-                      control={
-                        <Checkbox
-                          checked={selectedOptions[question.id]?.includes(option.id) || false}
-                          onChange={() => handleOptionChange(question.id, option.id, true)}
-                        />
-                      }
+                      value={option.id}
+                      control={<Radio />}
                       label={option.option_text}
                     />
-                  ))
-                ) : (
-                  <RadioGroup
-                    value={selectedOptions[question.id]?.[0] || ""}
-                    onChange={(e) => {
-                      const selectedId = Number(e.target.value);
-                      handleOptionChange(question.id, selectedId, false);
-                      if (selectedId === question.options.find(option => option.option_text === 'その他')?.id) {
-                        handleOtherResponseChange(question.id, otherResponses[question.id] || "");
-                      } else {
-                        handleOtherResponseChange(question.id, "");
-                      }
-                    }}
-                  >
-                    {question.options.map((option: Option) => (
-                      <FormControlLabel
-                        key={option.id}
-                        value={option.id}
-                        control={<Radio />}
-                        label={option.option_text}
-                      />
-                    ))}
-                  </RadioGroup>
-                )}
-              </FormGroup>
-
-              {question.allows_other && (
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={3}
-                  placeholder="その他の回答を入力してください"
-                  value={otherResponses[question.id] || ""}
-                  onChange={(e) => handleOtherResponseChange(question.id, e.target.value)}
-                  sx={{ mt: 2 }}
-                />
+                  ))}
+                </RadioGroup>
               )}
-            </Box>
-          ))}
-        </FormGroup>
+            </FormGroup>
+
+            {question.allows_other && (
+              <TextField
+                fullWidth
+                multiline
+                rows={3}
+                placeholder="その他の回答を入力してください"
+                value={otherResponses[question.id] || ""}
+                onChange={(e) => handleOtherResponseChange(question.id, e.target.value)}
+                sx={{ mt: 2 }}
+              />
+            )}
+          </Box>
+        ))}
+      </FormGroup>
+
         <Button
           type="submit"
           variant="contained"
