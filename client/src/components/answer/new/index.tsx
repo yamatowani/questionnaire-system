@@ -27,7 +27,11 @@ export default function NewAnswerForm() {
       setIsSubmitting(false);
     },
     onError: (error) => {
-      setSubmitError(error.message || "回答の送信中にエラーが発生しました");
+      const errorMessage = error.graphQLErrors.length > 0 
+        ? error.graphQLErrors[0].message 
+        : '予期しないエラーが発生しました';
+      setSubmitError(errorMessage);
+      alert(errorMessage);
       setIsSubmitting(false);
     },
   });
@@ -59,41 +63,10 @@ export default function NewAnswerForm() {
     }));
   };
 
-  const validateResponses = () => {
-    const errors: string[] = [];
-    for (const question of survey.questions) {
-      const selected = selectedOptions[question.id] || [];
-      const isOtherSelected = selected.includes(question.options.find(option => option.option_text === 'その他')?.id);
-
-      if (selected.length === 0) {
-        errors.push(`「${question.question_text}」に回答してください。`);
-      }
-
-      if (isOtherSelected && !otherResponses[question.id]) {
-        errors.push(`「${question.question_text}」の「その他」を選択した場合は、テキストエリアに回答を入力してください。`);
-      }
-
-      if (!isOtherSelected && otherResponses[question.id]) {
-        errors.push(`「${question.question_text}」で「その他」を選択していない場合は、テキストエリアを空にしてください。`);
-      }
-    }
-    return errors;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitError(null);
-
-    const validationErrors = validateResponses();
-    if (validationErrors.length > 0) {
-      setSubmitError(validationErrors.join('\n'));
-      setIsSubmitting(false);
-      
-      window.scrollTo({ top: 0, behavior: 'auto' });
-      
-      return;
-    }
 
     const responses = survey.questions.map((question: Question) => ({
       question_id: Number(question.id),
@@ -161,7 +134,6 @@ export default function NewAnswerForm() {
                     onChange={(e) => {
                       const selectedId = Number(e.target.value);
                       handleOptionChange(question.id, selectedId, false);
-                      // 「その他」が選択された場合の処理
                       if (selectedId === question.options.find(option => option.option_text === 'その他')?.id) {
                         handleOtherResponseChange(question.id, otherResponses[question.id] || "");
                       } else {
