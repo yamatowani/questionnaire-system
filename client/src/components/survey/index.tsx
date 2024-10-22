@@ -55,21 +55,28 @@ export default function Surveys() {
           <ListItem key={survey.id} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
             <ListItemText
               primary={
-                <Link href={`/survey/${survey.url}`} passHref>
-                  <Typography variant="h6" component="span" sx={{ textDecoration: 'underline', cursor: 'pointer' }}>
-                    タイトル: {survey.title}
-                  </Typography>
-                </Link>
+                <Typography variant="h6" component="div">
+                  <Link href={`/survey/${survey.url}`} passHref>
+                    <span style={{ textDecoration: 'underline', cursor: 'pointer' }}>タイトル: {survey.title}</span>
+                  </Link>
+                  <div style={{ marginTop: '4px' }}>
+                    <Link href={`/survey/${survey.url}`} passHref>
+                      <Button variant="outlined" color="secondary" size="small" sx={{ mr: 1 }}>
+                        回答
+                      </Button>
+                    </Link>
+                    <Link href={`/answer/${survey.url}`} passHref>
+                      <Button variant="outlined" color="primary" size="small">
+                        結果
+                      </Button>
+                    </Link>
+                  </div>
+                </Typography>
               }
             />
           </ListItem>
         ))}
       </List>
-      <Link href='/answer' passHref>
-        <Button variant="contained" color="primary" sx={{ mt: 2 }}>
-          アンケートの結果を見る
-        </Button>
-      </Link>
       <br />
       <Link href='/survey' passHref>
         <Button variant="contained" color="primary" sx={{ mt: 2 }}>
