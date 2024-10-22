@@ -10,6 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import React from "react";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -19,22 +20,23 @@ ChartJS.register(
   Legend
 );
 
-export default function AnswersChart({ data }) {
-  if (!data) {
+export default function AnswersChart({ surveyResult }) {
+  if (!surveyResult) {
     return <p>データが存在しません</p>;
   }
 
   return (
     <div>
-      {data.map((question) => {
-        const labels = question.options.map((option) => option.option_text);
+      {surveyResult.questions.map((question) => {
+        const labels = question.questionResults.map((result) => result.optionText);
+        const dataValues = question.questionResults.map((result) => result.count);
 
-        const ChartData = {
+        const chartData = {
           labels,
           datasets: [
             {
-              label: `アンケートID: ${question.questionId} - ${question.title}`,
-              data: question.options.map((option) => option.count),
+              label: `質問ID: ${question.questionId} - ${question.questionText}`,
+              data: dataValues,
               backgroundColor: "#1976d2",
               borderColor: "#1976d2",
               borderWidth: 1,
@@ -43,12 +45,10 @@ export default function AnswersChart({ data }) {
         };
 
         return (
-          <div key={question.questionId} style={{ width: "400px" }}>
-            <h3>{question.title}</h3>
+          <div key={question.questionId} style={{ margin: "20px 0", width: "100%" }}>
+            <h3>{question.questionText}</h3>
             <Bar
-              height={100}
-              width={100}
-              data={ChartData}
+              data={chartData}
               options={{
                 responsive: true,
                 plugins: {
@@ -56,6 +56,13 @@ export default function AnswersChart({ data }) {
                     display: true,
                     position: "top",
                   },
+                  tooltip: {
+                    callbacks: {
+                      label: (tooltipItem) => {
+                        return `${tooltipItem.label}: ${tooltipItem.raw} 回答`;
+                      }
+                    }
+                  }
                 },
               }}
             />

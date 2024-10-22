@@ -5,23 +5,28 @@ import { SURVEY_RESULT } from "@/lib/graphql/queries/query";
 import useAuth from "@/hooks/useAuth";
 import AnswersChart from "./chart";
 import { Box, Button, Typography, CircularProgress, Alert } from "@mui/material";
+import { useParams } from "next/navigation";
 
 export default function SurveyResult() {
   const { token } = useAuth();
+  const params = useParams<{ url: string }>();
+  const url = params.url;
 
   const { data, loading, error } = useQuery(SURVEY_RESULT, {
     context: {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     },
+    variables: { url },
   });
+  console.log(data);
 
   if (loading) return <CircularProgress />;
 
   if (error) return <Alert severity="error">Error: {error.message}</Alert>;
 
-  if (!data || !data.questionResults || data.questionResults.length === 0) {
+  if (!data || !data.surveyResult) {
     return (
       <Box sx={{ textAlign: 'center', mt: 4 }}>
         <Typography variant="h6">作成したアンケートはありません</Typography>
@@ -42,10 +47,10 @@ export default function SurveyResult() {
 
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto', mt: 4 }}>
-      <Typography variant="h4">アンケート結果一覧</Typography>
-      <AnswersChart data={data.questionResults} />
+      <Typography variant="h4">{data.surveyResult.title} の結果一覧</Typography>
+      {/* AnswersChartコンポーネントを修正して、questionsを渡す */}
+      <AnswersChart surveyResult={data.surveyResult} />
       <Box sx={{ textAlign: 'center', mt: 4 }}>
-        <br />
         <Link href='/question' passHref>
           <Button variant="contained" color="primary" sx={{ mb: 2 }}>
             新しいアンケートを作成する
