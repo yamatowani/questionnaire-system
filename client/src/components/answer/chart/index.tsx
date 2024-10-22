@@ -44,6 +44,9 @@ export default function AnswersChart({ surveyResult }) {
           ],
         };
 
+        // 空の回答を除外
+        const filteredOtherResponses = question.otherResponses.filter(response => response.trim() !== "");
+
         return (
           <div key={question.questionId} style={{ margin: "20px 0", width: "100%" }}>
             <h3>{question.questionText}</h3>
@@ -67,20 +70,31 @@ export default function AnswersChart({ surveyResult }) {
                 scales: {
                   x: {
                     ticks: {
-                      stepSize: 1
+                      stepSize: 1,
                     },
                   },
                   y: {
                     grid: {
-                      display: true
+                      display: true,
                     },
                     ticks: {
-                      stepSize: 1
+                      stepSize: 1,
                     },
                   },
                 },
               }}
             />
+
+            {filteredOtherResponses.length > 0 && (
+              <div style={{ marginTop: "10px" }}>
+                <h4>その他の回答:</h4>
+                <ul>
+                  {filteredOtherResponses.map((response, index) => (
+                    <li key={index}>{response}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         );
       })}
