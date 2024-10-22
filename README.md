@@ -1,30 +1,32 @@
 # 概要
-1問だけの選択式アンケートを作成し、URLを配布して回答を収集するシステム
+アンケートを作成し、URLを配布して回答を収集するシステム
 
 ## 使用技術
 - サーバーサイド: NestJS, TypeScript, TypeORM, MySQL, GraphQL
 - クライアントサイド: Next.js, React, TypeScript, Material UI, react-chartjs-2
 
 ## 基本機能
-- **ログインによるアクセス制御**: 管理画面にログインすることでアクセスを制限します。
-- **アンケート作成**: 管理画面から単一選択式の質問を持つアンケートを作成可能です。
+- **ログインによるアクセス制御**: 管理画面にログインすることでアクセスを制限
+- **アンケート作成**: 管理画面からアンケートを作成できる
   - **質問構成**:
     - 1つの質問文
     - 1個以上の選択肢
+    - 複数の選択肢による回答が可能な質問を作成可能
+    - 任意のテキストによる選択肢を作成可能
 - **回答URLの発行**: アンケート作成時に回答用のURLを発行
 - **回答画面**:
   - URLにアクセスするとアンケートが表示されます
-  - ユーザーは選択肢から1つを選んで回答可能です
+  - ユーザーは選択肢から1つ or 複数 or 任意のテキスト による回答で回答可能です
 - **集計結果の表示**:
-  - 回答状況を選択肢ごとの回答者数および%で棒グラフに表示します。
+  - 回答状況を選択肢ごとの回答者数を棒グラフに表示
 
 ## URL, ドメイン設計
 | URL                  | 説明                                                             |
 |----------------------|------------------------------------------------------------------|
 | `/`                  | アンケート一覧画面。ログインしているユーザーに紐づくアンケートを表示。 |
-| `/question`          | アンケート作成画面。作成時にログインしているユーザーのIDを付与。   |
-| `/question/:url`     | アンケート回答画面。URL(パスパラメータ)に紐づくアンケート表示。任意の回答者(ログイン不要)がアンケートに答えることができる。 |
-| `/answer`            | アンケートの結果一覧。ログインしているユーザーが作成したアンケートの結果をグラフ形式で表示。 |
+| `/survey`          | アンケート作成画面。作成時にログインしているユーザーのIDを付与。   |
+| `/survey/:url`     | アンケート回答画面。URL(パスパラメータ)に紐づくアンケート表示。任意の回答者(ログイン不要)がアンケートに答えることができる。 |
+| `/answer/:url`            | アンケート結果画面。URL(パスパラメータ)に紐づくアンケートの結果をグラフ形式で表示。 |
 
 ## 認証ロジック
 ### ユーザー作成
@@ -46,7 +48,7 @@
 
 ### ログイン
 #### リダイレクト処理
-- 未ログイン状態の場合`/`,`/question`,`/answer`にアクセスした場合、`/login`にリダイレクトされる
+- 未ログイン状態の状態で`/`,`/survey`,`/answer/:url`にアクセスした場合、`/login`にリダイレクトされる
 
 #### ログイン情報の入力
 - 管理者ユーザーに以下の情報を入力させる：
@@ -66,33 +68,31 @@
 
 | Query                | Description                                            | Input Type        | Output Type       |
 |----------------------|-------------------------------------------------------|--------------------|--------------------|
-| `questionByUrl`      | 指定したURLに基づいてアンケートを取得             | `url: String!`     | `Question!`        |
-| `questions`          | 指定された管理者ユーザーの質問リストを取得     | NULL | `[Question!]!`     |
-| `questionResults`    | 管理者ユーザーによって作成された質問の結果を取得| NULL | `[QuestionWithAnswerCounts!]!` |
+| **`surveyByUrl`**      | 指定したURLに基づいてアンケートを取得             | `url: String!`     | `Survey!`        |
+| `surveys`          | 指定された管理者ユーザーの質問リストを取得     | NULL | `[Survey!]!`     |
+| `surveyResult`    | 管理者ユーザーによって作成された質問の結果を取得| NULL | `SurveyResult!` |
 
 ### Input/Output仕様
 
-##### **`questionByUrl`**
+##### **`surveyByUrl`**
 - **Input**:
   - `url` (String!): アンケートURL
 - **Output**:
-  - `Question!`:
+  - `Survey!`:
     - `id` (ID!): アンケートID
     - `title` (String!): アンケートタイトル
     - `url` (String!): アンケートURL
     - `admin_user` (AdminUser!): アンケートを作成した管理者ユーザー
-    - `options` ([Option!]!): アンケートの持つ選択肢
+    - `questions` ([Question!]!): アンケートの持つ質問
     - `created_at` (DateTime!): 作成日時
     - `updated_at` (DateTime!): 更新日時
 
-##### `questions`
+##### `surveys`
 - **Output**:
-  - `[Question!]!`:
+  - `[Surveys!]!`:
     - `id` (ID!): アンケートID
     - `title` (String!): アンケートタイトル
     - `url` (String!): アンケートURL
-    - `created_at` (DateTime!): 作成日時
-    - `updated_at` (DateTime!): 更新日時
 
 ##### `questionResults`
 - **Output**:
@@ -111,7 +111,7 @@
 | Mutation                     | Description                                     | Input Type                                            | Output Type                    |
 |------------------------------|------------------------------------------------|------------------------------------------------------|---------------------------------|
 | `registerAdminUser`          | 管理者ユーザーの登録                  | `registerAdminUserInput: RegisterAdminUserInput!`  | `RegisterAdminUserOutput!`     |
-| `submitQuestion`             | アンケートを作成                             | `submitQuestionInput: SubmitQuestionInput!` | `SubmitQuestionOutput!`        |
+| `submitSurvey`             | アンケートを作成                             | `submitQuestionInput: SubmitQuestionInput!` | `SubmitQuestionOutput!`        |
 | `submitAnswer`               | アンケートに回答                             | `submitAnswerInput: SubmitAnswerInput!`            | `SubmitAnswerOutput!`          |
 | `authenticateAdminUser`      | 管理者ユーザーの認証                 | `authenticateAdminUserInput: AuthenticateAdminUserInput!` | `AuthResponse!`                |
 

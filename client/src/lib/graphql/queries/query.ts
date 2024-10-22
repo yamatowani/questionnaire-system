@@ -24,13 +24,6 @@ export const SURVEYS = gql`
       id
       title
       url
-      questions {
-        id
-        question_text
-        options {
-          id
-          option_text
-        }
       }
     }
   }
