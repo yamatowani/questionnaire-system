@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Answer } from 'src/entities/answer.entity';
 import {
   SurveyResult,
-  Questions,
+  QuestionResults,
   AnswerCounts,
 } from 'src/dto/output/surveyResult';
 
@@ -47,7 +47,7 @@ export class SurveyService {
       throw new NotFoundException('Survey not found');
     }
 
-    const questions: Questions[] = await Promise.all(
+    const questionResults: QuestionResults[] = await Promise.all(
       survey.questions.map(async (question) => {
         const options: AnswerCounts[] = await Promise.all(
           question.options.map(async (option) => {
@@ -69,7 +69,7 @@ export class SurveyService {
         return {
           questionId: question.id,
           questionText: question.question_text,
-          questionResults: options,
+          answerCounts: options,
           otherCount: otherResponses.length,
           otherResponses: otherResponses.map(
             (response) => response.other_response,
@@ -81,7 +81,7 @@ export class SurveyService {
     return {
       surveyId: survey.id,
       title: survey.title,
-      questions: questions,
+      questionResults: questionResults,
     };
   }
 
