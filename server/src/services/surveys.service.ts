@@ -56,7 +56,7 @@ export class SurveyService {
             });
 
             return {
-              option_id: option.id,
+              optionId: option.id,
               optionText: option.option_text,
               count: count,
             };

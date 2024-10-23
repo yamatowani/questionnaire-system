@@ -33,7 +33,7 @@ export class QuestionResults {
 @ObjectType()
 export class AnswerCounts {
   @Field(() => Int)
-  option_id: number;
+  optionId: number;
 
   @Field()
   optionText: string;
