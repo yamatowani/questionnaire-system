@@ -114,16 +114,16 @@ export class SurveyService {
 
         for (const question of submitSurveyInput.questions) {
           const newQuestion = entityManager.create(Question, {
-            question_text: question.question_text,
-            has_multiple_options: question.has_multiple_options,
-            allows_other: question.allows_other,
+            question_text: question.questionText,
+            has_multiple_options: question.hasMultipleOptions,
+            allows_other: question.allowsOther,
             survey: savedSurvey,
           });
           const savedQuestion = await entityManager.save(Question, newQuestion);
 
           for (const option of question.options) {
             const newOption = entityManager.create(Option, {
-              option_text: option.option_text,
+              option_text: option.optionText,
               question: savedQuestion,
             });
 
