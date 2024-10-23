@@ -17,12 +17,12 @@ export class AnswerService {
     const answers: Answer[] = [];
 
     for (const questionAnswer of submitAnswerInput.question_answers) {
-      const { question_id, options } = questionAnswer;
+      const { questionId, options } = questionAnswer;
 
       const relatedQuestion = await this.answerRepository.manager.findOne(
         Question,
         {
-          where: { id: question_id },
+          where: { id: questionId },
         },
       );
 
@@ -33,15 +33,15 @@ export class AnswerService {
       }
 
       const relatedOptions = await this.answerRepository.manager.find(Option, {
-        where: { id: In(options.map((option) => option.option_id)) },
+        where: { id: In(options.map((option) => option.optionId)) },
       });
 
       let otherSelected = false;
 
       for (const selectedOption of options) {
-        const { option_id, other_response } = selectedOption;
+        const { optionId, otherResponse } = selectedOption;
         const relatedOption = relatedOptions.find(
-          (option) => option.id === option_id,
+          (option) => option.id === optionId,
         );
 
         if (!relatedOption) {
@@ -49,7 +49,7 @@ export class AnswerService {
         }
 
         if (relatedOption.option_text === 'その他') {
-          if (!other_response) {
+          if (!otherResponse) {
             throw new BadRequestException(
               `質問 "${relatedQuestion.question_text}" で「その他」を選択した場合はテキストを入力してください`,
             );
@@ -60,8 +60,8 @@ export class AnswerService {
 
       if (!otherSelected) {
         for (const selectedOption of options) {
-          const { other_response } = selectedOption;
-          if (other_response) {
+          const { otherResponse } = selectedOption;
+          if (otherResponse) {
             throw new BadRequestException(
               `質問 "${relatedQuestion.question_text}" で「その他」以外を選択した場合はテキストは入力しないでください`,
             );
@@ -73,27 +73,27 @@ export class AnswerService {
     return await this.answerRepository.manager.transaction(
       async (entityManager: EntityManager) => {
         for (const questionAnswer of submitAnswerInput.question_answers) {
-          const { question_id, options } = questionAnswer;
+          const { questionId, options } = questionAnswer;
 
           const relatedQuestion = await entityManager.findOne(Question, {
-            where: { id: question_id },
+            where: { id: questionId },
           });
 
           const relatedOptions = await entityManager.find(Option, {
-            where: { id: In(options.map((option) => option.option_id)) },
+            where: { id: In(options.map((option) => option.optionId)) },
           });
 
           for (const selectedOption of options) {
-            const { option_id, other_response } = selectedOption;
+            const { optionId, otherResponse } = selectedOption;
 
             const relatedOption = relatedOptions.find(
-              (option) => option.id === option_id,
+              (option) => option.id === optionId,
             );
 
             const createdAnswer = entityManager.create(Answer, {
               question: relatedQuestion,
               option: relatedOption,
-              other_response: other_response || '',
+              other_response: otherResponse || '',
             });
 
             const savedAnswer = await entityManager.save(createdAnswer);
