@@ -9,7 +9,7 @@ export class SubmitAnswerInput {
 @InputType()
 export class SubmitQuestionAnswerInput {
   @Field(() => Int)
-  question_id: number;
+  questionId: number;
 
   @Field(() => [SubmitOptionAnswerInput])
   options: SubmitOptionAnswerInput[];
@@ -18,8 +18,8 @@ export class SubmitQuestionAnswerInput {
 @InputType()
 export class SubmitOptionAnswerInput {
   @Field(() => Int)
-  option_id: number;
+  optionId: number;
 
   @Field({ nullable: true })
-  other_response?: string;
+  otherResponse?: string;
 }

@@ -4,13 +4,13 @@ import { SubmitOptionInput } from './submitOption';
 @InputType()
 export class SubmitQuestionInput {
   @Field()
-  question_text: string;
+  questionText: string;
 
   @Field()
-  has_multiple_options: boolean;
+  hasMultipleOptions: boolean;
 
   @Field()
-  allows_other: boolean;
+  allowsOther: boolean;
 
   @Field(() => [SubmitOptionInput])
   options: SubmitOptionInput[];
