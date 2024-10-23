@@ -63,46 +63,65 @@
   - JwtAuthGuardがリクエストのトークンを検証する
   - 認証が成功した場合、リクエスト内にAdminUserIdをセットし、各リゾルバ内で使用する 
 
-##  GraphQL API仕様
 ### Queries
 
 | Query                | Description                                            | Input Type        | Output Type       |
 |----------------------|-------------------------------------------------------|--------------------|--------------------|
-| **`surveyByUrl`**      | 指定したURLに基づいてアンケートを取得             | `url: String!`     | `Survey!`        |
+| `surveyByUrl`      | 指定したURLに基づいてアンケートを取得             | `url: String!`     | `Survey!`        |
 | `surveys`          | 指定された管理者ユーザーの質問リストを取得     | NULL | `[Survey!]!`     |
 | `surveyResult`    | 管理者ユーザーによって作成された質問の結果を取得| NULL | `SurveyResult!` |
 
+---
+
 ### Input/Output仕様
 
-##### **`surveyByUrl`**
-- **Input**:
-  - `url` (String!): アンケートURL
-- **Output**:
-  - `Survey!`:
-    - `id` (ID!): アンケートID
-    - `title` (String!): アンケートタイトル
-    - `url` (String!): アンケートURL
-    - `admin_user` (AdminUser!): アンケートを作成した管理者ユーザー
-    - `questions` ([Question!]!): アンケートの持つ質問
-    - `created_at` (DateTime!): 作成日時
-    - `updated_at` (DateTime!): 更新日時
+#### **`surveyByUrl`**
 
-##### `surveys`
-- **Output**:
-  - `[Surveys!]!`:
-    - `id` (ID!): アンケートID
-    - `title` (String!): アンケートタイトル
-    - `url` (String!): アンケートURL
+| Input        | Type          | Description         |
+|--------------|---------------|---------------------|
+| `url`        | `String!`     | アンケートURL        |
 
-##### `questionResults`
-- **Output**:
-  - `[QuestionWithAnswerCounts!]!`:
-    - `questionId` (Int!): アンケートID
-    - `title` (String!): アンケートタイトル
-    - `options` ([AnswerCount!]!):
-      - `option_id` (Int!): 選択肢ID
-      - `option_text` (String!): 選択肢テキスト
-      - `count` (Int!): 選択肢の回答数
+| Output       | Type            | Description            |
+|--------------|-----------------|------------------------|
+| `id`         | `ID!`           | アンケートID            |
+| `title`      | `String!`       | アンケートタイトル       |
+| `url`        | `String!`       | アンケートURL           |
+| `admin_user` | `AdminUser!`    | アンケートを作成した管理者ユーザー |
+| `questions`  | `[Question!]!`  | アンケートの持つ質問    |
+| `created_at` | `DateTime!`     | 作成日時                |
+| `updated_at` | `DateTime!`     | 更新日時                |
+
+---
+
+#### **`surveys`**
+
+| Output       | Type            | Description            |
+|--------------|-----------------|------------------------|
+| `id`         | `ID!`           | アンケートID            |
+| `title`      | `String!`       | アンケートタイトル       |
+| `url`        | `String!`       | アンケートURL           |
+
+---
+
+#### **`surveyResult`**
+
+| Input        | Type          | Description         |
+|--------------|---------------|---------------------|
+| `url`        | `String!`     | アンケートURL        |
+
+| Output         | Type              | Description            |
+|----------------|-------------------|------------------------|
+| `surveyId`     | `String!`         | アンケートID            |
+| `title`        | `String!`         | アンケートタイトル       |
+| `questionResults` |                 | 質問とその回答          |
+| `questionId`   | `Int!`            | 質問ID                  |
+| `questionText` | `String!`         | 質問テキスト            |
+| `otherCount`   | `Int!`            | 任意回答の数            |
+| `otherResponses` | `[String!]`      | 任意回答の配列          |
+| `answerCounts` |                   | 選択肢の回答数          |
+| `optionId`     | `Int!`            | 選択肢のID              |
+| `optionText`   | `String!`         | 選択肢のテキスト        |
+| `count`        | `Int!`            | 選択肢の回答数          |
 
 ---
 
@@ -111,71 +130,64 @@
 | Mutation                     | Description                                     | Input Type                                            | Output Type                    |
 |------------------------------|------------------------------------------------|------------------------------------------------------|---------------------------------|
 | `registerAdminUser`          | 管理者ユーザーの登録                  | `registerAdminUserInput: RegisterAdminUserInput!`  | `RegisterAdminUserOutput!`     |
-| `submitSurvey`             | アンケートを作成                             | `submitQuestionInput: SubmitQuestionInput!` | `SubmitQuestionOutput!`        |
+| `submitSurvey`             | アンケートを作成                             | `submitSurveyInput: SubmitSurveyInput!` | `SubmitSurveyOutput!`        |
 | `submitAnswer`               | アンケートに回答                             | `submitAnswerInput: SubmitAnswerInput!`            | `SubmitAnswerOutput!`          |
 | `authenticateAdminUser`      | 管理者ユーザーの認証                 | `authenticateAdminUserInput: AuthenticateAdminUserInput!` | `AuthResponse!`                |
 
-#### Input/Output仕様
+---
 
-##### `registerAdminUser`
-- **Input**:
-  - `registerAdminUserInput` (RegisterAdminUserInput!):
-    - `name` (String!): 管理者ユーザー名
-    - `email` (String!): 管理者ユーザーのメールアドレス
-    - `password` (String!): 管理者ユーザーの作成したパスワード
-- **Output**:
-  - `RegisterAdminUserOutput!`:
-    - `success` (Boolean!): 成功したかをBooleanで返す
-    - `errorMessage` (String, nullable): エラーメッセージ
-    - `user` (AdminUser, nullable):
-      - `id` (ID!): 管理者ユーザーID。
-      - `name` (String!): 管理者ユーザー名
-      - `email` (String!): 管理者ユーザーのメールアドレス
-      - `created_at` (DateTime!): 作成日時
-      - `updated_at` (DateTime!): 更新日時
+#### **`registerAdminUser`**
 
-##### `submitQuestion`
-- **Input**:
-  - `submitQuestionInput` (SubmitQuestionInput!):
-    - `title` (String!): アンケートタイトル
-    - `options` ([SubmitOptionInput!]!):
-      - `SubmitOptionInput`:
-        - `option_text` (String!): 選択肢のテキスト。
-- **Output**:
-  - `SubmitQuestionOutput!`:
-    - `success` (Boolean!): 成功したかをBooleanで返す
-    - `errorMessage` (String, nullable): エラーメッセージ
-    - `question` (Question, nullable):
-      - `id` (ID!): アンケートID
-      - `title` (String!): アンケートタイトル
-      - `url` (String!): アンケートURL
-      - `admin_user` (AdminUser!): アンケートを作成した管理者ユーザー
-      - `options` ([Option!]!): 質問の選択肢
-      - `created_at` (DateTime!): 作成日時
-      - `updated_at` (DateTime!): 更新日時
+| Input                   | Type                  | Description                   |
+|-------------------------|-----------------------|-------------------------------|
+| `name`                  | `String!`             | 管理者ユーザー名              |
+| `email`                 | `String!`             | 管理者ユーザーのメールアドレス |
+| `password`              | `String!`             | パスワード                    |
 
-##### `submitAnswer`
-- **Input**:
-  - `submitAnswerInput` (SubmitAnswerInput!):
-    - `option_id` (Int!): 選択肢ID
-    - `question_id` (Int!): アンケートID
-- **Output**:
-  - `SubmitAnswerOutput!`:
-    - `success` (Boolean!): 成功したかをBooleanで返す
-    - `errorMessage` (String, nullable): エラーメッセージ
-    - `answer` (Answer): 回答
-      - `id` (ID!): 回答ID
-      - `question` (Question!): 回答したアンケート
-      - `option` (Option!): 選択した選択肢
+| Output                  | Type                      | Description                   |
+|-------------------------|---------------------------|-------------------------------|
+| `success`               | `Boolean!`                | 成功したか                    |
+| `errorMessage`          | `String`                  | エラーメッセージ              |
+| `user`                  | `AdminUser`               | 登録されたユーザー情報         |
 
-##### `authenticateAdminUser`
-- **Input**:
-  - `authenticateAdminUserInput` (AuthenticateAdminUserInput!):
-    - `email` (String!): 管理者ユーザーのメールアドレス
-    - `password` (String!): 管理者ユーザーの作成したパスワード
-- **Output**:
-  - `AuthResponse!`:
-    - `access_token` (String!): 認証トークン
+---
+
+#### **`submitSurvey`**
+
+| Input                   | Type                      | Description                   |
+|-------------------------|---------------------------|-------------------------------|
+| `title`                 | `String!`                 | アンケートタイトル             |
+| `questions`             | `[SubmitQuestionInput!]!`  | 質問のリスト                   |
+| `question_text`         | `String!`                 | 質問テキスト                   |
+| `has_multiple_options`  | `Boolean!`                | 複数選択肢を許可するか         |
+| `allows_other`          | `Boolean!`                | その他の回答を許可するか       |
+| `options`               | `[SubmitOptionInput!]!`    | 選択肢リスト                   |
+| `option_text`           | `String!`                 | 選択肢のテキスト               |
+
+| Output                  | Type                      | Description                   |
+|-------------------------|---------------------------|-------------------------------|
+| `success`               | `Boolean!`                | 成功したか                    |
+| `errorMessage`          | `String`                  | エラーメッセージ              |
+| `survey`                | `Survey`                  | 作成されたアンケート           |
+
+---
+
+#### **`submitAnswer`**
+
+| Input                   | Type                      | Description                   |
+|-------------------------|---------------------------|-------------------------------|
+| `question_answers`       | `[SubmitQuestionAnswerInput!]!` | 質問ごとの回答リスト      |
+| `question_id`            | `Int!`                    | 質問ID                         |
+| `options`               | `[SubmitOptionAnswerInput!]!` | 選択されたオプションリスト   |
+| `option_id`             | `Int!`                    | オプションID                   |
+| `other_response`        | `String`                  | その他の回答                   |
+
+| Output                  | Type                      | Description                   |
+|-------------------------|---------------------------|-------------------------------|
+| `success`               | `Boolean!`                | 成功したか                    |
+| `errorMessage`          | `String`                  | エラーメッセージ              |
+| `answer`                | `[Answer!]`               | 登録された回答                 |
+
 
 ## DB設計, ER図
 
