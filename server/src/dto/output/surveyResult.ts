@@ -8,12 +8,12 @@ export class SurveyResult {
   @Field()
   title: string;
 
-  @Field(() => [Questions])
-  questions: Questions[];
+  @Field(() => [QuestionResults])
+  questionResults: QuestionResults[];
 }
 
 @ObjectType()
-export class Questions {
+export class QuestionResults {
   @Field(() => Int)
   questionId: number;
 
@@ -21,7 +21,7 @@ export class Questions {
   questionText: string;
 
   @Field(() => [AnswerCounts])
-  questionResults: AnswerCounts[];
+  answerCounts: AnswerCounts[];
 
   @Field(() => Int, { nullable: true })
   otherCount?: number;
