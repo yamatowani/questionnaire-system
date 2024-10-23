@@ -61,7 +61,7 @@ type RegisterAdminUserOutput {
 }
 
 type AuthResponse {
-  access_token: String!
+  accessToken: String!
 }
 
 type SurveyResult {
@@ -121,14 +121,14 @@ input SubmitSurveyInput {
 }
 
 input SubmitQuestionInput {
-  question_text: String!
-  has_multiple_options: Boolean!
-  allows_other: Boolean!
+  questionText: String!
+  hasMultipleOptions: Boolean!
+  allowsOther: Boolean!
   options: [SubmitOptionInput!]!
 }
 
 input SubmitOptionInput {
-  option_text: String!
+  optionText: String!
 }
 
 input AuthenticateAdminUserInput {
@@ -141,11 +141,11 @@ input SubmitAnswerInput {
 }
 
 input SubmitQuestionAnswerInput {
-  question_id: Int!
+  questionId: Int!
   options: [SubmitOptionAnswerInput!]!
 }
 
 input SubmitOptionAnswerInput {
-  option_id: Int!
-  other_response: String
+  optionId: Int!
+  otherResponse: String
 }
