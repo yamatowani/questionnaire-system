@@ -33,10 +33,10 @@ export const SURVEY_RESULT = gql`
     surveyResult(url: $url) {
       surveyId
       title
-      questions {
+      questionResults {
         questionId
         questionText
-        questionResults {
+        answerCounts {
           option_id
           optionText
           count

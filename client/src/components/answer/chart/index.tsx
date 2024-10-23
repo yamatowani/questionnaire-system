@@ -27,9 +27,9 @@ export default function AnswersChart({ surveyResult }) {
 
   return (
     <div>
-      {surveyResult.questions.map((question) => {
-        const labels = question.questionResults.map((result) => result.optionText);
-        const dataValues = question.questionResults.map((result) => result.count);
+      {surveyResult.questionResults.map((question) => {
+        const labels = question.answerCounts.map((result) => result.optionText);
+        const dataValues = question.answerCounts.map((result) => result.count);
 
         const chartData = {
           labels,
