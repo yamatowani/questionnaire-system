@@ -48,6 +48,7 @@ export default function SurveyResult() {
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto', mt: 4 }}>
       <Typography variant="h4">{data.surveyResult.title} の結果一覧</Typography>
+      <Typography variant="h5">総回答数: {data.surveyResult.answer_count}件</Typography>
       {/* AnswersChartコンポーネントを修正して、questionsを渡す */}
       <AnswersChart surveyResult={data.surveyResult} />
       <Box sx={{ textAlign: 'center', mt: 4 }}>
