@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { AdminUser } from './admin_user.entity';
 import { Question } from './question.entity';
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 
 @Entity({ name: 'surveys' })
 @ObjectType()
@@ -26,6 +26,10 @@ export class Survey {
   @Column('varchar', { unique: true, nullable: false })
   @Field()
   url: string;
+
+  @Column({ default: 0 })
+  @Field(() => Int)
+  answer_count: number;
 
   @ManyToOne(() => AdminUser, (admin_user) => admin_user.surveys, {
     onDelete: 'CASCADE',

@@ -39,6 +39,7 @@ type Survey {
   id: ID!
   title: String!
   url: String!
+  answer_count: Int!
   admin_user: AdminUser!
   questions: [Question!]!
   created_at: DateTime!
