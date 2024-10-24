@@ -113,6 +113,7 @@
 |----------------|-------------------|------------------------|
 | `surveyId`     | `String!`         | アンケートID            |
 | `title`        | `String!`         | アンケートタイトル       |
+| `answer_count` | `Int!`    　　　　 | アンケート総回答数       |
 | `questionResults` |                 | 質問とその回答          |
 | `questionId`   | `Int!`            | 質問ID                  |
 | `questionText` | `String!`         | 質問テキスト            |
@@ -207,7 +208,8 @@ erDiagram
         int id PK "アンケートID"
         varchar title "アンケートタイトル"
         varchar url "アンケートURL"
-        bigint admin_user_id FK "アンケートを作成した管理ユーザーID"
+        int     answer_count "アンケート総回答数"
+        int admin_user_id FK "アンケートを作成した管理ユーザーID"
         timestamp created_at "作成日時"
         timestamp updated_at "更新日時"
     }
@@ -215,9 +217,9 @@ erDiagram
     Questions {
         int id PK "質問ID"
         varchar question_text "質問項目"
-        bigint survey_id FK "質問が属するアンケートID"
-        boolean has_multiple_options "複数選択が可能か"
-        boolean allows_other "その他の自由回答を許可するか"
+        int survey_id FK "質問が属するアンケートID"
+        tinyint has_multiple_options "複数選択が可能か"
+        tinyint allows_other "その他の自由回答を許可するか"
         timestamp created_at "作成日時"
         timestamp updated_at "更新日時"
     }
@@ -225,15 +227,15 @@ erDiagram
     Options {
         int id PK "選択肢ID"
         varchar option_text "選択肢文"
-        bigint question_id FK "属する質問ID"
+        int question_id FK "属する質問ID"
         timestamp created_at "作成日時"
         timestamp updated_at "更新日時"
     }
 
     Answers {
         int id PK "回答ID"
-        bigint question_id FK "質問ID"
-        bigint option_id FK "選択肢ID"
+        int question_id FK "質問ID"
+        int option_id FK "選択肢ID"
         varchar other_response "その他の回答"
         timestamp created_at "作成日時"
         timestamp updated_at "更新日時"
