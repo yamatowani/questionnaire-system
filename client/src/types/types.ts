@@ -17,9 +17,9 @@ export type Survey = {
 
 export type Question = {
   id: number;
-  question_text: string;
-  has_multiple_options: boolean;
-  allows_other: boolean;
+  questionText: string;
+  hasMultipleOptions: boolean;
+  allowsOther: boolean;
   options: Option[];
   created_at: string;
   updated_at: string;
@@ -27,8 +27,8 @@ export type Question = {
 
 export type Option = {
   id: number;
-  option_text: string;
-  question_id: number;
+  optionText: string;
+  questionId: number;
   created_at: string;
   updated_at: string;
 }
@@ -45,14 +45,14 @@ export type SubmitSurveyInput = {
 }
 
 type SubmitQuestionInput = {
-  question_text: string;
-  has_multiple_options: boolean;
-  allows_other: boolean;
+  questionText: string;
+  hasMultipleOptions: boolean;
+  allowsOther: boolean;
   options: SubmitOptionInput[];
 }
 
 type SubmitOptionInput = {
-  option_text: string;
+  optionText: string;
 }
 
 export type AuthenticateAdminUserResponse = {
@@ -62,14 +62,14 @@ export type AuthenticateAdminUserResponse = {
 }
 
 export type SubmitAnswerInput = {
-  question_answers: SubmitQuestionAnswerInput[];
+  questionAnswers: SubmitQuestionAnswerInput[];
 }
 export type SubmitQuestionAnswerInput = {
-  question_id: number;
+  questionId: number;
   options: SubmitOptionAnswerInput[];
 }
 
 type SubmitOptionAnswerInput = {
-  option_id: number;
-  other_response: string;
+  optionId: number;
+  otherResponse: string;
 }
