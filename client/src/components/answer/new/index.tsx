@@ -6,10 +6,12 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import { Option, Question } from "@/types/types";
 import { Box, Button, Typography, FormControlLabel, Checkbox, Radio, RadioGroup, CircularProgress, Alert, FormGroup, Divider, TextField } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 export default function NewAnswerForm() {
   const params = useParams<{ url: string }>();
   const url = params.url;
+  const router = useRouter();
 
   const { loading, error, data } = useQuery(SURVEY_BY_URL, {
     variables: { url },
@@ -23,8 +25,8 @@ export default function NewAnswerForm() {
   const [createAnswer] = useMutation(SUBMIT_ANSWER, {
     onCompleted: () => {
       setSubmitError(null);
-      alert("回答を記録しました!");
       setIsAnswered(true);
+      router.push('/complete');
     },
     onError: (error) => {
       const errorMessage = error.graphQLErrors.length > 0 
