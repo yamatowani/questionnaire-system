@@ -17,9 +17,9 @@ export type Survey = {
 
 export type Question = {
   id: number;
-  questionText: string;
-  hasMultipleOptions: boolean;
-  allowsOther: boolean;
+  question_text: string;
+  has_multiple_options: boolean;
+  allows_other: boolean;
   options: Option[];
   created_at: string;
   updated_at: string;
@@ -27,8 +27,8 @@ export type Question = {
 
 export type Option = {
   id: number;
-  optionText: string;
-  questionId: number;
+  option_text: string;
+  questio_id: number;
   created_at: string;
   updated_at: string;
 }
@@ -62,7 +62,7 @@ export type AuthenticateAdminUserResponse = {
 }
 
 export type SubmitAnswerInput = {
-  questionAnswers: SubmitQuestionAnswerInput[];
+  question_answers: SubmitQuestionAnswerInput[];
 }
 export type SubmitQuestionAnswerInput = {
   questionId: number;

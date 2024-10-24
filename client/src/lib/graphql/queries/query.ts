@@ -8,11 +8,11 @@ export const SURVEY_BY_URL = gql`
       questions {
         id
         question_text
-        hasMultipleOptions
-        allowsOther
+        has_multiple_options
+        allows_other
         options {
           id
-          optionText
+          option_text
         }
       }
     }
@@ -37,7 +37,7 @@ export const SURVEY_RESULT = gql`
         questionId
         questionText
         answerCounts {
-          option_id
+          optionId
           optionText
           count
         }

@@ -69,10 +69,10 @@ export default function NewAnswerForm() {
     setSubmitError(null);
 
     const responses = survey.questions.map((question: Question) => ({
-      question_id: Number(question.id),
+      questionId: Number(question.id),
       options: (selectedOptions[question.id] || []).map(optionId => ({
-        option_id: Number(optionId),
-        other_response: otherResponses[question.id] || "",
+        optionId: Number(optionId),
+        otherResponse: otherResponses[question.id] || "",
       })),
     }));
 
@@ -113,14 +113,14 @@ export default function NewAnswerForm() {
        <FormGroup>
         {survey.questions.map((question: Question) => (
           <Box key={question.id} sx={{ mb: 4, p: 2, border: '1px solid #e0e0e0', borderRadius: 2 }}>
-            <Typography variant="h5">{question.questionText}</Typography>
-            {question.hasMultipleOptions && (
+            <Typography variant="h5">{question.question_text}</Typography>
+            {question.has_multiple_options && (
               <Typography variant="subtitle1" color="textSecondary" sx={{ mb: 1 }}>
                 当てはまるものを全てお選びください
               </Typography>
             )}
             <FormGroup sx={{ mt: 2 }}>
-              {question.hasMultipleOptions ? (
+              {question.has_multiple_options ? (
                 question.options.map((option: Option) => (
                   <FormControlLabel
                     key={option.id}
@@ -130,7 +130,7 @@ export default function NewAnswerForm() {
                         onChange={() => handleOptionChange(question.id, option.id, true)}
                       />
                     }
-                    label={option.optionText}
+                    label={option.option_text}
                   />
                 ))
               ) : (
@@ -139,7 +139,7 @@ export default function NewAnswerForm() {
                   onChange={(e) => {
                     const selectedId = Number(e.target.value);
                     handleOptionChange(question.id, selectedId, false);
-                    if (selectedId === question.options.find(option => option.optionText === 'その他')?.id) {
+                    if (selectedId === question.options.find(option => option.option_text === 'その他')?.id) {
                       handleOtherResponseChange(question.id, otherResponses[question.id] || "");
                     } else {
                       handleOtherResponseChange(question.id, "");
@@ -151,14 +151,14 @@ export default function NewAnswerForm() {
                       key={option.id}
                       value={option.id}
                       control={<Radio />}
-                      label={option.optionText}
+                      label={option.option_text}
                     />
                   ))}
                 </RadioGroup>
               )}
             </FormGroup>
 
-            {question.allowsOther && (
+            {question.allows_other && (
               <TextField
                 fullWidth
                 multiline
