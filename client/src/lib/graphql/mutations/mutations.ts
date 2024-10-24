@@ -39,13 +39,13 @@ export const SUBMIT_ANSWER = gql`
         id
         question {
           id
-          question_text
+          questionText
         }
         option {
           id
-          option_text
+          optionText
         }
-        other_response
+        otherResponse
       }
     }
   }
