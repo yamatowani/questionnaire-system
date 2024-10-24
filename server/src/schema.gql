@@ -68,6 +68,7 @@ type AuthResponse {
 type SurveyResult {
   surveyId: Int!
   title: String!
+  answer_count: Float!
   questionResults: [QuestionResults!]!
 }
 

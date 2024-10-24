@@ -81,6 +81,7 @@ export class SurveyService {
     return {
       surveyId: survey.id,
       title: survey.title,
+      answer_count: survey.answer_count,
       questionResults: questionResults,
     };
   }
