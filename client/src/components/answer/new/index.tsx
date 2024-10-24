@@ -18,13 +18,13 @@ export default function NewAnswerForm() {
   const [selectedOptions, setSelectedOptions] = useState<{ [questionId: number]: number[] }>({});
   const [otherResponses, setOtherResponses] = useState<{ [key: number]: string }>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isAnswered, setIsAnswered] = useState<boolean>(false);
 
   const [createAnswer] = useMutation(SUBMIT_ANSWER, {
     onCompleted: () => {
       setSubmitError(null);
       alert("回答を記録しました!");
-      setIsSubmitting(false);
+      setIsAnswered(true);
     },
     onError: (error) => {
       const errorMessage = error.graphQLErrors.length > 0 
@@ -32,7 +32,6 @@ export default function NewAnswerForm() {
         : '予期しないエラーが発生しました';
       setSubmitError(errorMessage);
       alert(errorMessage);
-      setIsSubmitting(false);
     },
   });
 
@@ -65,7 +64,6 @@ export default function NewAnswerForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setSubmitError(null);
 
     const responses = survey.questions.map((question: Question) => ({
@@ -89,7 +87,6 @@ export default function NewAnswerForm() {
     } catch (error) {
       console.error("Error submitting answers:", error);
     } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -177,7 +174,7 @@ export default function NewAnswerForm() {
           type="submit"
           variant="contained"
           color="primary"
-          disabled={isSubmitting}
+          disabled={isAnswered}
           fullWidth
           sx={{ mt: 2 }}
         >
