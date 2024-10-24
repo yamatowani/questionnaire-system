@@ -48,7 +48,10 @@ export class AnswerService {
             const createdAnswer = entityManager.create(Answer, {
               question: relatedQuestion,
               option: relatedOption,
-              other_response: otherResponse || '',
+              other_response:
+                relatedOption.option_text === 'その他'
+                  ? otherResponse || ''
+                  : '',
             });
 
             const savedAnswer = await entityManager.save(createdAnswer);
