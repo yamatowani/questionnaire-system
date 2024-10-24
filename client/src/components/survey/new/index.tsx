@@ -14,10 +14,10 @@ export default function NewSurveyForm() {
     title: '',
     questions: [
       {
-        question_text: '',
-        has_multiple_options: false,
-        allows_other: false,
-        options: [{ option_text: '' }]
+        questionText: '',
+        hasMultipleOptions: false,
+        allowsOther: false,
+        options: [{ optionText: '' }]
       }
     ],
   });
@@ -42,10 +42,10 @@ export default function NewSurveyForm() {
           title: '',
           questions: [
             {
-              question_text: '',
-              has_multiple_options: false,
-              allows_other: false,
-              options: [{ option_text: '' }]
+              questionText: '',
+              hasMultipleOptions: false,
+              allowsOther: false,
+              options: [{ optionText: '' }]
             }
           ],
         });
@@ -64,9 +64,9 @@ export default function NewSurveyForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, qIndex: number, oIndex?: number) => {
     const updatedQuestions = [...formData.questions];
     if (oIndex !== undefined) {
-      updatedQuestions[qIndex].options[oIndex].option_text = e.target.value;
+      updatedQuestions[qIndex].options[oIndex].optionText = e.target.value;
     } else {
-      updatedQuestions[qIndex].question_text = e.target.value;
+      updatedQuestions[qIndex].questionText = e.target.value;
     }
     setFormData({ ...formData, questions: updatedQuestions });
   };
@@ -84,7 +84,7 @@ export default function NewSurveyForm() {
 
   const addOption = (qIndex: number) => {
     const updatedQuestions = [...formData.questions];
-    updatedQuestions[qIndex].options.push({ option_text: '' });
+    updatedQuestions[qIndex].options.push({ optionText: '' });
     setFormData({ ...formData, questions: updatedQuestions });
   };
 
@@ -94,10 +94,10 @@ export default function NewSurveyForm() {
       questions: [
         ...formData.questions,
         {
-          question_text: '',
-          has_multiple_options: false,
-          allows_other: false,
-          options: [{ option_text: '' }]
+          questionText: '',
+          hasMultipleOptions: false,
+          allowsOther: false,
+          options: [{ optionText: '' }]
         }
       ],
     });
@@ -105,7 +105,7 @@ export default function NewSurveyForm() {
 
   const handleMultipleOptionsChange = (qIndex: number) => {
     const updatedQuestions = [...formData.questions];
-    updatedQuestions[qIndex].has_multiple_options = !updatedQuestions[qIndex].has_multiple_options;
+    updatedQuestions[qIndex].hasMultipleOptions = !updatedQuestions[qIndex].hasMultipleOptions;
     setFormData({ ...formData, questions: updatedQuestions });
   };
 
@@ -113,14 +113,14 @@ export default function NewSurveyForm() {
     const updatedQuestions = [...formData.questions];
     const question = updatedQuestions[qIndex];
   
-    question.allows_other = !question.allows_other;
+    question.allowsOther = !question.allowsOther;
   
-    if (question.allows_other) {
-      if (!question.options.some(option => option.option_text === "その他")) {
-        question.options.push({ option_text: "その他" });
+    if (question.allowsOther) {
+      if (!question.options.some(option => option.optionText === "その他")) {
+        question.options.push({ optionText: "その他" });
       }
     } else {
-      question.options = question.options.filter(option => option.option_text !== "その他");
+      question.options = question.options.filter(option => option.optionText !== "その他");
     }
   
     setFormData({ ...formData, questions: updatedQuestions });
@@ -168,7 +168,7 @@ export default function NewSurveyForm() {
               variant="outlined"
               label={`質問 ${qIndex + 1} を入力`}
               onChange={(e) => handleChange(e, qIndex)}
-              value={question.question_text}
+              value={question.questionText}
               required
               sx={{ mb: 2 }}
             />
@@ -176,7 +176,7 @@ export default function NewSurveyForm() {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={question.has_multiple_options}
+                    checked={question.hasMultipleOptions}
                     onChange={() => handleMultipleOptionsChange(qIndex)}
                   />
                 }
@@ -185,7 +185,7 @@ export default function NewSurveyForm() {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={question.allows_other}
+                    checked={question.allowsOther}
                     onChange={() => handleOtherOptionsChange(qIndex)}
                   />
                 }
@@ -199,7 +199,7 @@ export default function NewSurveyForm() {
                   variant="outlined"
                   label={`選択肢 ${oIndex + 1} を入力`}
                   onChange={(e) => handleChange(e, qIndex, oIndex)}
-                  value={option.option_text}
+                  value={option.optionText}
                   required
                   sx={{ mr: 1 }}
                 />
