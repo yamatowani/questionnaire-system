@@ -57,7 +57,7 @@ type SubmitOptionInput = {
 
 export type AuthenticateAdminUserResponse = {
   authenticateAdminUser: {
-    access_token: string;
+    accessToken: string;
   };
 }
 

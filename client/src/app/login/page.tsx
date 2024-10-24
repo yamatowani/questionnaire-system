@@ -14,8 +14,8 @@ const LoginPage = () => {
   const [error, setError] = useState('');
 
   const handleLoginSuccess = (data: AuthenticateAdminUserResponse) => {
-    const { access_token } = data.authenticateAdminUser;
-    localStorage.setItem('token', access_token);
+    const { accessToken } = data.authenticateAdminUser;
+    localStorage.setItem('token', accessToken);
     alert('ログインに成功しました！');
     router.push('/');
   };

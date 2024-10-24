@@ -54,7 +54,7 @@ export const SUBMIT_ANSWER = gql`
 export const AUTHENTICATE_ADMIN_USER = gql`
   mutation authenticateAdminUser($authenticateAdminUserInput: AuthenticateAdminUserInput!) {
     authenticateAdminUser(authenticateAdminUserInput: $authenticateAdminUserInput) {
-      access_token
+      accessToken
     }
   }
 `;
