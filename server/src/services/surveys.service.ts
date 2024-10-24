@@ -96,15 +96,12 @@ export class SurveyService {
     submitSurveyInput: SubmitSurveyInput,
     adminUserId: number,
   ): Promise<Survey> {
+    const adminUser = await this.adminUserRepository.findOne({
+      where: { id: adminUserId },
+    });
+
     return await this.surveyRepository.manager.transaction(
       async (entityManager: EntityManager) => {
-        const adminUser = await entityManager.findOne(AdminUser, {
-          where: { id: adminUserId },
-        });
-        if (!adminUser) {
-          throw new NotFoundException('Admin user not found');
-        }
-
         const survey = entityManager.create(Survey, {
           title: submitSurveyInput.title,
           url: uuidv4(),
