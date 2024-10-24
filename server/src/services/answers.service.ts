@@ -16,6 +16,7 @@ export class AnswerService {
   public async create(submitAnswerInput: SubmitAnswerInput): Promise<Answer[]> {
     const answers: Answer[] = [];
 
+    // 回答のバリデーションなどを回答作成処理の外に切り出した
     for (const questionAnswer of submitAnswerInput.question_answers) {
       const { questionId, options } = questionAnswer;
 
@@ -70,6 +71,7 @@ export class AnswerService {
       }
     }
 
+    // 回答作成処理, トランザクションによってシリアライズ
     return await this.answerRepository.manager.transaction(
       async (entityManager: EntityManager) => {
         for (const questionAnswer of submitAnswerInput.question_answers) {

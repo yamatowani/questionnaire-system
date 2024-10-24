@@ -96,10 +96,12 @@ export class SurveyService {
     submitSurveyInput: SubmitSurveyInput,
     adminUserId: number,
   ): Promise<Survey> {
+    // adminUserのフェッチはトランザクション処理外で行う
     const adminUser = await this.adminUserRepository.findOne({
       where: { id: adminUserId },
     });
 
+    // アンケート作成処理はトランザクションによってシリアライズ
     return await this.surveyRepository.manager.transaction(
       async (entityManager: EntityManager) => {
         const survey = entityManager.create(Survey, {
