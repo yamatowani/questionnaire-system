@@ -8,6 +8,9 @@ export class SurveyResult {
   @Field()
   title: string;
 
+  @Field()
+  answer_count: number;
+
   @Field(() => [QuestionResults])
   questionResults: QuestionResults[];
 }
