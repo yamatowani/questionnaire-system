@@ -8,11 +8,11 @@ export const SURVEY_BY_URL = gql`
       questions {
         id
         question_text
-        has_multiple_options
-        allows_other
+        hasMultipleOptions
+        allowsOther
         options {
           id
-          option_text
+          optionText
         }
       }
     }
