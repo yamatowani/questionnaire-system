@@ -159,10 +159,10 @@
 | `title`                 | `String!`                 | アンケートタイトル             |
 | `questions`             | `[SubmitQuestionInput!]!`  | 質問のリスト                   |
 | `question_text`         | `String!`                 | 質問テキスト                   |
-| `has_multiple_options`  | `Boolean!`                | 複数選択肢を許可するか         |
-| `allows_other`          | `Boolean!`                | その他の回答を許可するか       |
+| `hasMultipleOptions`  | `Boolean!`                | 複数選択肢を許可するか         |
+| `allowsOther`          | `Boolean!`                | その他の回答を許可するか       |
 | `options`               | `[SubmitOptionInput!]!`    | 選択肢リスト                   |
-| `option_text`           | `String!`                 | 選択肢のテキスト               |
+| `optionText`           | `String!`                 | 選択肢のテキスト               |
 
 | Output                  | Type                      | Description                   |
 |-------------------------|---------------------------|-------------------------------|
@@ -176,11 +176,11 @@
 
 | Input                   | Type                      | Description                   |
 |-------------------------|---------------------------|-------------------------------|
-| `question_answers`       | `[SubmitQuestionAnswerInput!]!` | 質問ごとの回答リスト      |
-| `question_id`            | `Int!`                    | 質問ID                         |
+| `questionAnswers`       | `[SubmitQuestionAnswerInput!]!` | 質問ごとの回答リスト      |
+| `questionId`            | `Int!`                    | 質問ID                         |
 | `options`               | `[SubmitOptionAnswerInput!]!` | 選択されたオプションリスト   |
-| `option_id`             | `Int!`                    | オプションID                   |
-| `other_response`        | `String`                  | その他の回答                   |
+| `optionId`             | `Int!`                    | オプションID                   |
+| `otherResponse`        | `String`                  | その他の回答                   |
 
 | Output                  | Type                      | Description                   |
 |-------------------------|---------------------------|-------------------------------|
