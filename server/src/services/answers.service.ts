@@ -30,9 +30,11 @@ export class AnswerService {
 
     return await this.answerRepository.manager.transaction(
       async (entityManager: EntityManager) => {
-        const surveyAnswer = await this.surveyAnswerRepository.create({
+        const surveyAnswer = this.surveyAnswerRepository.create({
           survey: survey,
         });
+
+        await entityManager.save(surveyAnswer);
 
         for (const questionAnswer of submitAnswerInput.question_answers) {
           const { questionId, options } = questionAnswer;
