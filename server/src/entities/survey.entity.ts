@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { AdminUser } from './admin_user.entity';
 import { Question } from './question.entity';
+import { SurveyAnswer } from './survey_answer.entity';
 import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 
 @Entity({ name: 'surveys' })
@@ -43,6 +44,12 @@ export class Survey {
   })
   @Field(() => [Question])
   questions: Question[];
+
+  @OneToMany(() => SurveyAnswer, (survey_answer) => survey_answer.survey, {
+    onDelete: 'CASCADE',
+  })
+  @Field(() => [SurveyAnswer])
+  survey_answers: SurveyAnswer[];
 
   @CreateDateColumn()
   @Field()
