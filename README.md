@@ -114,7 +114,7 @@
 |----------------|-------------------|------------------------|
 | `surveyId`     | `String!`         | アンケートID            |
 | `title`        | `String!`         | アンケートタイトル       |
-| `answer_count` | `Int!`    　　　　 | アンケート総回答数       |
+| `answerSet` | `Int!`    　　　　 | アンケート総回答数       |
 | `questionResults` |                 | 質問とその回答          |
 | `questionId`   | `Int!`            | 質問ID                  |
 | `questionText` | `String!`         | 質問テキスト            |
