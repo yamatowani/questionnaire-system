@@ -52,7 +52,7 @@ export default function Surveys() {
       </Typography>
       <List>
         {data.surveys.map((survey: Survey) => (
-          <ListItem key={survey.id} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
+          <ListItem key={survey.id} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9', boxShadow: 3 }}>
             <ListItemText
               primary={
                 <Typography variant="h6" component="div">
