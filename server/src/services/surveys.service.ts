@@ -51,7 +51,7 @@ export class SurveyService {
     }
 
     const answerSet = await this.surveyAnswerRepository.count({
-      where: { survey: survey },
+      where: { survey: { id: survey.id } },
     });
 
     const questionResults: QuestionResults[] = await Promise.all(
