@@ -2,6 +2,9 @@ import { InputType, Field, Int } from '@nestjs/graphql';
 
 @InputType()
 export class SubmitAnswerInput {
+  @Field(() => Int)
+  surveyId: number;
+
   @Field(() => [SubmitQuestionAnswerInput])
   question_answers: SubmitQuestionAnswerInput[];
 }

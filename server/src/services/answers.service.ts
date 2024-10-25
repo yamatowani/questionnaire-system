@@ -4,6 +4,7 @@ import { EntityManager, In, Repository } from 'typeorm';
 import { Question } from 'src/entities/question.entity';
 import { Option } from 'src/entities/option.entity';
 import { Answer } from 'src/entities/answer.entity';
+import { SurveyAnswer } from 'src/entities/survey_answer.entity';
 import { SubmitAnswerInput } from 'src/dto/input/submitAnswer';
 import { Survey } from 'src/entities/survey.entity';
 
@@ -14,6 +15,8 @@ export class AnswerService {
     private readonly answerRepository: Repository<Answer>,
     @InjectRepository(Survey)
     private readonly surveyRepository: Repository<Survey>,
+    @InjectRepository(SurveyAnswer)
+    private readonly surveyAnswerRepository: Repository<SurveyAnswer>,
   ) {}
 
   public async create(submitAnswerInput: SubmitAnswerInput): Promise<Answer[]> {
@@ -21,22 +24,25 @@ export class AnswerService {
 
     await this.validateAnswers(submitAnswerInput);
 
+    const survey = await this.surveyRepository.findOne({
+      where: { id: submitAnswerInput.surveyId },
+    });
+
     return await this.answerRepository.manager.transaction(
       async (entityManager: EntityManager) => {
+        const surveyAnswer = await this.surveyAnswerRepository.create({
+          survey: survey,
+        });
+
         for (const questionAnswer of submitAnswerInput.question_answers) {
           const { questionId, options } = questionAnswer;
 
           const relatedQuestion = await entityManager.findOne(Question, {
             where: { id: questionId },
-            relations: ['survey'],
           });
 
           const relatedOptions = await entityManager.find(Option, {
             where: { id: In(options.map((option) => option.optionId)) },
-          });
-
-          const survey = await this.surveyRepository.findOne({
-            where: { id: relatedQuestion.survey.id },
           });
 
           for (const selectedOption of options) {
@@ -46,6 +52,7 @@ export class AnswerService {
             );
 
             const createdAnswer = entityManager.create(Answer, {
+              survey_answers: surveyAnswer,
               question: relatedQuestion,
               option: relatedOption,
               other_response:
@@ -56,11 +63,6 @@ export class AnswerService {
 
             const savedAnswer = await entityManager.save(createdAnswer);
             answers.push(savedAnswer);
-          }
-
-          if (survey) {
-            survey.answer_count += 1;
-            await entityManager.save(survey);
           }
         }
         return answers;
