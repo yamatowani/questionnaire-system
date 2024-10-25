@@ -48,7 +48,6 @@ type Survey {
   id: ID!
   title: String!
   url: String!
-  answer_count: Int!
   admin_user: AdminUser!
   questions: [Question!]!
   survey_answers: [SurveyAnswer!]!
@@ -78,7 +77,7 @@ type AuthResponse {
 type SurveyResult {
   surveyId: Int!
   title: String!
-  answer_count: Float!
+  answerSet: Float!
   questionResults: [QuestionResults!]!
 }
 

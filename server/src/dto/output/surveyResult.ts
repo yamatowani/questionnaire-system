@@ -9,7 +9,7 @@ export class SurveyResult {
   title: string;
 
   @Field()
-  answer_count: number;
+  answerSet: number;
 
   @Field(() => [QuestionResults])
   questionResults: QuestionResults[];

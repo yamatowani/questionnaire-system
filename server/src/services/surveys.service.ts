@@ -8,6 +8,7 @@ import { SubmitSurveyInput } from 'src/dto/input/submitSurvey';
 import { AdminUser } from 'src/entities/admin_user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { Answer } from 'src/entities/answer.entity';
+import { SurveyAnswer } from 'src/entities/survey_answer.entity';
 import {
   SurveyResult,
   QuestionResults,
@@ -27,6 +28,8 @@ export class SurveyService {
     private readonly adminUserRepository: Repository<AdminUser>,
     @InjectRepository(Answer)
     private readonly answerRepository: Repository<Answer>,
+    @InjectRepository(SurveyAnswer)
+    private readonly surveyAnswerRepository: Repository<SurveyAnswer>,
   ) {}
 
   public async surveys(adminUserId: number): Promise<Survey[]> {
@@ -46,6 +49,10 @@ export class SurveyService {
     if (!survey) {
       throw new NotFoundException('Survey not found');
     }
+
+    const answerSet = await this.surveyAnswerRepository.count({
+      where: { survey: survey },
+    });
 
     const questionResults: QuestionResults[] = await Promise.all(
       survey.questions.map(async (question) => {
@@ -81,7 +88,7 @@ export class SurveyService {
     return {
       surveyId: survey.id,
       title: survey.title,
-      answer_count: survey.answer_count,
+      answerSet: answerSet,
       questionResults: questionResults,
     };
   }
