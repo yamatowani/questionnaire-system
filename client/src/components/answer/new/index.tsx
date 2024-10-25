@@ -3,7 +3,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import { SURVEY_BY_URL } from "@/lib/graphql/queries/query";
 import { SUBMIT_ANSWER } from "@/lib/graphql/mutations/mutations";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Option, Question } from "@/types/types";
 import { Box, Button, Typography, FormControlLabel, Checkbox, Radio, RadioGroup, CircularProgress, Alert, FormGroup, Divider, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -22,9 +22,16 @@ export default function NewAnswerForm() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
 
+  useEffect(() => {
+    const answeredStatus = localStorage.getItem(`survey-${url}-answered`);
+    if (answeredStatus === "true") {
+      setIsAnswered(true);
+    }
+  }, [url]);
+
   const [createAnswer] = useMutation(SUBMIT_ANSWER, {
     onCompleted: () => {
-      setSubmitError(null);
+      localStorage.setItem(`survey-${url}-answered`, "true");
       setIsAnswered(true);
       router.push('/complete');
     },
@@ -46,11 +53,12 @@ export default function NewAnswerForm() {
     setSelectedOptions((prev) => {
       const currentOptions = prev[questionId] || [];
       if (hasMultipleOptions) {
-        if (currentOptions.includes(optionId)) {
-          return { ...prev, [questionId]: currentOptions.filter(id => id !== optionId) };
-        } else {
-          return { ...prev, [questionId]: [...currentOptions, optionId] };
-        }
+        return {
+          ...prev,
+          [questionId]: currentOptions.includes(optionId)
+            ? currentOptions.filter(id => id !== optionId)
+            : [...currentOptions, optionId],
+        };
       } else {
         return { ...prev, [questionId]: [optionId] };
       }
@@ -76,8 +84,6 @@ export default function NewAnswerForm() {
       })),
     }));
 
-    console.log("Submitting Responses:", responses);
-
     try {
       await createAnswer({
         variables: {
@@ -88,9 +94,18 @@ export default function NewAnswerForm() {
       });
     } catch (error) {
       console.error("Error submitting answers:", error);
-    } finally {
     }
   };
+
+  if (isAnswered) {
+    return (
+      <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4, p: 3, boxShadow: 3, borderRadius: 2, textAlign: 'center' }}>
+        <Typography variant="h6" color="textSecondary">
+          すでに回答済みです
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4, p: 3, boxShadow: 3, borderRadius: 2 }}>
@@ -109,68 +124,68 @@ export default function NewAnswerForm() {
           </Alert>
         )}
 
-       <FormGroup>
-        {survey.questions.map((question: Question) => (
-          <Box key={question.id} sx={{ mb: 4, p: 2, border: '1px solid #e0e0e0', borderRadius: 2 }}>
-            <Typography variant="h5">{question.question_text}</Typography>
-            {question.has_multiple_options && (
-              <Typography variant="subtitle1" color="textSecondary" sx={{ mb: 1 }}>
-                当てはまるものを全てお選びください
-              </Typography>
-            )}
-            <FormGroup sx={{ mt: 2 }}>
-              {question.has_multiple_options ? (
-                question.options.map((option: Option) => (
-                  <FormControlLabel
-                    key={option.id}
-                    control={
-                      <Checkbox
-                        checked={selectedOptions[question.id]?.includes(option.id) || false}
-                        onChange={() => handleOptionChange(question.id, option.id, true)}
-                      />
-                    }
-                    label={option.option_text}
-                  />
-                ))
-              ) : (
-                <RadioGroup
-                  value={selectedOptions[question.id]?.[0] || ""}
-                  onChange={(e) => {
-                    const selectedId = Number(e.target.value);
-                    handleOptionChange(question.id, selectedId, false);
-                    if (selectedId === question.options.find(option => option.option_text === 'その他')?.id) {
-                      handleOtherResponseChange(question.id, otherResponses[question.id] || "");
-                    } else {
-                      handleOtherResponseChange(question.id, "");
-                    }
-                  }}
-                >
-                  {question.options.map((option: Option) => (
+        <FormGroup>
+          {survey.questions.map((question: Question) => (
+            <Box key={question.id} sx={{ mb: 4, p: 2, border: '1px solid #e0e0e0', borderRadius: 2 }}>
+              <Typography variant="h5">{question.question_text}</Typography>
+              {question.has_multiple_options && (
+                <Typography variant="subtitle1" color="textSecondary" sx={{ mb: 1 }}>
+                  当てはまるものを全てお選びください
+                </Typography>
+              )}
+              <FormGroup sx={{ mt: 2 }}>
+                {question.has_multiple_options ? (
+                  question.options.map((option: Option) => (
                     <FormControlLabel
                       key={option.id}
-                      value={option.id}
-                      control={<Radio />}
+                      control={
+                        <Checkbox
+                          checked={selectedOptions[question.id]?.includes(option.id) || false}
+                          onChange={() => handleOptionChange(question.id, option.id, true)}
+                        />
+                      }
                       label={option.option_text}
                     />
-                  ))}
-                </RadioGroup>
-              )}
-            </FormGroup>
+                  ))
+                ) : (
+                  <RadioGroup
+                    value={selectedOptions[question.id]?.[0] || ""}
+                    onChange={(e) => {
+                      const selectedId = Number(e.target.value);
+                      handleOptionChange(question.id, selectedId, false);
+                      if (selectedId === question.options.find(option => option.option_text === 'その他')?.id) {
+                        handleOtherResponseChange(question.id, otherResponses[question.id] || "");
+                      } else {
+                        handleOtherResponseChange(question.id, "");
+                      }
+                    }}
+                  >
+                    {question.options.map((option: Option) => (
+                      <FormControlLabel
+                        key={option.id}
+                        value={option.id}
+                        control={<Radio />}
+                        label={option.option_text}
+                      />
+                    ))}
+                  </RadioGroup>
+                )}
+              </FormGroup>
 
-            {question.allows_other && (
-              <TextField
-                fullWidth
-                multiline
-                rows={3}
-                placeholder="その他の回答を入力してください"
-                value={otherResponses[question.id] || ""}
-                onChange={(e) => handleOtherResponseChange(question.id, e.target.value)}
-                sx={{ mt: 2 }}
-              />
-            )}
-          </Box>
-        ))}
-      </FormGroup>
+              {question.allows_other && (
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={3}
+                  placeholder="その他の回答を入力してください"
+                  value={otherResponses[question.id] || ""}
+                  onChange={(e) => handleOtherResponseChange(question.id, e.target.value)}
+                  sx={{ mt: 2 }}
+                />
+              )}
+            </Box>
+          ))}
+        </FormGroup>
 
         <Button
           type="submit"
