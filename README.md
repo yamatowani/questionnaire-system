@@ -209,7 +209,6 @@ erDiagram
         int id PK "アンケートID"
         varchar title "アンケートタイトル"
         varchar url "アンケートURL"
-        int     answer_count "アンケート総回答数"
         int admin_user_id FK "アンケートを作成した管理ユーザーID"
         timestamp created_at "作成日時"
         timestamp updated_at "更新日時"

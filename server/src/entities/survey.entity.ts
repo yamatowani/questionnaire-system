@@ -28,10 +28,6 @@ export class Survey {
   @Field()
   url: string;
 
-  @Column({ default: 0 })
-  @Field(() => Int)
-  answer_count: number;
-
   @ManyToOne(() => AdminUser, (admin_user) => admin_user.surveys, {
     onDelete: 'CASCADE',
   })
