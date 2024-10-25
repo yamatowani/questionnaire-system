@@ -149,6 +149,7 @@ input AuthenticateAdminUserInput {
 }
 
 input SubmitAnswerInput {
+  surveyId: Int!
   question_answers: [SubmitQuestionAnswerInput!]!
 }
 
