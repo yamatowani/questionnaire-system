@@ -10,6 +10,7 @@ import {
 import { Question } from './question.entity';
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Option } from './option.entity';
+import { SurveyAnswer } from './survey_answer.entity';
 
 @Entity({ name: 'answers' })
 @ObjectType()
@@ -31,6 +32,13 @@ export class Answer {
   @JoinColumn({ name: 'option_id' })
   @Field(() => Option)
   option: Option;
+
+  @ManyToOne(() => SurveyAnswer, (survey_answer) => survey_answer.answers, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'survey_answer_id' })
+  @Field(() => SurveyAnswer)
+  survey_answer: SurveyAnswer;
 
   @Column({ nullable: true })
   @Field({ nullable: true })

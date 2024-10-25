@@ -114,7 +114,7 @@
 |----------------|-------------------|------------------------|
 | `surveyId`     | `String!`         | アンケートID            |
 | `title`        | `String!`         | アンケートタイトル       |
-| `answer_count` | `Int!`    　　　　 | アンケート総回答数       |
+| `answerSet` | `Int!`    　　　　 | アンケート総回答数       |
 | `questionResults` |                 | 質問とその回答          |
 | `questionId`   | `Int!`            | 質問ID                  |
 | `questionText` | `String!`         | 質問テキスト            |
@@ -209,7 +209,6 @@ erDiagram
         int id PK "アンケートID"
         varchar title "アンケートタイトル"
         varchar url "アンケートURL"
-        int     answer_count "アンケート総回答数"
         int admin_user_id FK "アンケートを作成した管理ユーザーID"
         timestamp created_at "作成日時"
         timestamp updated_at "更新日時"
@@ -233,21 +232,29 @@ erDiagram
         timestamp updated_at "更新日時"
     }
 
+    SurveyAnswers {
+      int id PK "回答セットID"
+      int survey_id FK "アンケートID"
+      timestamp created_at "作成日時"
+      timestamp updated_at "更新日時"
+    }
+
     Answers {
         int id PK "回答ID"
+        int survey_answers_id FK "回答セットID"
         int question_id FK "質問ID"
         int option_id FK "選択肢ID"
         varchar other_response "その他の回答"
         timestamp created_at "作成日時"
         timestamp updated_at "更新日時"
     }
-
     
     %% リレーションシップ
     AdminUsers ||--o{ Surveys : "作成する"
     Surveys ||--|{ Questions : "複数の質問を持つ"
     Questions ||--|{ Options : "複数の選択肢を持つ"
-    Options ||--o{ Answers : "0以上の回答を持つ"
-    Questions ||--o{ Answers : "0以上の回答を持つ"
-
+    SurveyAnswers ||--o{ Answers : "複数の回答を持つ"
+    Surveys ||--o{ SurveyAnswers : "複数の回答セットを持つ"
+    Questions ||--o{ Answers : "各質問に対する回答"
+    Options ||--o{ Answers : "回答の選択肢"
 ```

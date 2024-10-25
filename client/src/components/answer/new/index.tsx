@@ -88,6 +88,7 @@ export default function NewAnswerForm() {
       await createAnswer({
         variables: {
           submitAnswerInput: {
+            surveyId:Number(survey.id),
             question_answers: responses,
           },
         },
